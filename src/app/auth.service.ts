@@ -13,7 +13,7 @@ export class AuthService {
   }
 
   private fetchUserInfo(setupTimer: boolean) {
-    this.httpClient.get<UserInfo>('/api/user/').subscribe(
+    this.httpClient.get<UserInfo>('/api/user').subscribe(
       data => {
         this._userInfo = data;
 

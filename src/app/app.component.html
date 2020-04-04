@@ -5,15 +5,18 @@
 	</div>
 	<nav role="navigation">
 		<ul id="menu-primary-menu">
-			{{ $currentNode := . }}
-			{{ range .Site.Menus.main }}
 			<li class="menu-item menu-item-type-post_type menu-item-object-page">
 				<a href="http://docs.darlinghq.org">Docs</a>
+			</li>
+			<li class="menu-item menu-item-type-post_type menu-item-object-page">
 				<a href="http://blog.darlinghq.org/">Blog</a>
+			</li>
+			<li class="menu-item menu-item-type-post_type menu-item-object-page">
 				<a href="https://github.com/darlinghq/darling">GitHub</a>
+			</li>
+			<li class="menu-item menu-item-type-post_type menu-item-object-page">
 				<a href="https://discord.gg/XRD3mQA">Discord</a>
 			</li>
-			{{end}}
 		</ul>
 	</nav>
 </header>
