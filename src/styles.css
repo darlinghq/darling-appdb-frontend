@@ -1,1 +1,304 @@
-/* You can add global styles to this file, and also import other style files */
+/*
+
+	Theme Name: Darling
+	Author: Lubos Dolezel
+	Website: http://www.darlinghq.org
+	Version: 1.0
+	Description: Darling website theme.
+	
+	CONTENTS
+	-------------
+	- Global resets
+	- Global typography & layout rules
+	- Page styles
+	- Post styles 
+	- General bits 
+	
+	- Media queries
+	
+*/
+
+/* 01 START : Global reset styles */
+html,body,div,span,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,abbr,address,cite,code,del,dfn,em,img,ins,kbd,q,samp,small,strong,sub,sup,var,b,i,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,dialog,figure,footer,header,hgroup,menu,nav,section,time,mark,audio,video{margin:0;padding:0;border:0;outline:0;vertical-align:baseline;background:transparent}article,aside,dialog,figure,footer,header,hgroup,nav,section{display:block}nav ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}a{margin:0;padding:0;border:0;vertical-align:baseline;background:transparent}ins,mark{background:#333;color:#fff;text-decoration:none}mark{padding:0 .2em;}del{text-decoration:line-through}abbr[title],dfn[title]{border-bottom:1px dotted #000;cursor:help}table{border-collapse:collapse;border-spacing:0}hr{display:block;height:1px;border:0;border-top:1px solid #ccc;margin:1em 0;padding:0}::-moz-selection,::-webkit-selection,::selection {text-shadow:none;background:#333;color:#fff;}.cf:before,.cf:after{content:"";display:table;}.cf:after{clear:both;}.cf{zoom:1;}[type=submit]{cursor:pointer;}
+/* 01 END : Global reset styles */
+
+/* START : Global rules */
+* { 
+	-webkit-box-sizing:  border-box; 
+	-moz-box-sizing: border-box; 
+	box-sizing:  border-box; 
+}
+
+html {
+	font-size: 100%; /* Set a 16px base size */
+	min-height: 100%;
+	background: linear-gradient(156deg, rgb(245, 245, 245), rgb(135, 167, 255) 100%);
+	font-family: 'Open Sans', sans-serif;
+}
+
+body {
+	margin: 0 auto;
+	font-size: 16px;
+	font-size: 1rem;
+	line-height: 1.5;
+}
+
+header {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+#logo-row {
+	margin: 20px;
+	display: flex;
+	flex-direction: column;
+}
+
+.logo {
+	background-image: url(/img/darling-header-logo.png);
+	background-repeat: no-repeat;
+	height: 80px;
+	display: inline-block;
+	padding: 0 40px 0 75px;
+	text-decoration: none;
+	font-size: 25px;
+	font-family: Bitter, sans-serif;
+	line-height: 80px;
+	color: black;
+	text-shadow: 0px 0px 5px rgba(120, 120, 120, 1);
+}
+
+header .desc {
+	font-style: italic;
+}
+
+.container {
+	max-width: 1100px;
+	margin: 0px auto;
+}
+
+article {
+	padding: 3ex 0;
+}
+
+aside.comments { display: none; }
+
+nav ul {
+	font-size: 20px;
+	display: flex;
+	flex-direction: row;
+}
+
+nav ul li {
+	display: block;
+}
+
+nav ul li a {
+	display: block;
+	color: white;
+	text-decoration: none;
+	padding: 20px;
+	font-weight: bold;
+	line-height: 40px;
+	text-shadow: 0px 0px 6px rgb(70, 70, 70);
+	transition: all 0.5s;
+}
+
+nav ul li:hover a {
+	background: blue;
+	text-shadow: none;
+}
+
+footer {
+	padding: 3ex;
+	text-align: right;
+}
+	
+pre {
+	background-color: #eee;
+	padding: 5px;
+}
+
+code, pre {
+    font-family: Inconsolata, monospace;
+}
+
+pre.terminal-box {
+	background: black;
+	max-width: 400px;
+	border-radius: 10px;
+	margin: 40px auto;
+	padding: 20px;
+	color: white;
+	font-size: 20px;
+	font-weight: bold;
+	box-shadow: 0px 0px 20px 5px black;
+}
+
+pre.terminal-box .cwd {
+	color: blue;
+}
+
+pre.terminal-box .prompt {
+	color: gray;
+}
+
+pre.terminal-box .command {
+	color: #9c27b0;
+}
+
+.intro {
+	max-width: 800px;
+	margin: 70px auto;
+	font-size: 20px;
+	text-align: center;
+}
+
+.intro #title {
+	font-size: 50px;
+	font-weight: normal;
+	margin-bottom: 5px;
+}
+
+ul.features li {
+    display: block;
+    padding: 40px;
+    color: white;
+    font-size: 18px;
+}
+
+ul.features li:nth-child(odd) {
+	background: #2b2b2b;
+}
+
+ul.features li:nth-child(even) {
+	background: #3f51b5;
+}
+
+ul.features p.heading {
+	font-weight: bold;
+	font-size: 24px;
+	margin-bottom: 20px;
+}
+
+ul.features p.heading i {
+	margin-right: 10px;
+}
+
+h2.faq {
+	text-align: center;
+	margin: 50px;
+	font-size: 100px;
+}
+
+ul.faq li {
+    display: block;
+    margin: 40px;
+    font-size: 18px;
+}
+
+ul.faq p.heading {
+	font-weight: bold;
+	margin-bottom: 20px;
+}
+
+ul.faq p.heading i {
+	margin-right: 10px;
+}
+
+ul.faq a {
+	color: black;
+	font-weight: normal;
+}
+
+@media (max-width: 780px) {
+	header {
+		flex-wrap: wrap;
+	}
+	nav ul {
+		flex-direction: column;
+		align-items: flex-end;
+	}
+	nav ul li a {
+		padding: 5px 20px;
+	}
+	nav {
+		background: rgb(135, 167, 255);
+                width: 100%;
+	}
+	nav::before {
+		display: block;
+		font-family: "Font Awesome 5 Free";
+		font-weight: 900;
+		content: "\f0c9";
+		font-size: 30px;
+		text-align: right;
+		padding: 20px;
+		line-height: 1;
+	}
+}
+
+
+/* END : Global rules */
+
+
+
+/* START : Page styles */
+
+/* END : Page styles */
+
+
+
+/* START : Post styles */
+
+/* END : Post styles */
+
+
+
+/* START : General bits */
+
+/* END : General bits */
+
+
+/* START : Media Queries */
+
+	/* I've added some arbitrary breakpoints to get you started, you don't have to use these - you can remove, edit or add to them however you like. They're just a guide. */
+
+/* 480px equivalent breakpoint */
+/*@media only screen and (min-width: 30em) { 
+}*/
+
+/* 600px equivalent breakpoint */
+/*@media only screen and (min-width: 37.5em) { 
+}*/
+
+/* 768px equivalent breakpoint */
+/*@media only screen and (min-width: 48em) { 
+.alignleft,
+.alignright {
+	float: left;
+	display: inline;	
+	}
+
+	.alignright {
+		float: right;
+	}
+}*/
+
+/* 1024px equivalent breakpoint */
+/*@media only screen and (min-width: 64em) { 
+}*/
+
+/* 1260px equivalent breakpoint */
+/*@media only screen and (min-width: 78.75em) { 
+}*/
+/* END : Media Queries */
+
+
+/* PRINT STYLES */
+
+@media print {
+	/* If you're going to have a print stylesheet, now's the time */
+}
