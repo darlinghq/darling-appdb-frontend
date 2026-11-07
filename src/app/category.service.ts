@@ -36,6 +36,7 @@ export class Category {
 
 export interface SoftwareOverview {
   name: string;
+  shortName: string;
   lastVersion?: string;
   status?: string;
 }

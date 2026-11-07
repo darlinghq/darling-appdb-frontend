@@ -2,8 +2,8 @@
 
 @if (software !== null) {
   <div class="software-grid">
-    @for (sw of software; track sw.name) {
-      <mat-card [routerLink]="['/software', sw.name]" class="software-card">
+    @for (sw of software; track sw.shortName) {
+      <mat-card [routerLink]="['/software', sw.shortName]" class="software-card">
         <mat-card-header>
           <mat-card-title>{{ sw.name }}</mat-card-title>
           @if (sw.lastVersion) {
