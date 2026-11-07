@@ -24,6 +24,9 @@ export class NewVersionFormComponent {
     private submissionService: SubmissionService,
     private snackBar: MatSnackBar
   ) {
+    // Read once, not reactive to later param changes: safe only because no
+    // in-app route currently re-enters this component with a different
+    // :name without a full navigation/destroy. Revisit if that changes.
     this.softwareName = route.snapshot.paramMap.get('name') ?? '';
     this.form = this.fb.group({
       version: ['', Validators.required],
