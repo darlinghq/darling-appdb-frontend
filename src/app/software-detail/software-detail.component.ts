@@ -11,13 +11,19 @@ import { SoftwareService, SoftwareDetail } from '../software.service';
 export class SoftwareDetailComponent implements OnInit {
   softwareName: string = '';
   software: SoftwareDetail | null = null;
+  notFound = false;
 
   constructor(private route: ActivatedRoute, private softwareService: SoftwareService) { }
 
   ngOnInit() {
     this.softwareName = this.route.snapshot.paramMap.get('name') ?? '';
-    this.softwareService.getSoftware(this.softwareName).subscribe(v => {
-      this.software = v;
+    this.softwareService.getSoftware(this.softwareName).subscribe({
+      next: v => {
+        this.software = v;
+      },
+      error: () => {
+        this.notFound = true;
+      }
     });
   }
 }

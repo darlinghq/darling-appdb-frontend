@@ -1,6 +1,8 @@
 <h1>{{ categoryId }}</h1>
 
-@if (software !== null) {
+@if (notFound) {
+  <p>Category "{{ categoryId }}" was not found.</p>
+} @else if (software !== null) {
   <div class="software-grid">
     @for (sw of software; track sw.shortName) {
       <mat-card [routerLink]="['/software', sw.shortName]" class="software-card">
