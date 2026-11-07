@@ -5,6 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomepageComponent } from './homepage/homepage.component';
 import { LoginComponent } from './login/login.component';
+import { CategoryDetailComponent } from './category-detail/category-detail.component';
 import { NeedAuthGuard } from './needauth';
 import { provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
 import { MaterialModule } from './material.module';
@@ -12,7 +13,8 @@ import { MaterialModule } from './material.module';
 @NgModule({ declarations: [
         AppComponent,
         HomepageComponent,
-        LoginComponent
+        LoginComponent,
+        CategoryDetailComponent
     ],
     bootstrap: [AppComponent], imports: [BrowserModule,
         AppRoutingModule,

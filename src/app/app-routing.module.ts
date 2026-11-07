@@ -3,9 +3,11 @@ import { Routes, RouterModule } from '@angular/router';
 import { HomepageComponent } from './homepage/homepage.component';
 import { NeedAuthGuard } from './needauth';
 import { LoginComponent } from './login/login.component';
+import { CategoryDetailComponent } from './category-detail/category-detail.component';
 
 
 const routes: Routes = [
+  { path: 'category/:id', component: CategoryDetailComponent, canActivate: [NeedAuthGuard] },
   { path: '', component: HomepageComponent, canActivate: [NeedAuthGuard]},
   { path: 'login', component: LoginComponent },
 ];

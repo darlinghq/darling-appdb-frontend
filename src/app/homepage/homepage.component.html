@@ -1,7 +1,7 @@
 @if (categories !== null) {
   <div class="categories">
     @for (cat of categories; track cat) {
-      <li><a href="{{ cat.link }}">{{ cat.name }}</a></li>
+      <li><a [routerLink]="cat.link">{{ cat.name }}</a></li>
     }
   </div>
 }

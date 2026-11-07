@@ -1,0 +1,23 @@
+<h1>{{ categoryId }}</h1>
+
+@if (software !== null) {
+  <div class="software-grid">
+    @for (sw of software; track sw.name) {
+      <mat-card [routerLink]="['/software', sw.name]" class="software-card">
+        <mat-card-header>
+          <mat-card-title>{{ sw.name }}</mat-card-title>
+          @if (sw.lastVersion) {
+            <mat-card-subtitle>{{ sw.lastVersion }}</mat-card-subtitle>
+          }
+        </mat-card-header>
+        @if (sw.status) {
+          <mat-card-content>
+            <mat-chip-set>
+              <mat-chip>{{ sw.status }}</mat-chip>
+            </mat-chip-set>
+          </mat-card-content>
+        }
+      </mat-card>
+    }
+  </div>
+}
