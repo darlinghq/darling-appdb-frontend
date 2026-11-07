@@ -994,7 +994,9 @@ export class NewVersionFormComponent {
         <mat-form-field appearance="outline">
           <mat-label>Version</mat-label>
           <input matInput formControlName="version" />
-          @if (serverErrors['version']) {
+          @if (form.controls.version.hasError('required') && form.controls.version.touched) {
+            <mat-error>Version is required</mat-error>
+          } @else if (serverErrors['version']) {
             <mat-error>{{ serverErrors['version'] }}</mat-error>
           }
         </mat-form-field>
@@ -1002,7 +1004,9 @@ export class NewVersionFormComponent {
         <mat-form-field appearance="outline">
           <mat-label>Download URL</mat-label>
           <input matInput formControlName="download" />
-          @if (serverErrors['download']) {
+          @if (form.controls.download.hasError('required') && form.controls.download.touched) {
+            <mat-error>Download URL is required</mat-error>
+          } @else if (serverErrors['download']) {
             <mat-error>{{ serverErrors['download'] }}</mat-error>
           }
         </mat-form-field>
@@ -1015,6 +1019,9 @@ export class NewVersionFormComponent {
               Submit
             }
           </button>
+          @if (form.invalid && !submitting) {
+            <span class="hint">Fill in all required fields to submit.</span>
+          }
         </div>
       </form>
     </mat-card-content>
@@ -1040,8 +1047,21 @@ mat-form-field {
 
 .actions {
   margin-top: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.hint {
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.6);
 }
 ```
+
+(Note: this required-field-error + disabled-button-hint pattern was added after Task 9's
+code-quality review flagged that the original form template gave the user zero visual feedback
+for why an empty form's submit button was disabled. Follow this version, not a bare
+`[disabled]="form.invalid || submitting"` with only server-error bindings.)
 
 - [ ] **Step 4: Declare and route it**
 
@@ -1163,7 +1183,9 @@ export class NewReportFormComponent {
               <mat-option [value]="s">{{ s }}</mat-option>
             }
           </mat-select>
-          @if (serverErrors['status']) {
+          @if (form.controls.status.hasError('required') && form.controls.status.touched) {
+            <mat-error>Status is required</mat-error>
+          } @else if (serverErrors['status']) {
             <mat-error>{{ serverErrors['status'] }}</mat-error>
           }
         </mat-form-field>
@@ -1171,7 +1193,9 @@ export class NewReportFormComponent {
         <mat-form-field appearance="outline">
           <mat-label>Description</mat-label>
           <textarea matInput formControlName="description" rows="4"></textarea>
-          @if (serverErrors['description']) {
+          @if (form.controls.description.hasError('required') && form.controls.description.touched) {
+            <mat-error>Description is required</mat-error>
+          } @else if (serverErrors['description']) {
             <mat-error>{{ serverErrors['description'] }}</mat-error>
           }
         </mat-form-field>
@@ -1184,6 +1208,9 @@ export class NewReportFormComponent {
               Submit
             }
           </button>
+          @if (form.invalid && !submitting) {
+            <span class="hint">Fill in all required fields to submit.</span>
+          }
         </div>
       </form>
     </mat-card-content>
@@ -1209,8 +1236,19 @@ mat-form-field {
 
 .actions {
   margin-top: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.hint {
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.6);
 }
 ```
+
+(Same required-field-error + disabled-button-hint pattern as Task 10, per Task 9's
+code-quality-review follow-up.)
 
 - [ ] **Step 4: Declare and route it**
 
