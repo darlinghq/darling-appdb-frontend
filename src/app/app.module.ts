@@ -7,6 +7,7 @@ import { HomepageComponent } from './homepage/homepage.component';
 import { LoginComponent } from './login/login.component';
 import { NeedAuthGuard } from './needauth';
 import { provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
+import { MaterialModule } from './material.module';
 
 @NgModule({ declarations: [
         AppComponent,
@@ -14,5 +15,6 @@ import { provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/com
         LoginComponent
     ],
     bootstrap: [AppComponent], imports: [BrowserModule,
-        AppRoutingModule], providers: [NeedAuthGuard, provideHttpClient(withXhr(), withInterceptorsFromDi())] })
+        AppRoutingModule,
+        MaterialModule], providers: [NeedAuthGuard, provideHttpClient(withXhr(), withInterceptorsFromDi())] })
 export class AppModule { }
