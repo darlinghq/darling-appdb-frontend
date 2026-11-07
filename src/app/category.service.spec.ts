@@ -37,7 +37,7 @@ describe('CategoryService', () => {
     });
 
     expect(await resultPromise).toEqual([
-      { name: 'Business', link: '/category/business' }
+      { id: 'business', name: 'Business', link: '/category/business' }
     ]);
   });
 
@@ -50,7 +50,7 @@ describe('CategoryService', () => {
     });
 
     expect(await resultPromise).toEqual([
-      { name: 'Geschäft', link: '/category/business' }
+      { id: 'business', name: 'Geschäft', link: '/category/business' }
     ]);
   });
 

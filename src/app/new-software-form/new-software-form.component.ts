@@ -1,8 +1,9 @@
-import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, signal } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SubmissionService, SubmissionResult, ValidationErrors } from '../submission.service';
+import { CategoryService, Category, CPU_ARCHITECTURES } from '../category.service';
 
 @Component({
   selector: 'app-new-software-form',
@@ -11,19 +12,33 @@ import { SubmissionService, SubmissionResult, ValidationErrors } from '../submis
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false
 })
-export class NewSoftwareFormComponent {
+export class NewSoftwareFormComponent implements OnInit {
   form: FormGroup;
   readonly submitting = signal(false);
   readonly result = signal<SubmissionResult | null>(null);
   readonly serverErrors = signal<ValidationErrors>({});
+  readonly categories = signal<Category[] | null>(null);
 
-  constructor(private fb: FormBuilder, private submissionService: SubmissionService, private snackBar: MatSnackBar) {
+  readonly cpuArchitectures = CPU_ARCHITECTURES;
+
+  constructor(
+    private fb: FormBuilder,
+    private submissionService: SubmissionService,
+    private categoryService: CategoryService,
+    private snackBar: MatSnackBar
+  ) {
     this.form = this.fb.group({
       name: ['', Validators.required],
       productLink: ['', Validators.required],
-      categories: ['', Validators.required],
-      cpu: ['x86-64', Validators.required],
+      categories: [[] as string[], Validators.required],
+      cpu: [['x86-64'] as string[], Validators.required],
       free: [true],
+    });
+  }
+
+  ngOnInit() {
+    this.categoryService.getCategories().subscribe(v => {
+      this.categories.set(v);
     });
   }
 
@@ -39,9 +54,9 @@ export class NewSoftwareFormComponent {
     this.submissionService.submitNewSoftware({
       name: value.name,
       links: { product: value.productLink },
-      cpu: [value.cpu],
+      cpu: value.cpu,
       free: value.free,
-      categories: value.categories.split(',').map((c: string) => c.trim()).filter((c: string) => c.length > 0),
+      categories: value.categories,
     }).subscribe({
       next: (result) => {
         this.submitting.set(false);

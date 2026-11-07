@@ -33,10 +33,13 @@ export class CategoryService {
 
       for (const [key, value] of Object.entries(o)) {
         rv.push({
+          id: key,
           name: pickLocalizedName(value.name),
           link: '/category/' + key
         });
       }
+
+      rv.sort((a, b) => a.name.localeCompare(b.name));
 
       return rv;
     }));
@@ -75,9 +78,13 @@ export interface SoftwareFilter {
   q?: string;
 }
 export class Category {
+  id!: string;
   name!: string;
   link!: string;
 }
+
+/** Must match the CPU values the backend accepts (no closed enum server-side, but this is the known set). */
+export const CPU_ARCHITECTURES = ['x86-64', 'i386', 'arm64'];
 
 export interface SoftwareOverview {
   name: string;
