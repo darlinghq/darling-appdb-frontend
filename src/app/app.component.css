@@ -30,8 +30,12 @@ mat-toolbar {
 
 .add-software-btn {
   margin-left: 16px;
-  --mat-button-filled-container-color: var(--mat-sys-tertiary);
-  --mat-button-filled-label-text-color: var(--mat-sys-on-tertiary);
+  /* The literal Darling logo navy, not --mat-sys-primary: M3 maps "primary"
+     to a lighter tonal role (#5054b3) for contrast/accessibility reasons,
+     which is what the header itself uses, so this needs its own fixed color
+     to read as a distinct, on-brand call-to-action against it. */
+  --mat-button-filled-container-color: #1a1a7e;
+  --mat-button-filled-label-text-color: #ffffff;
 }
 
 .header-search {
