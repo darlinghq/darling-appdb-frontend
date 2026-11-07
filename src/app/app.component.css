@@ -1,3 +1,11 @@
+mat-toolbar {
+  /* mat-toolbar's "color" input only toggles a CSS class now; M3's default
+     toolbar tokens always resolve to the neutral surface color regardless of
+     it, so the header needs its background pinned to the brand theme here. */
+  --mat-toolbar-container-background-color: var(--mat-sys-primary);
+  --mat-toolbar-container-text-color: var(--mat-sys-on-primary);
+}
+
 .brand {
   display: flex;
   align-items: center;
@@ -42,4 +50,11 @@
   max-width: 1100px;
   margin: 0 auto;
   padding: 24px 16px;
+}
+
+footer {
+  text-align: center;
+  padding: 24px 16px;
+  color: var(--mat-sys-on-surface-variant);
+  font-size: 13px;
 }
