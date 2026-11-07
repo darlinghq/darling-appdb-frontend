@@ -1,0 +1,61 @@
+@if (result === null) {
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Add software</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="form" (ngSubmit)="submit()">
+        <mat-form-field appearance="outline">
+          <mat-label>Name</mat-label>
+          <input matInput formControlName="name" />
+          @if (serverErrors['name']) {
+            <mat-error>{{ serverErrors['name'] }}</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Product page URL</mat-label>
+          <input matInput formControlName="productLink" />
+          @if (serverErrors['productLink']) {
+            <mat-error>{{ serverErrors['productLink'] }}</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Categories (comma-separated)</mat-label>
+          <input matInput formControlName="categories" />
+          @if (serverErrors['categories']) {
+            <mat-error>{{ serverErrors['categories'] }}</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>CPU architecture</mat-label>
+          <mat-select formControlName="cpu">
+            <mat-option value="x86-64">x86-64</mat-option>
+            <mat-option value="arm64">arm64</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-checkbox formControlName="free">Free software</mat-checkbox>
+
+        <div class="actions">
+          <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid || submitting">
+            @if (submitting) {
+              <mat-progress-spinner diameter="20" mode="indeterminate"></mat-progress-spinner>
+            } @else {
+              Submit
+            }
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+} @else {
+  <mat-card>
+    <mat-card-content>
+      <p>Your submission opened <a [href]="result.prUrl" target="_blank" rel="noopener">pull request #{{ result.prNumber }}</a>.</p>
+      <p>A maintainer needs to review and merge it before it's live.</p>
+    </mat-card-content>
+  </mat-card>
+}
