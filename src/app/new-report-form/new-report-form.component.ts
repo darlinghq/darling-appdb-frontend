@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -9,15 +9,16 @@ import { SubmissionService, SubmissionResult, ValidationErrors } from '../submis
   selector: 'app-new-report-form',
   templateUrl: './new-report-form.component.html',
   styleUrls: ['./new-report-form.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false
 })
 export class NewReportFormComponent {
   softwareName: string;
   versionId: string;
   form: FormGroup;
-  submitting = false;
-  result: SubmissionResult | null = null;
-  serverErrors: ValidationErrors = {};
+  readonly submitting = signal(false);
+  readonly result = signal<SubmissionResult | null>(null);
+  readonly serverErrors = signal<ValidationErrors>({});
 
   // Must match the backend's validReportStatuses enum (validation.go).
   statuses = ['platinum', 'gold', 'silver', 'bronze', 'garbage'];
@@ -40,23 +41,23 @@ export class NewReportFormComponent {
   }
 
   submit() {
-    if (this.form.invalid || this.submitting) {
+    if (this.form.invalid || this.submitting()) {
       return;
     }
 
-    this.submitting = true;
-    this.serverErrors = {};
+    this.submitting.set(true);
+    this.serverErrors.set({});
 
     this.submissionService.submitNewReport(this.softwareName, this.versionId, this.form.value).subscribe({
       next: (result) => {
-        this.submitting = false;
-        this.result = result;
+        this.submitting.set(false);
+        this.result.set(result);
         this.snackBar.open('Submitted! Opened PR #' + result.prNumber, 'Dismiss', { duration: 5000 });
       },
       error: (err: HttpErrorResponse) => {
-        this.submitting = false;
+        this.submitting.set(false);
         if (err.status === 400 && err.error && typeof err.error === 'object') {
-          this.serverErrors = err.error;
+          this.serverErrors.set(err.error);
         } else {
           this.snackBar.open(err.error?.message || 'Submission failed', 'Dismiss', { duration: 5000 });
         }

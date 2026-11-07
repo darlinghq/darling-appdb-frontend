@@ -14,6 +14,8 @@ import { NeedAuthGuard } from './needauth';
 import { provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from './material.module';
+import { provideZoneChangeDetection } from '@angular/core';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 @NgModule({ declarations: [
         AppComponent,
@@ -28,5 +30,15 @@ import { MaterialModule } from './material.module';
     bootstrap: [AppComponent], imports: [BrowserModule,
         AppRoutingModule,
         ReactiveFormsModule,
-        MaterialModule], providers: [NeedAuthGuard, provideHttpClient(withXhr(), withInterceptorsFromDi())] })
+        MaterialModule],
+    providers: [
+        NeedAuthGuard,
+        provideHttpClient(withXhr(), withInterceptorsFromDi()),
+        // These used to be passed as bootstrapModule(AppModule, { applicationProviders: [...] })
+        // in main.ts -- that's not a real option on an NgModule bootstrap (its second
+        // argument is CompilerOptions, which has no such field), so it was silently a
+        // no-op. Environment providers for an NgModule-based app belong here instead.
+        provideZoneChangeDetection(),
+        provideAnimationsAsync(),
+    ] })
 export class AppModule { }

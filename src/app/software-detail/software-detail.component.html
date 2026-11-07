@@ -1,6 +1,6 @@
-@if (notFound) {
+@if (notFound()) {
   <p>Software "{{ softwareName }}" was not found.</p>
-} @else if (software !== null) {
+} @else if (software(); as software) {
   <mat-card>
     <mat-card-header>
       <mat-card-title>{{ software.name }}</mat-card-title>

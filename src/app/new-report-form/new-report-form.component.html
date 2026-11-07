@@ -1,4 +1,4 @@
-@if (result === null) {
+@if (result() === null) {
   <mat-card>
     <mat-card-header>
       <mat-card-title>Report compatibility for {{ softwareName }} {{ versionId }}</mat-card-title>
@@ -14,8 +14,8 @@
           </mat-select>
           @if (form.controls.status.hasError('required') && form.controls.status.touched) {
             <mat-error>Status is required</mat-error>
-          } @else if (serverErrors['status']) {
-            <mat-error>{{ serverErrors['status'] }}</mat-error>
+          } @else if (serverErrors()['status']) {
+            <mat-error>{{ serverErrors()['status'] }}</mat-error>
           }
         </mat-form-field>
 
@@ -24,27 +24,27 @@
           <textarea matInput formControlName="description" rows="4"></textarea>
           @if (form.controls.description.hasError('required') && form.controls.description.touched) {
             <mat-error>Description is required</mat-error>
-          } @else if (serverErrors['description']) {
-            <mat-error>{{ serverErrors['description'] }}</mat-error>
+          } @else if (serverErrors()['description']) {
+            <mat-error>{{ serverErrors()['description'] }}</mat-error>
           }
         </mat-form-field>
 
         <div class="actions">
-          <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid || submitting">
-            @if (submitting) {
+          <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid || submitting()">
+            @if (submitting()) {
               <mat-progress-spinner diameter="20" mode="indeterminate"></mat-progress-spinner>
             } @else {
               Submit
             }
           </button>
-          @if (form.invalid && !submitting) {
+          @if (form.invalid && !submitting()) {
             <span class="hint">Fill in all required fields to submit.</span>
           }
         </div>
       </form>
     </mat-card-content>
   </mat-card>
-} @else {
+} @else if (result(); as result) {
   <mat-card>
     <mat-card-content>
       <p>Your submission opened <a [href]="result.prUrl" target="_blank" rel="noopener">pull request #{{ result.prNumber }}</a>.</p>

@@ -1,10 +1,10 @@
-<h1>{{ categoryName }}</h1>
+<h1>{{ categoryName() }}</h1>
 
-@if (notFound) {
+@if (notFound()) {
   <p>Category "{{ categoryId }}" was not found.</p>
-} @else if (software !== null) {
+} @else if (software() !== null) {
   <div class="software-grid">
-    @for (sw of software; track sw.shortName) {
+    @for (sw of software(); track sw.shortName) {
       <mat-card [routerLink]="['/software', sw.shortName]" class="software-card">
         <mat-card-header>
           <mat-card-title>{{ sw.name }}</mat-card-title>

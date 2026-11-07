@@ -1,4 +1,4 @@
-@if (result === null) {
+@if (result() === null) {
   <mat-card>
     <mat-card-header>
       <mat-card-title>Add version of {{ softwareName }}</mat-card-title>
@@ -10,8 +10,8 @@
           <input matInput formControlName="version" />
           @if (form.controls.version.hasError('required') && form.controls.version.touched) {
             <mat-error>Version is required</mat-error>
-          } @else if (serverErrors['version']) {
-            <mat-error>{{ serverErrors['version'] }}</mat-error>
+          } @else if (serverErrors()['version']) {
+            <mat-error>{{ serverErrors()['version'] }}</mat-error>
           }
         </mat-form-field>
 
@@ -20,27 +20,27 @@
           <input matInput formControlName="download" />
           @if (form.controls.download.hasError('required') && form.controls.download.touched) {
             <mat-error>Download URL is required</mat-error>
-          } @else if (serverErrors['download']) {
-            <mat-error>{{ serverErrors['download'] }}</mat-error>
+          } @else if (serverErrors()['download']) {
+            <mat-error>{{ serverErrors()['download'] }}</mat-error>
           }
         </mat-form-field>
 
         <div class="actions">
-          <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid || submitting">
-            @if (submitting) {
+          <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid || submitting()">
+            @if (submitting()) {
               <mat-progress-spinner diameter="20" mode="indeterminate"></mat-progress-spinner>
             } @else {
               Submit
             }
           </button>
-          @if (form.invalid && !submitting) {
+          @if (form.invalid && !submitting()) {
             <span class="hint">Fill in all required fields to submit.</span>
           }
         </div>
       </form>
     </mat-card-content>
   </mat-card>
-} @else {
+} @else if (result(); as result) {
   <mat-card>
     <mat-card-content>
       <p>Your submission opened <a [href]="result.prUrl" target="_blank" rel="noopener">pull request #{{ result.prNumber }}</a>.</p>

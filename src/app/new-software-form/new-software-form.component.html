@@ -1,4 +1,4 @@
-@if (result === null) {
+@if (result() === null) {
   <mat-card>
     <mat-card-header>
       <mat-card-title>Add software</mat-card-title>
@@ -10,8 +10,8 @@
           <input matInput formControlName="name" />
           @if (form.controls.name.hasError('required') && form.controls.name.touched) {
             <mat-error>Name is required</mat-error>
-          } @else if (serverErrors['name']) {
-            <mat-error>{{ serverErrors['name'] }}</mat-error>
+          } @else if (serverErrors()['name']) {
+            <mat-error>{{ serverErrors()['name'] }}</mat-error>
           }
         </mat-form-field>
 
@@ -20,8 +20,8 @@
           <input matInput formControlName="productLink" />
           @if (form.controls.productLink.hasError('required') && form.controls.productLink.touched) {
             <mat-error>Product page URL is required</mat-error>
-          } @else if (serverErrors['productLink']) {
-            <mat-error>{{ serverErrors['productLink'] }}</mat-error>
+          } @else if (serverErrors()['productLink']) {
+            <mat-error>{{ serverErrors()['productLink'] }}</mat-error>
           }
         </mat-form-field>
 
@@ -30,8 +30,8 @@
           <input matInput formControlName="categories" />
           @if (form.controls.categories.hasError('required') && form.controls.categories.touched) {
             <mat-error>At least one category is required</mat-error>
-          } @else if (serverErrors['categories']) {
-            <mat-error>{{ serverErrors['categories'] }}</mat-error>
+          } @else if (serverErrors()['categories']) {
+            <mat-error>{{ serverErrors()['categories'] }}</mat-error>
           }
         </mat-form-field>
 
@@ -46,21 +46,21 @@
         <mat-checkbox formControlName="free">Free software</mat-checkbox>
 
         <div class="actions">
-          <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid || submitting">
-            @if (submitting) {
+          <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid || submitting()">
+            @if (submitting()) {
               <mat-progress-spinner diameter="20" mode="indeterminate"></mat-progress-spinner>
             } @else {
               Submit
             }
           </button>
-          @if (form.invalid && !submitting) {
+          @if (form.invalid && !submitting()) {
             <span class="hint">Fill in all required fields to submit.</span>
           }
         </div>
       </form>
     </mat-card-content>
   </mat-card>
-} @else {
+} @else if (result(); as result) {
   <mat-card>
     <mat-card-content>
       <p>Your submission opened <a [href]="result.prUrl" target="_blank" rel="noopener">pull request #{{ result.prNumber }}</a>.</p>
