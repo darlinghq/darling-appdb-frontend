@@ -8,7 +8,9 @@
         <mat-form-field appearance="outline">
           <mat-label>Name</mat-label>
           <input matInput formControlName="name" />
-          @if (serverErrors['name']) {
+          @if (form.controls.name.hasError('required') && form.controls.name.touched) {
+            <mat-error>Name is required</mat-error>
+          } @else if (serverErrors['name']) {
             <mat-error>{{ serverErrors['name'] }}</mat-error>
           }
         </mat-form-field>
@@ -16,7 +18,9 @@
         <mat-form-field appearance="outline">
           <mat-label>Product page URL</mat-label>
           <input matInput formControlName="productLink" />
-          @if (serverErrors['productLink']) {
+          @if (form.controls.productLink.hasError('required') && form.controls.productLink.touched) {
+            <mat-error>Product page URL is required</mat-error>
+          } @else if (serverErrors['productLink']) {
             <mat-error>{{ serverErrors['productLink'] }}</mat-error>
           }
         </mat-form-field>
@@ -24,7 +28,9 @@
         <mat-form-field appearance="outline">
           <mat-label>Categories (comma-separated)</mat-label>
           <input matInput formControlName="categories" />
-          @if (serverErrors['categories']) {
+          @if (form.controls.categories.hasError('required') && form.controls.categories.touched) {
+            <mat-error>At least one category is required</mat-error>
+          } @else if (serverErrors['categories']) {
             <mat-error>{{ serverErrors['categories'] }}</mat-error>
           }
         </mat-form-field>
@@ -47,6 +53,9 @@
               Submit
             }
           </button>
+          @if (form.invalid && !submitting) {
+            <span class="hint">Fill in all required fields to submit.</span>
+          }
         </div>
       </form>
     </mat-card-content>
