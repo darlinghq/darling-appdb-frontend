@@ -5,7 +5,7 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root'
 })
 export class AuthService {
-  private _userInfo;
+  private _userInfo: UserInfo | null = null;
 
   constructor(private httpClient: HttpClient) {
     this.fetchUserInfo(true);
@@ -30,7 +30,7 @@ export class AuthService {
     );
   }
 
-  get userInfo(): UserInfo {
+  get userInfo(): UserInfo | null {
     return this._userInfo;
   }
 
@@ -40,7 +40,7 @@ export class AuthService {
 }
 
 export class UserInfo {
-  email: string;
-  name: string;
-  provider: string;
+  email!: string;
+  name!: string;
+  provider!: string;
 }

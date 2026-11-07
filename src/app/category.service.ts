@@ -26,6 +26,6 @@ export class CategoryService {
   }
 }
 export class Category {
-  name: string;
-  link: string;
+  name!: string;
+  link!: string;
 }
