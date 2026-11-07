@@ -6,8 +6,7 @@
     "start": "ng serve",
     "build": "ng build",
     "test": "ng test",
-    "lint": "ng lint",
-    "e2e": "ng e2e"
+    "lint": "ng lint"
   },
   "private": true,
   "overrides": {
@@ -38,16 +37,12 @@
     "@angular/compiler-cli": "^22.2.5",
     "@angular/language-service": "^22.2.5",
     "@types/jasmine": "~3.6.0",
-    "@types/jasminewd2": "~2.0.3",
     "@types/node": "^12.11.1",
     "@vitest/coverage-istanbul": "^4.1.12",
     "codelyzer": "^6.0.0",
     "istanbul-lib-instrument": "^6.0.3",
     "jasmine-core": "~3.6.0",
-    "jasmine-spec-reporter": "~5.0.0",
     "jsdom": "^31.0.0",
-    "protractor": "~7.0.0",
-    "ts-node": "~7.0.0",
     "tslint": "~6.1.0",
     "typescript": "~6.0.3",
     "vitest": "^4.1.12"
