@@ -1,5 +1,9 @@
-.login-buttons {
-	text-align: center;
-	margin: 0 auto;
-	padding-top: 4ex;
+.login-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 48px;
+}
+
+mat-card {
+  max-width: 400px;
 }
