@@ -1,12 +1,14 @@
 import { TestBed, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
+import { MaterialModule } from './material.module';
 
 describe('AppComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule
+        RouterTestingModule,
+        MaterialModule
       ],
       declarations: [
         AppComponent
@@ -30,6 +32,6 @@ describe('AppComponent', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('span.desc').textContent).toContain('run macOS software on Linux');
+    expect(compiled.querySelector('span.title').textContent).toContain('Darling AppDB');
   });
 });
