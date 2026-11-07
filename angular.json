@@ -26,8 +26,7 @@
               "src/assets"
             ],
             "styles": [
-              "src/material-theme.scss",
-              "src/styles.scss"
+              "src/material-theme.scss"
             ],
             "scripts": [],
             "extractLicenses": false,
