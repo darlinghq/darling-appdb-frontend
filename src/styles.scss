@@ -23,73 +23,11 @@ body {
 	line-height: 1.5;
 }
 
-header {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-}
-
-#logo-row {
-	margin: 20px;
-	display: flex;
-	flex-direction: column;
-}
-
-.logo {
-	background-image: url(/assets/img/darling-header-logo.png);
-	background-repeat: no-repeat;
-	height: 80px;
-	display: inline-block;
-	padding: 0 40px 0 75px;
-	text-decoration: none;
-	font-size: 25px;
-	font-family: Bitter, sans-serif;
-	line-height: 80px;
-	color: black;
-	text-shadow: 0px 0px 5px rgba(120, 120, 120, 1);
-}
-
-header .desc {
-	font-style: italic;
-}
-
-.container {
-	max-width: 1100px;
-	margin: 0px auto;
-}
-
 article {
 	padding: 3ex 0;
 }
 
 aside.comments { display: none; }
-
-nav ul {
-	font-size: 20px;
-	display: flex;
-	flex-direction: row;
-}
-
-nav ul li {
-	display: block;
-}
-
-nav ul li a {
-	display: block;
-	color: white;
-	text-decoration: none;
-	padding: 20px;
-	font-weight: bold;
-	line-height: 40px;
-	text-shadow: 0px 0px 6px rgb(70, 70, 70);
-	transition: all 0.5s;
-}
-
-nav ul li:hover a {
-	background: blue;
-	text-shadow: none;
-}
 
 footer {
 	padding: 3ex;
@@ -192,34 +130,6 @@ ul.faq a {
 	color: black;
 	font-weight: normal;
 }
-
-@media (max-width: 780px) {
-	header {
-		flex-wrap: wrap;
-	}
-	nav ul {
-		flex-direction: column;
-		align-items: flex-end;
-	}
-	nav ul li a {
-		padding: 5px 20px;
-	}
-	nav {
-		background: rgb(135, 167, 255);
-                width: 100%;
-	}
-	nav::before {
-		display: block;
-		font-family: "Font Awesome 5 Free";
-		font-weight: 900;
-		content: "\f0c9";
-		font-size: 30px;
-		text-align: right;
-		padding: 20px;
-		line-height: 1;
-	}
-}
-
 
 /* END : Global rules */
 
