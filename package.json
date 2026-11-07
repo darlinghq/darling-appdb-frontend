@@ -32,7 +32,7 @@
     "@angular/compiler-cli": "^22.2.5",
     "@angular/language-service": "^22.2.5",
     "@eslint/js": "^10.0.1",
-    "@types/node": "^12.11.1",
+    "@types/node": "^26.0.0",
     "@vitest/coverage-istanbul": "^4.1.12",
     "angular-eslint": "22.6.0",
     "eslint": "^10.12.0",
