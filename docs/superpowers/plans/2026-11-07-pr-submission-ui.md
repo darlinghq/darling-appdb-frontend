@@ -120,8 +120,12 @@ primary `#1a1a7e` (navy, the terminal screen), tertiary `#f7941e` (amber, the ha
 
 Run:
 ```bash
-ng generate @angular/material:m3-theme --primaryColor=#1a1a7e --tertiaryColor=#f7941e --themeTypes=both
+ng generate @angular/material:m3-theme --primary-color=#1a1a7e --tertiary-color=#f7941e --defaults
 ```
+(Corrected from an earlier draft of this plan that guessed camelCase flag names and a
+`--themeTypes` option — neither exists on this schematic version; the real flags are kebab-case
+and `--defaults` skips the interactive prompts instead.)
+
 Expected: generates a theme file (check the command's own output for the exact path/filename —
 commonly something like `src/styles/_theme-colors.scss` or similar; use whatever it actually
 created). Run `git status --short` right after to see exactly what file(s) appeared.
