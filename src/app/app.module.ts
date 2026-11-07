@@ -9,6 +9,7 @@ import { CategoryDetailComponent } from './category-detail/category-detail.compo
 import { SoftwareDetailComponent } from './software-detail/software-detail.component';
 import { NewSoftwareFormComponent } from './new-software-form/new-software-form.component';
 import { NewVersionFormComponent } from './new-version-form/new-version-form.component';
+import { NewReportFormComponent } from './new-report-form/new-report-form.component';
 import { NeedAuthGuard } from './needauth';
 import { provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -21,7 +22,8 @@ import { MaterialModule } from './material.module';
         CategoryDetailComponent,
         SoftwareDetailComponent,
         NewSoftwareFormComponent,
-        NewVersionFormComponent
+        NewVersionFormComponent,
+        NewReportFormComponent
     ],
     bootstrap: [AppComponent], imports: [BrowserModule,
         AppRoutingModule,

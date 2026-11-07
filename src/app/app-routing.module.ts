@@ -7,6 +7,7 @@ import { CategoryDetailComponent } from './category-detail/category-detail.compo
 import { SoftwareDetailComponent } from './software-detail/software-detail.component';
 import { NewSoftwareFormComponent } from './new-software-form/new-software-form.component';
 import { NewVersionFormComponent } from './new-version-form/new-version-form.component';
+import { NewReportFormComponent } from './new-report-form/new-report-form.component';
 
 
 const routes: Routes = [
@@ -14,6 +15,7 @@ const routes: Routes = [
   { path: 'software/:name', component: SoftwareDetailComponent, canActivate: [NeedAuthGuard] },
   { path: 'submit/software', component: NewSoftwareFormComponent, canActivate: [NeedAuthGuard] },
   { path: 'software/:name/submit/version', component: NewVersionFormComponent, canActivate: [NeedAuthGuard] },
+  { path: 'software/:name/versions/:version/submit/report', component: NewReportFormComponent, canActivate: [NeedAuthGuard] },
   { path: '', component: HomepageComponent, canActivate: [NeedAuthGuard]},
   { path: 'login', component: LoginComponent },
 ];
