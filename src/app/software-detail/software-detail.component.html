@@ -15,7 +15,7 @@
       @if (software.lastVersion) {
         <p>Latest version: <strong>{{ software.lastVersion.version }}</strong></p>
         @if (software.lastVersion.lastReport; as report) {
-          <p>Status: <strong>{{ report.status }}</strong></p>
+          <p>Status: <app-status-badge [status]="report.status"></app-status-badge></p>
           <p>{{ report.description }}</p>
           @if (report.screenshots?.length) {
             <div class="screenshot-gallery">

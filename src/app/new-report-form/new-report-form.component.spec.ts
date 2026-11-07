@@ -8,6 +8,7 @@ import { vi } from 'vitest';
 
 import { NewReportFormComponent } from './new-report-form.component';
 import { MaterialModule } from '../material.module';
+import { StatusBadgeComponent } from '../status-badge/status-badge.component';
 import { MAX_SCREENSHOTS } from '../screenshot-resize';
 import { ScreenshotResizeService } from '../screenshot-resize.service';
 
@@ -18,7 +19,7 @@ describe('NewReportFormComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [RouterTestingModule, ReactiveFormsModule, MaterialModule],
-      declarations: [NewReportFormComponent],
+      declarations: [NewReportFormComponent, StatusBadgeComponent],
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),

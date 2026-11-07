@@ -6,7 +6,7 @@
     <mat-select [value]="statusFilter()" (selectionChange)="onStatusFilterChange($event.value)">
       <mat-option value="">Any</mat-option>
       @for (s of statuses; track s) {
-        <mat-option [value]="s">{{ s }}</mat-option>
+        <mat-option [value]="s"><app-status-badge [status]="s"></app-status-badge></mat-option>
       }
     </mat-select>
   </mat-form-field>
@@ -30,9 +30,7 @@
           </mat-card-header>
           @if (sw.status) {
             <mat-card-content>
-              <mat-chip-set>
-                <mat-chip>{{ sw.status }}</mat-chip>
-              </mat-chip-set>
+              <app-status-badge [status]="sw.status"></app-status-badge>
             </mat-card-content>
           }
         </mat-card>

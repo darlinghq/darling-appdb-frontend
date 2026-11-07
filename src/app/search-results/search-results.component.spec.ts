@@ -7,6 +7,7 @@ import { BehaviorSubject } from 'rxjs';
 
 import { SearchResultsComponent } from './search-results.component';
 import { MaterialModule } from '../material.module';
+import { StatusBadgeComponent } from '../status-badge/status-badge.component';
 
 describe('SearchResultsComponent', () => {
   let fixture: ComponentFixture<SearchResultsComponent>;
@@ -18,7 +19,7 @@ describe('SearchResultsComponent', () => {
 
     TestBed.configureTestingModule({
       imports: [RouterTestingModule, MaterialModule],
-      declarations: [SearchResultsComponent],
+      declarations: [SearchResultsComponent, StatusBadgeComponent],
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),

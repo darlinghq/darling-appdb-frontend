@@ -6,6 +6,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { CategoryDetailComponent } from './category-detail.component';
 import { MaterialModule } from '../material.module';
+import { StatusBadgeComponent } from '../status-badge/status-badge.component';
 
 describe('CategoryDetailComponent', () => {
   let fixture: ComponentFixture<CategoryDetailComponent>;
@@ -14,7 +15,7 @@ describe('CategoryDetailComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [RouterTestingModule, MaterialModule],
-      declarations: [CategoryDetailComponent],
+      declarations: [CategoryDetailComponent, StatusBadgeComponent],
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),

@@ -9,7 +9,7 @@
           <mat-label>Status</mat-label>
           <mat-select formControlName="status">
             @for (s of statuses; track s) {
-              <mat-option [value]="s">{{ s }}</mat-option>
+              <mat-option [value]="s"><app-status-badge [status]="s"></app-status-badge></mat-option>
             }
           </mat-select>
           @if (form.controls.status.hasError('required') && form.controls.status.touched) {
