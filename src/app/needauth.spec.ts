@@ -11,7 +11,7 @@ describe('NeedAuthGuard', () => {
     const authServiceStub = {
       waitUntilChecked: () => of(authenticated)
     };
-    const routerSpy = { navigateByUrl: vi.fn() };
+    const routerSpy = { navigate: vi.fn() };
 
     TestBed.configureTestingModule({
       providers: [
@@ -30,18 +30,18 @@ describe('NeedAuthGuard', () => {
   it('allows activation once the auth check resolves authenticated, without redirecting', async () => {
     const { guard, router } = setup(true);
 
-    const result = await firstValueFrom(guard.canActivate(null as any, null as any));
+    const result = await firstValueFrom(guard.canActivate(null as any, { url: '/submit/software' } as any));
 
     expect(result).toBe(true);
-    expect(router.navigateByUrl).not.toHaveBeenCalled();
+    expect(router.navigate).not.toHaveBeenCalled();
   });
 
-  it('redirects to /login and blocks activation when the auth check resolves unauthenticated', async () => {
+  it('redirects to /login with the originally-requested URL as returnTo when unauthenticated', async () => {
     const { guard, router } = setup(false);
 
-    const result = await firstValueFrom(guard.canActivate(null as any, null as any));
+    const result = await firstValueFrom(guard.canActivate(null as any, { url: '/submit/software' } as any));
 
     expect(result).toBe(false);
-    expect(router.navigateByUrl).toHaveBeenCalledWith('/login');
+    expect(router.navigate).toHaveBeenCalledWith(['/login'], { queryParams: { returnTo: '/submit/software' } });
   });
 });

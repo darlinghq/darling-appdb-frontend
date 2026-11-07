@@ -9,14 +9,14 @@ export class NeedAuthGuard  {
 	constructor(private authService: AuthService, private router: Router) {
 	}
 
-	canActivate(_route: ActivatedRouteSnapshot, _state: RouterStateSnapshot): Observable<boolean> {
+	canActivate(_route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
 		return this.authService.waitUntilChecked().pipe(
 			map(authenticated => {
 				if (authenticated) {
 					return true;
 				}
 
-				this.router.navigateByUrl('/login');
+				this.router.navigate(['/login'], { queryParams: { returnTo: state.url } });
 				return false;
 			})
 		);
