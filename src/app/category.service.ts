@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { filter, map } from 'rxjs/operators'; 
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -12,9 +12,9 @@ export class CategoryService {
 
   public getCategories(): Observable<Category[]> {
     return this.httpClient.get<object>('/api/category').pipe(map(o => {
-      let rv = [];
+      const rv = [];
 
-      for (let [key, value] of Object.entries(o)) {
+      for (const [key, value] of Object.entries(o)) {
         rv.push({
           name: value.name,
           link: '/category/' + key
