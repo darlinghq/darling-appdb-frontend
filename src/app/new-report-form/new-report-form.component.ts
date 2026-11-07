@@ -19,6 +19,7 @@ export class NewReportFormComponent {
   result: SubmissionResult | null = null;
   serverErrors: ValidationErrors = {};
 
+  // Must match the backend's validReportStatuses enum (validation.go).
   statuses = ['platinum', 'gold', 'silver', 'bronze', 'garbage'];
 
   constructor(
@@ -27,6 +28,9 @@ export class NewReportFormComponent {
     private submissionService: SubmissionService,
     private snackBar: MatSnackBar
   ) {
+    // Read once, not reactive to later param changes: safe only because no
+    // in-app route currently re-enters this component with a different
+    // :name/:version without a full navigation/destroy. Revisit if that changes.
     this.softwareName = route.snapshot.paramMap.get('name') ?? '';
     this.versionId = route.snapshot.paramMap.get('version') ?? '';
     this.form = this.fb.group({
