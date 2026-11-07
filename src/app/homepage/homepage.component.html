@@ -1,7 +1,9 @@
 @if (categories !== null) {
-  <div class="categories">
+  <div class="categories-grid">
     @for (cat of categories; track cat) {
-      <li><a [routerLink]="cat.link">{{ cat.name }}</a></li>
+      <mat-card [routerLink]="cat.link" class="category-card">
+        <mat-card-content>{{ cat.name }}</mat-card-content>
+      </mat-card>
     }
   </div>
 }

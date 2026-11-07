@@ -1,0 +1,12 @@
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.category-card {
+  cursor: pointer;
+  text-align: center;
+  font-weight: 500;
+}
