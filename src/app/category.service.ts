@@ -24,8 +24,18 @@ export class CategoryService {
       return rv;
     }));
   }
+
+  public getCategoryContents(id: string): Observable<SoftwareOverview[]> {
+    return this.httpClient.get<SoftwareOverview[]>('/api/category/' + id);
+  }
 }
 export class Category {
   name!: string;
   link!: string;
+}
+
+export interface SoftwareOverview {
+  name: string;
+  lastVersion?: string;
+  status?: string;
 }
