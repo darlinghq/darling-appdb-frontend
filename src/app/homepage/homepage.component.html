@@ -1,3 +1,7 @@
-<div class="categories" *ngIf="categories !== null">
-	<li *ngFor="let cat of categories"><a href="{{ cat.link }}">{{ cat.name }}</a></li>
-</div>
+@if (categories !== null) {
+  <div class="categories">
+    @for (cat of categories; track cat) {
+      <li><a href="{{ cat.link }}">{{ cat.name }}</a></li>
+    }
+  </div>
+}
