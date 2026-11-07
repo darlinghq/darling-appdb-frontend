@@ -1,0 +1,22 @@
+.software-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.software-card {
+  cursor: pointer;
+}
+
+.card-screenshot {
+  height: 140px;
+  object-fit: cover;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: flex-start;
+}

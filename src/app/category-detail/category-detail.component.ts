@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { CategoryService, SoftwareOverview } from '../category.service';
+import { CategoryService, SoftwareOverview, REPORT_STATUSES } from '../category.service';
 
 @Component({
   selector: 'app-category-detail',
@@ -14,6 +14,10 @@ export class CategoryDetailComponent implements OnInit {
   readonly categoryName = signal('');
   readonly software = signal<SoftwareOverview[] | null>(null);
   readonly notFound = signal(false);
+
+  readonly statuses = REPORT_STATUSES;
+  readonly statusFilter = signal('');
+  readonly searchQuery = signal('');
 
   constructor(private route: ActivatedRoute, private categoryService: CategoryService) { }
 
@@ -31,7 +35,24 @@ export class CategoryDetailComponent implements OnInit {
       }
     });
 
-    this.categoryService.getCategoryContents(this.categoryId).subscribe({
+    this.reload();
+  }
+
+  onStatusFilterChange(status: string) {
+    this.statusFilter.set(status);
+    this.reload();
+  }
+
+  onSearch(query: string) {
+    this.searchQuery.set(query);
+    this.reload();
+  }
+
+  private reload() {
+    this.categoryService.getCategoryContents(this.categoryId, {
+      status: this.statusFilter(),
+      q: this.searchQuery()
+    }).subscribe({
       next: v => {
         this.software.set(v);
       },

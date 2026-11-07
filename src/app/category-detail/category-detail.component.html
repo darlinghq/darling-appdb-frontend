@@ -1,25 +1,49 @@
 <h1>{{ categoryName() }}</h1>
 
+<div class="filters">
+  <mat-form-field appearance="outline">
+    <mat-label>Search</mat-label>
+    <input matInput #searchInput [value]="searchQuery()" (keyup.enter)="onSearch(searchInput.value)" placeholder="Software name" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Compatibility</mat-label>
+    <mat-select [value]="statusFilter()" (selectionChange)="onStatusFilterChange($event.value)">
+      <mat-option value="">Any</mat-option>
+      @for (s of statuses; track s) {
+        <mat-option [value]="s">{{ s }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+</div>
+
 @if (notFound()) {
   <p>Category "{{ categoryId }}" was not found.</p>
 } @else if (software() !== null) {
-  <div class="software-grid">
-    @for (sw of software(); track sw.shortName) {
-      <mat-card [routerLink]="['/software', sw.shortName]" class="software-card">
-        <mat-card-header>
-          <mat-card-title>{{ sw.name }}</mat-card-title>
-          @if (sw.lastVersion) {
-            <mat-card-subtitle>{{ sw.lastVersion }}</mat-card-subtitle>
+  @if (software()!.length === 0) {
+    <p>No software matches the current filters.</p>
+  } @else {
+    <div class="software-grid">
+      @for (sw of software(); track sw.shortName) {
+        <mat-card [routerLink]="['/software', sw.shortName]" class="software-card">
+          @if (sw.screenshots?.length) {
+            <img mat-card-image [src]="sw.screenshots![0]" alt="" class="card-screenshot" />
           }
-        </mat-card-header>
-        @if (sw.status) {
-          <mat-card-content>
-            <mat-chip-set>
-              <mat-chip>{{ sw.status }}</mat-chip>
-            </mat-chip-set>
-          </mat-card-content>
-        }
-      </mat-card>
-    }
-  </div>
+          <mat-card-header>
+            <mat-card-title>{{ sw.name }}</mat-card-title>
+            @if (sw.lastVersion) {
+              <mat-card-subtitle>{{ sw.lastVersion }}</mat-card-subtitle>
+            }
+          </mat-card-header>
+          @if (sw.status) {
+            <mat-card-content>
+              <mat-chip-set>
+                <mat-chip>{{ sw.status }}</mat-chip>
+              </mat-chip-set>
+            </mat-card-content>
+          }
+        </mat-card>
+      }
+    </div>
+  }
 }

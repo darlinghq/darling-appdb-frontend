@@ -10,6 +10,7 @@ import { SoftwareDetailComponent } from './software-detail/software-detail.compo
 import { NewSoftwareFormComponent } from './new-software-form/new-software-form.component';
 import { NewVersionFormComponent } from './new-version-form/new-version-form.component';
 import { NewReportFormComponent } from './new-report-form/new-report-form.component';
+import { SearchResultsComponent } from './search-results/search-results.component';
 import { NeedAuthGuard } from './needauth';
 import { provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -25,7 +26,8 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
         SoftwareDetailComponent,
         NewSoftwareFormComponent,
         NewVersionFormComponent,
-        NewReportFormComponent
+        NewReportFormComponent,
+        SearchResultsComponent
     ],
     bootstrap: [AppComponent], imports: [BrowserModule,
         AppRoutingModule,

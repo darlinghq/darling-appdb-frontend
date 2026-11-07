@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 
 /** Raw shape of one entry in the backend's GET /api/category map response. */
@@ -50,9 +50,29 @@ export class CategoryService {
     }));
   }
 
-  public getCategoryContents(id: string): Observable<SoftwareOverview[]> {
-    return this.httpClient.get<SoftwareOverview[]>('/api/category/' + id);
+  public getCategoryContents(id: string, filter?: SoftwareFilter): Observable<SoftwareOverview[]> {
+    return this.httpClient.get<SoftwareOverview[]>('/api/category/' + id, { params: toHttpParams(filter) });
   }
+
+  public search(filter: SoftwareFilter): Observable<SoftwareOverview[]> {
+    return this.httpClient.get<SoftwareOverview[]>('/api/search', { params: toHttpParams(filter) });
+  }
+}
+
+function toHttpParams(filter?: SoftwareFilter): HttpParams {
+  let params = new HttpParams();
+  if (filter?.status) {
+    params = params.set('status', filter.status);
+  }
+  if (filter?.q) {
+    params = params.set('q', filter.q);
+  }
+  return params;
+}
+
+export interface SoftwareFilter {
+  status?: string;
+  q?: string;
 }
 export class Category {
   name!: string;
@@ -64,4 +84,8 @@ export interface SoftwareOverview {
   shortName: string;
   lastVersion?: string;
   status?: string;
+  screenshots?: string[];
 }
+
+/** Must match the backend's validReportStatuses enum (validation.go). */
+export const REPORT_STATUSES = ['platinum', 'gold', 'silver', 'bronze', 'garbage'];

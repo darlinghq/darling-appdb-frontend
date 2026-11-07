@@ -2,3 +2,17 @@ mat-card-actions {
   display: flex;
   gap: 8px;
 }
+
+.screenshot-gallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.screenshot-gallery img {
+  width: 160px;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 4px;
+}

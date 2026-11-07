@@ -75,4 +75,35 @@ describe('CategoryService', () => {
 
     expect(await resultPromise).toBe('does-not-exist');
   });
+
+  it('getCategoryContents sends status and q as query params when given', async () => {
+    const resultPromise = firstValueFrom(service.getCategoryContents('productivity', { status: 'gold', q: 'calc' }));
+
+    const req = httpMock.expectOne(r => r.url === '/api/category/productivity');
+    expect(req.request.params.get('status')).toBe('gold');
+    expect(req.request.params.get('q')).toBe('calc');
+    req.flush([]);
+
+    expect(await resultPromise).toEqual([]);
+  });
+
+  it('getCategoryContents omits query params when no filter is given', async () => {
+    const resultPromise = firstValueFrom(service.getCategoryContents('productivity'));
+
+    const req = httpMock.expectOne(r => r.url === '/api/category/productivity');
+    expect(req.request.params.keys().length).toBe(0);
+    req.flush([]);
+
+    expect(await resultPromise).toEqual([]);
+  });
+
+  it('search hits /api/search with the given query params', async () => {
+    const resultPromise = firstValueFrom(service.search({ q: 'pear' }));
+
+    const req = httpMock.expectOne(r => r.url === '/api/search');
+    expect(req.request.params.get('q')).toBe('pear');
+    req.flush([{ name: 'pearCalc', shortName: 'pearcalc' }]);
+
+    expect(await resultPromise).toEqual([{ name: 'pearCalc', shortName: 'pearcalc' }]);
+  });
 });

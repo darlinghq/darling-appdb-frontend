@@ -20,6 +20,24 @@
   flex: 1 1 auto;
 }
 
+.header-search {
+  margin-right: 8px;
+}
+
+.header-search input {
+  border: none;
+  border-radius: 16px;
+  padding: 6px 14px;
+  font-size: 14px;
+  background: rgba(255, 255, 255, 0.15);
+  color: inherit;
+  width: 180px;
+}
+
+.header-search input::placeholder {
+  color: rgba(255, 255, 255, 0.75);
+}
+
 .container {
   max-width: 1100px;
   margin: 0 auto;

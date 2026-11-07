@@ -17,6 +17,7 @@ export class SoftwareService {
 export interface ReportData {
   status: string;
   description: string;
+  screenshots?: string[];
 }
 
 export interface VersionData {

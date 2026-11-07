@@ -45,6 +45,7 @@ export interface NewVersionPayload {
 export interface NewReportPayload {
   status: string;
   description: string;
+  screenshots?: string[];
 }
 
 /** Field-name -> message, as returned by the backend on a 400 validation failure. */

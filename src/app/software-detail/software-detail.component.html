@@ -14,9 +14,16 @@
 
       @if (software.lastVersion) {
         <p>Latest version: <strong>{{ software.lastVersion.version }}</strong></p>
-        @if (software.lastVersion.lastReport) {
-          <p>Status: <strong>{{ software.lastVersion.lastReport.status }}</strong></p>
-          <p>{{ software.lastVersion.lastReport.description }}</p>
+        @if (software.lastVersion.lastReport; as report) {
+          <p>Status: <strong>{{ report.status }}</strong></p>
+          <p>{{ report.description }}</p>
+          @if (report.screenshots?.length) {
+            <div class="screenshot-gallery">
+              @for (url of report.screenshots; track url) {
+                <a [href]="url" target="_blank" rel="noopener"><img [src]="url" alt="Compatibility report screenshot" /></a>
+              }
+            </div>
+          }
         } @else {
           <p>No compatibility report yet for this version.</p>
         }

@@ -5,6 +5,9 @@
   </a>
   <a mat-button routerLink="/submit/software">+ Add software</a>
   <span class="spacer"></span>
+  <div class="header-search">
+    <input #headerSearch type="search" placeholder="Search software…" (keyup.enter)="search(headerSearch.value)" />
+  </div>
   <a mat-button href="http://docs.darlinghq.org">Docs</a>
   <a mat-button href="http://blog.darlinghq.org/">Blog</a>
   <a mat-button href="https://github.com/darlinghq/darling">GitHub</a>

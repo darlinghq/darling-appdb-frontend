@@ -8,9 +8,11 @@ import { SoftwareDetailComponent } from './software-detail/software-detail.compo
 import { NewSoftwareFormComponent } from './new-software-form/new-software-form.component';
 import { NewVersionFormComponent } from './new-version-form/new-version-form.component';
 import { NewReportFormComponent } from './new-report-form/new-report-form.component';
+import { SearchResultsComponent } from './search-results/search-results.component';
 
 
 const routes: Routes = [
+  { path: 'search', component: SearchResultsComponent, canActivate: [NeedAuthGuard] },
   { path: 'category/:id', component: CategoryDetailComponent, canActivate: [NeedAuthGuard] },
   { path: 'software/:name', component: SoftwareDetailComponent, canActivate: [NeedAuthGuard] },
   { path: 'submit/software', component: NewSoftwareFormComponent, canActivate: [NeedAuthGuard] },

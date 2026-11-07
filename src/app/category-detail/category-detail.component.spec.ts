@@ -52,6 +52,20 @@ describe('CategoryDetailComponent', () => {
     expect(compiled.textContent).toContain('Productivity');
   });
 
+  it('re-fetches with status and q query params when the filters change', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(r => r.url === '/api/category').flush({});
+    httpMock.expectOne(r => r.url === '/api/category/productivity').flush([]);
+
+    fixture.componentInstance.onStatusFilterChange('gold');
+    httpMock.expectOne(r => r.url === '/api/category/productivity' && r.params.get('status') === 'gold').flush([]);
+
+    fixture.componentInstance.onSearch('calc');
+    httpMock.expectOne(r =>
+      r.url === '/api/category/productivity' && r.params.get('status') === 'gold' && r.params.get('q') === 'calc'
+    ).flush([]);
+  });
+
   it('shows a not-found message when the category does not exist', () => {
     fixture.detectChanges();
 

@@ -29,6 +29,27 @@
           }
         </mat-form-field>
 
+        <div class="screenshots-field">
+          <label>Screenshots (optional, up to {{ maxScreenshots }})</label>
+          <div class="screenshot-list">
+            @for (shot of screenshots(); track $index) {
+              <div class="screenshot-thumb">
+                <img [src]="shot" alt="Screenshot preview" />
+                <button mat-icon-button type="button" (click)="removeScreenshot($index)" aria-label="Remove screenshot">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </div>
+            }
+          </div>
+          @if (screenshots().length < maxScreenshots) {
+            <button mat-stroked-button type="button" (click)="screenshotInput.click()">Add screenshot</button>
+            <input #screenshotInput type="file" accept="image/*" multiple hidden (change)="onFilesSelected($event)" />
+          }
+          @if (screenshotError()) {
+            <p class="screenshot-error">{{ screenshotError() }}</p>
+          }
+        </div>
+
         <div class="actions">
           <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid || submitting()">
             @if (submitting()) {
