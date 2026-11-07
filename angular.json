@@ -67,18 +67,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "darling-appdb:build"
+            "buildTarget": "darling-appdb:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "darling-appdb:build:production"
+              "buildTarget": "darling-appdb:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "darling-appdb:build"
+            "buildTarget": "darling-appdb:build"
           }
         },
         "test": {
