@@ -30,6 +30,6 @@ describe('AppComponent', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('.content span').textContent).toContain('darling-appdb app is running!');
+    expect(compiled.querySelector('span.desc').textContent).toContain('run macOS software on Linux');
   });
 });
