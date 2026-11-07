@@ -28,6 +28,12 @@ mat-toolbar {
   flex: 1 1 auto;
 }
 
+.add-software-btn {
+  margin-left: 16px;
+  --mat-button-filled-container-color: var(--mat-sys-tertiary);
+  --mat-button-filled-label-text-color: var(--mat-sys-on-tertiary);
+}
+
 .header-search {
   margin-right: 8px;
 }
