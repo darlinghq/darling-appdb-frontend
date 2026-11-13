@@ -7,9 +7,7 @@ import { HomepageComponent } from './homepage/homepage.component';
 import { LoginComponent } from './login/login.component';
 import { CategoryDetailComponent } from './category-detail/category-detail.component';
 import { SoftwareDetailComponent } from './software-detail/software-detail.component';
-import { NewSoftwareFormComponent } from './new-software-form/new-software-form.component';
-import { NewVersionFormComponent } from './new-version-form/new-version-form.component';
-import { NewReportFormComponent } from './new-report-form/new-report-form.component';
+import { SubmitWizardComponent } from './submit-wizard/submit-wizard.component';
 import { SearchResultsComponent } from './search-results/search-results.component';
 import { StatusBadgeComponent } from './status-badge/status-badge.component';
 import { NeedAuthGuard } from './needauth';
@@ -25,9 +23,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
         LoginComponent,
         CategoryDetailComponent,
         SoftwareDetailComponent,
-        NewSoftwareFormComponent,
-        NewVersionFormComponent,
-        NewReportFormComponent,
+        SubmitWizardComponent,
         SearchResultsComponent,
         StatusBadgeComponent
     ],

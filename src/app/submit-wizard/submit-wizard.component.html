@@ -1,0 +1,204 @@
+@if (result() === null) {
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        @if (softwareName) { Contribute to {{ softwareName }} } @else { Add software }
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <p class="subtitle">
+        Fill in as much as you like: everything you add is sent as one pull request.
+      </p>
+
+      @if (generalErrors().length > 0) {
+        <ul class="general-errors">
+          @for (message of generalErrors(); track message) {
+            <li>{{ message }}</li>
+          }
+        </ul>
+      }
+
+      <form [formGroup]="form" (ngSubmit)="submit()">
+
+        @if (!softwareName) {
+          <section formGroupName="software">
+            <h3>Software</h3>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Name</mat-label>
+              <input matInput formControlName="name" />
+              @if (form.get('software.name')?.hasError('required') && form.get('software.name')?.touched) {
+                <mat-error>Name is required</mat-error>
+              } @else if (serverErrors()['software.name']) {
+                <mat-error>{{ serverErrors()['software.name'] }}</mat-error>
+              }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Product page URL</mat-label>
+              <input matInput formControlName="productLink" />
+              @if (form.get('software.productLink')?.hasError('required') && form.get('software.productLink')?.touched) {
+                <mat-error>Product page URL is required</mat-error>
+              } @else if (serverErrors()['software.productLink']) {
+                <mat-error>{{ serverErrors()['software.productLink'] }}</mat-error>
+              }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Categories</mat-label>
+              <mat-select formControlName="categories" multiple>
+                @for (cat of categories(); track cat.id) {
+                  <mat-option [value]="cat.id">{{ cat.name }}</mat-option>
+                }
+              </mat-select>
+              @if (form.get('software.categories')?.hasError('required') && form.get('software.categories')?.touched) {
+                <mat-error>At least one category is required</mat-error>
+              } @else if (serverErrors()['software.categories']) {
+                <mat-error>{{ serverErrors()['software.categories'] }}</mat-error>
+              }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>CPU architectures</mat-label>
+              <mat-select formControlName="cpu" multiple>
+                @for (arch of cpuArchitectures; track arch) {
+                  <mat-option [value]="arch">{{ arch }}</mat-option>
+                }
+              </mat-select>
+              @if (form.get('software.cpu')?.hasError('required') && form.get('software.cpu')?.touched) {
+                <mat-error>At least one CPU architecture is required</mat-error>
+              }
+            </mat-form-field>
+
+            <mat-checkbox formControlName="free">Free software</mat-checkbox>
+          </section>
+        }
+
+        <section>
+          <h3>Version</h3>
+          <mat-form-field appearance="outline">
+            <mat-label>Version</mat-label>
+            <mat-select [value]="versionMode()" (selectionChange)="setVersionMode($event.value)">
+              @if (!softwareName) {
+                <mat-option value="none">Don't add a version</mat-option>
+              }
+              <mat-option value="new">Add a new version</mat-option>
+              @if (existingVersionOption(); as existing) {
+                <mat-option value="existing">Existing version {{ existing }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          @if (versionMode() === 'new') {
+            <div formGroupName="version">
+              <mat-form-field appearance="outline">
+                <mat-label>Version number</mat-label>
+                <input matInput formControlName="version" />
+                @if (form.get('version.version')?.hasError('required') && form.get('version.version')?.touched) {
+                  <mat-error>Version is required</mat-error>
+                } @else if (serverErrors()['version.version']) {
+                  <mat-error>{{ serverErrors()['version.version'] }}</mat-error>
+                }
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Download URL</mat-label>
+                <input matInput formControlName="download" />
+                @if (form.get('version.download')?.hasError('required') && form.get('version.download')?.touched) {
+                  <mat-error>Download URL is required</mat-error>
+                } @else if (serverErrors()['version.download']) {
+                  <mat-error>{{ serverErrors()['version.download'] }}</mat-error>
+                }
+              </mat-form-field>
+            </div>
+          }
+        </section>
+
+        <section>
+          <h3>Compatibility report</h3>
+          <mat-checkbox
+            [checked]="reportEnabled()"
+            [disabled]="versionMode() === 'none' || versionMode() === 'existing'"
+            (change)="setReportEnabled($event.checked)">
+            Add a compatibility report
+          </mat-checkbox>
+          @if (versionMode() === 'none') {
+            <p class="hint">Choose a version to attach a report to it.</p>
+          }
+
+          @if (reportEnabled()) {
+            <div formGroupName="report">
+              <mat-form-field appearance="outline">
+                <mat-label>Status</mat-label>
+                <mat-select formControlName="status">
+                  @for (s of statuses; track s) {
+                    <mat-option [value]="s"><app-status-badge [status]="s"></app-status-badge></mat-option>
+                  }
+                </mat-select>
+                @if (form.get('report.status')?.hasError('required') && form.get('report.status')?.touched) {
+                  <mat-error>Status is required</mat-error>
+                } @else if (serverErrors()['report.status']) {
+                  <mat-error>{{ serverErrors()['report.status'] }}</mat-error>
+                }
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Description</mat-label>
+                <textarea matInput formControlName="description" rows="4"></textarea>
+                @if (form.get('report.description')?.hasError('required') && form.get('report.description')?.touched) {
+                  <mat-error>Description is required</mat-error>
+                } @else if (serverErrors()['report.description']) {
+                  <mat-error>{{ serverErrors()['report.description'] }}</mat-error>
+                }
+              </mat-form-field>
+
+              <div class="screenshots-field">
+                <span class="field-label">Screenshots (optional, up to {{ maxScreenshots }})</span>
+                <div class="screenshot-list">
+                  @for (shot of screenshots(); track $index) {
+                    <div class="screenshot-thumb">
+                      <img [src]="shot" alt="Screenshot preview" />
+                      <button mat-icon-button type="button" (click)="removeScreenshot($index)" aria-label="Remove screenshot">
+                        <mat-icon>close</mat-icon>
+                      </button>
+                    </div>
+                  }
+                </div>
+                @if (screenshots().length < maxScreenshots) {
+                  <button mat-stroked-button type="button" (click)="screenshotInput.click()">Add screenshot</button>
+                  <input #screenshotInput type="file" accept="image/*" multiple hidden (change)="onFilesSelected($event)" />
+                }
+                @if (screenshotError()) {
+                  <p class="screenshot-error">{{ screenshotError() }}</p>
+                }
+                @if (serverErrors()['report.screenshots']) {
+                  <p class="screenshot-error">{{ serverErrors()['report.screenshots'] }}</p>
+                }
+              </div>
+            </div>
+          }
+        </section>
+
+        <div class="actions">
+          <button mat-raised-button color="primary" type="submit" [disabled]="!canSubmit()">
+            @if (submitting()) {
+              <mat-progress-spinner diameter="20" mode="indeterminate"></mat-progress-spinner>
+            } @else {
+              Submit
+            }
+          </button>
+          @if (!canSubmit() && !submitting()) {
+            <span class="hint">Fill in all required fields to submit.</span>
+          }
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+} @else if (result(); as result) {
+  <mat-card>
+    <mat-card-content>
+      <p>Your submission opened <a [href]="result.prUrl" target="_blank" rel="noopener">pull request #{{ result.prNumber }}</a>.</p>
+      <p>A maintainer needs to review and merge it before it's live.</p>
+    </mat-card-content>
+  </mat-card>
+}
