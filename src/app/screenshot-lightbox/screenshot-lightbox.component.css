@@ -1,0 +1,37 @@
+.lightbox {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+}
+
+img {
+  max-width: 90vw;
+  max-height: 85vh;
+  object-fit: contain;
+  cursor: zoom-out;
+}
+
+button {
+  position: absolute;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.close { top: 8px; right: 8px; z-index: 1; }
+.nav { top: 50%; transform: translateY(-50%); z-index: 1; }
+.prev { left: 8px; }
+.next { right: 8px; }
+
+.counter {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #fff;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-size: 13px;
+}

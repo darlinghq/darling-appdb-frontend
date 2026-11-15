@@ -8,19 +8,32 @@
     <mat-card-content>
       <mat-chip-set>
         @for (cat of software.categories; track cat) {
-          <mat-chip>{{ cat }}</mat-chip>
+          <mat-chip><a class="category-link" [routerLink]="['/category', cat]">{{ categoryNames()[cat] ?? cat }}</a></mat-chip>
         }
       </mat-chip-set>
 
+      @if (linkEntries(software).length) {
+        <ul class="software-links">
+          @for (link of linkEntries(software); track link.key) {
+            <li><a [href]="link.url" target="_blank" rel="noopener noreferrer">{{ link.key }}</a></li>
+          }
+        </ul>
+      }
+
       @if (software.lastVersion) {
-        <p>Latest version: <strong>{{ software.lastVersion.version }}</strong></p>
+        <p>
+          Latest version: <strong>{{ software.lastVersion.version }}</strong>
+          @if (software.lastVersion.download) {
+            &middot; <a [href]="software.lastVersion.download" target="_blank" rel="noopener noreferrer">Download</a>
+          }
+        </p>
         @if (software.lastVersion.lastReport; as report) {
           <p>Status: <app-status-badge [status]="report.status"></app-status-badge></p>
           <p>{{ report.description }}</p>
           @if (report.screenshots?.length) {
             <div class="screenshot-gallery">
-              @for (url of report.screenshots; track url) {
-                <a [href]="url" target="_blank" rel="noopener"><img [src]="url" alt="Compatibility report screenshot" /></a>
+              @for (url of report.screenshots; track url; let i = $index) {
+                <a [href]="url" (click)="openScreenshot($event, report.screenshots!, i)"><img [src]="url" alt="Compatibility report screenshot" /></a>
               }
             </div>
           }

@@ -1,0 +1,11 @@
+<div class="lightbox">
+  <button mat-icon-button class="close" (click)="close()" aria-label="Close"><mat-icon>close</mat-icon></button>
+  @if (hasMultiple) {
+    <button mat-icon-button class="nav prev" (click)="step(-1)" aria-label="Previous screenshot"><mat-icon>chevron_left</mat-icon></button>
+  }
+  <img [src]="url" alt="Compatibility report screenshot" (click)="close()" />
+  @if (hasMultiple) {
+    <button mat-icon-button class="nav next" (click)="step(1)" aria-label="Next screenshot"><mat-icon>chevron_right</mat-icon></button>
+    <div class="counter">{{ index() + 1 }} / {{ data.urls.length }}</div>
+  }
+</div>
