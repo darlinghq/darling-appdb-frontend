@@ -68,8 +68,15 @@ mat-card-content {
 }
 
 .category-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   color: inherit;
   text-decoration: none;
+}
+
+.category-icon {
+  flex: none;
 }
 
 .cpu-list {

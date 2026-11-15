@@ -17,6 +17,8 @@ export class SoftwareDetailComponent implements OnInit {
   readonly software = signal<SoftwareDetail | null>(null);
   /** Category id -> display name; ids fall back to themselves until/unless this loads. */
   readonly categoryNames = signal<Record<string, string>>({});
+  /** Category id -> icon URL, for the categories that have one. */
+  readonly categoryIcons = signal<Record<string, string>>({});
   readonly notFound = signal(false);
 
   constructor(private route: ActivatedRoute, private softwareService: SoftwareService, private dialog: MatDialog, private categoryService: CategoryService) { }
@@ -46,7 +48,10 @@ export class SoftwareDetailComponent implements OnInit {
   ngOnInit() {
     this.softwareName = this.route.snapshot.paramMap.get('name') ?? '';
     this.categoryService.getCategories().subscribe({
-      next: cats => this.categoryNames.set(Object.fromEntries(cats.map(c => [c.id, c.name]))),
+      next: cats => {
+        this.categoryNames.set(Object.fromEntries(cats.map(c => [c.id, c.name])));
+        this.categoryIcons.set(Object.fromEntries(cats.filter(c => !!c.icon).map(c => [c.id, c.icon!])));
+      },
       error: () => { /* keep showing ids */ }
     });
     this.softwareService.getSoftware(this.softwareName).subscribe({
