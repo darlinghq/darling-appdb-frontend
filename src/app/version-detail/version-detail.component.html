@@ -1,0 +1,44 @@
+@if (notFound()) {
+  <p>Version "{{ versionId }}" of "{{ softwareName }}" was not found.</p>
+} @else if (version(); as ver) {
+  <mat-card>
+    <mat-card-content>
+      <a class="back-link" [routerLink]="['/software', softwareName]">&larr; {{ softwareName }}</a>
+      <header class="version-header">
+        <h1 class="version-title">{{ softwareName }} <span class="version-pill">v{{ ver.version }}</span></h1>
+        @if (ver.download) {
+          <a mat-stroked-button class="compact-link-btn" [href]="ver.download" target="_blank" rel="noopener noreferrer">
+            <mat-icon>download</mat-icon> Download
+          </a>
+        }
+      </header>
+
+      <section class="reports">
+        <h2>Compatibility reports</h2>
+        @for (report of ver.reports; track report.id ?? $index; let first = $first) {
+          <details class="report-entry" [open]="first">
+            <summary>
+              <app-status-badge [status]="report.status"></app-status-badge>
+              <app-report-byline [submitter]="report.submitter" [submittedAt]="report.submittedAt"></app-report-byline>
+            </summary>
+            <div class="report-description" [innerHTML]="report.description | markdown"></div>
+            @if (report.screenshots?.length) {
+              <div class="screenshot-gallery">
+                @for (url of report.screenshots; track url; let i = $index) {
+                  <a [href]="url" (click)="openScreenshot($event, report.screenshots!, i)"><img [src]="url" alt="Compatibility report screenshot" /></a>
+                }
+              </div>
+            }
+          </details>
+        } @empty {
+          <p class="empty">No compatibility reports yet for this version.</p>
+        }
+      </section>
+    </mat-card-content>
+    <mat-card-actions>
+      <a mat-raised-button color="primary" [routerLink]="['/software', softwareName, 'versions', ver.version, 'submit', 'report']">
+        Report compatibility
+      </a>
+    </mat-card-actions>
+  </mat-card>
+}

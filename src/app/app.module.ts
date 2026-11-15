@@ -13,6 +13,7 @@ import { StatusBadgeComponent } from './status-badge/status-badge.component';
 import { ScreenshotLightboxComponent } from './screenshot-lightbox/screenshot-lightbox.component';
 import { MarkdownPipe } from './markdown/markdown.pipe';
 import { ReportBylineComponent } from './report-byline/report-byline.component';
+import { VersionDetailComponent } from './version-detail/version-detail.component';
 import { StatusLevelsComponent } from './status-levels/status-levels.component';
 import { NeedAuthGuard } from './needauth';
 import { provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
@@ -33,7 +34,8 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
         ScreenshotLightboxComponent,
         MarkdownPipe,
         StatusLevelsComponent,
-        ReportBylineComponent
+        ReportBylineComponent,
+        VersionDetailComponent
     ],
     bootstrap: [AppComponent], imports: [BrowserModule,
         AppRoutingModule,
