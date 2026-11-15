@@ -6,6 +6,7 @@ import { map } from 'rxjs/operators';
 /** Raw shape of one entry in the backend's GET /api/category map response. */
 interface RawCategory {
   name: { [locale: string]: string };
+  icon?: string;
 }
 
 /** Picks a display name out of a backend locale map, preferring English. */
@@ -35,7 +36,8 @@ export class CategoryService {
         rv.push({
           id: key,
           name: pickLocalizedName(value.name),
-          link: '/category/' + key
+          link: '/category/' + key,
+          icon: value.icon
         });
       }
 
@@ -81,6 +83,8 @@ export class Category {
   id!: string;
   name!: string;
   link!: string;
+  /** URL of the category's SVG icon, if the database defines one. */
+  icon?: string;
 }
 
 /** Must match the CPU values the backend accepts (no closed enum server-side, but this is the known set). */

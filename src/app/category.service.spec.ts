@@ -28,6 +28,16 @@ describe('CategoryService', () => {
     expect(service).toBeTruthy();
   });
 
+  it('passes through the icon URL when the backend provides one', async () => {
+    const resultPromise = firstValueFrom(service.getCategories());
+
+    httpMock.expectOne('/api/category').flush({
+      audio: { name: { en: 'Music & Audio' }, icon: '/api/category/audio/icon' }
+    });
+
+    expect((await resultPromise)[0].icon).toBe('/api/category/audio/icon');
+  });
+
   it('extracts the English display name from the backend locale map', async () => {
     const resultPromise = firstValueFrom(service.getCategories());
 
