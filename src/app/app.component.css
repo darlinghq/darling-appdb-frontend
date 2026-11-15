@@ -6,6 +6,16 @@ mat-toolbar {
   --mat-toolbar-container-text-color: var(--mat-sys-on-primary);
 }
 
+.wide-nav {
+  display: flex;
+  align-items: center;
+}
+
+.menu-btn,
+.add-short {
+  display: none;
+}
+
 .brand {
   display: flex;
   align-items: center;
@@ -88,4 +98,49 @@ footer {
   margin-left: 8px;
   --mat-button-outlined-label-text-color: #ffffff;
   --mat-button-outlined-outline-color: rgba(255, 255, 255, 0.6);
+}
+
+.menu-user {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+}
+
+/* Phones / narrow windows: wrap the toolbar into two rows. Row 1: brand, Add,
+   menu. Row 2: full-width search. Docs/Blog/GitHub/Discord and the account
+   actions move into the menu. */
+@media (max-width: 900px) {
+  mat-toolbar {
+    --mat-toolbar-standard-height: auto;
+    --mat-toolbar-mobile-height: auto;
+    flex-wrap: wrap;
+    row-gap: 8px;
+    padding: 8px 12px;
+  }
+
+  .wide-nav,
+  .add-long {
+    display: none;
+  }
+
+  .menu-btn,
+  .add-short {
+    display: inline;
+  }
+
+  .menu-btn {
+    display: inline-flex;
+    color: inherit;
+  }
+
+  .brand { order: 1; min-width: 0; }
+  .spacer { order: 2; }
+  .add-software-btn { order: 3; margin-left: 8px; }
+  .menu-btn { order: 4; }
+  .header-search { order: 5; flex: 1 1 100%; margin: 0; }
+  .header-search input { width: 100%; box-sizing: border-box; }
+
+  .logo-img { height: 32px; width: 32px; margin-right: 8px; }
+  .title { font-size: 17px; white-space: nowrap; }
 }
