@@ -37,8 +37,24 @@ mat-card-content {
   opacity: 0.8;
 }
 
+/* Sized to match the version pill and status badge beside it (~26px tall,
+   12px / 600 text) instead of a full-size Material button. */
+.version-link-btn {
+  --mat-button-outlined-container-height: 26px;
+  --mat-button-outlined-horizontal-padding: 10px;
+  --mat-button-outlined-icon-spacing: 4px;
+  --mat-button-outlined-label-text-size: 12px;
+  --mat-button-outlined-label-text-weight: 600;
+  --mat-button-outlined-container-shape: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
 .version-link-btn mat-icon {
-  margin-right: 4px;
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+  margin: 0 4px 0 0;
 }
 
 .software-meta {
