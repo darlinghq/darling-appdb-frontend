@@ -39,7 +39,7 @@ mat-card-content {
 
 /* Sized to match the version pill and status badge beside it (~26px tall,
    12px / 600 text) instead of a full-size Material button. */
-.version-link-btn {
+.compact-link-btn {
   --mat-button-outlined-container-height: 26px;
   --mat-button-outlined-horizontal-padding: 10px;
   --mat-button-outlined-icon-spacing: 4px;
@@ -50,7 +50,7 @@ mat-card-content {
   font-weight: 600;
 }
 
-.version-link-btn mat-icon {
+.compact-link-btn mat-icon {
   width: 16px;
   height: 16px;
   font-size: 16px;
@@ -70,6 +70,31 @@ mat-card-content {
 .category-link {
   color: inherit;
   text-decoration: none;
+}
+
+.cpu-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.cpu-list mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  opacity: 0.7;
+}
+
+.cpu-list li {
+  padding: 1px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  background: rgba(128, 128, 128, 0.15);
 }
 
 .software-links {

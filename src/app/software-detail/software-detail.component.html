@@ -11,11 +11,16 @@
             @if (ver.lastReport; as report) {
               <app-status-badge [status]="report.status"></app-status-badge>
             }
-            @if (ver.download) {
-              <a mat-stroked-button class="version-link-btn" [href]="ver.download" target="_blank" rel="noopener noreferrer">
-                <mat-icon>open_in_new</mat-icon> Website
-              </a>
-            }
+          }
+          @if (software.links?.['product']; as productUrl) {
+            <a mat-stroked-button class="compact-link-btn" [href]="productUrl" target="_blank" rel="noopener noreferrer">
+              <mat-icon>open_in_new</mat-icon> Website
+            </a>
+          }
+          @if (software.lastVersion?.download; as downloadUrl) {
+            <a mat-stroked-button class="compact-link-btn" [href]="downloadUrl" target="_blank" rel="noopener noreferrer">
+              <mat-icon>download</mat-icon> Download
+            </a>
           }
         </div>
       </header>
@@ -26,9 +31,17 @@
             <mat-chip><a class="category-link" [routerLink]="['/category', cat]">{{ categoryNames()[cat] ?? cat }}</a></mat-chip>
           }
         </mat-chip-set>
-        @if (linkEntries(software).length) {
+        @if (software.cpu?.length) {
+          <ul class="cpu-list" aria-label="CPU architectures" title="Supported CPU architectures">
+            <mat-icon aria-hidden="true">memory</mat-icon>
+            @for (cpu of software.cpu; track cpu) {
+              <li>{{ cpu }}</li>
+            }
+          </ul>
+        }
+        @if (extraLinks(software).length) {
           <ul class="software-links">
-            @for (link of linkEntries(software); track link.key) {
+            @for (link of extraLinks(software); track link.key) {
               <li><a [href]="link.url" target="_blank" rel="noopener noreferrer">{{ link.key }}<mat-icon>open_in_new</mat-icon></a></li>
             }
           </ul>
