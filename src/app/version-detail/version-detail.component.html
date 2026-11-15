@@ -19,7 +19,7 @@
           <details class="report-entry" [open]="first">
             <summary>
               <app-status-badge [status]="report.status"></app-status-badge>
-              <app-report-byline [submitter]="report.submitter" [submittedAt]="report.submittedAt"></app-report-byline>
+              <app-report-byline [submitter]="report.submitter" [submittedAt]="report.submittedAt" [commit]="report.commit" [commitUrl]="report.commitUrl"></app-report-byline>
             </summary>
             <div class="report-description" [innerHTML]="report.description | markdown"></div>
             @if (report.screenshots?.length) {

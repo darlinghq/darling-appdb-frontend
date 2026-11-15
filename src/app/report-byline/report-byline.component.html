@@ -1,4 +1,4 @@
-@if (submitter() || submittedAt()) {
+@if (submitter() || submittedAt() || shortCommit()) {
   <p class="byline">
     @if (submitter(); as s) {
       Reported by
@@ -11,6 +11,14 @@
     @if (submittedAt(); as at) {
       @if (submitter()) { · }
       <time [attr.datetime]="at">{{ at | date: 'mediumDate' }}</time>
+    }
+    @if (shortCommit(); as short) {
+      @if (submitter() || submittedAt()) { · }
+      @if (safeCommitUrl(); as url) {
+        <a class="commit-link" [href]="url" target="_blank" rel="noopener noreferrer" title="View the commit on GitHub">{{ short }}</a>
+      } @else {
+        <span class="commit-hash">{{ short }}</span>
+      }
     }
   </p>
 }

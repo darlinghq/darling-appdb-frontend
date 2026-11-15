@@ -3,3 +3,9 @@
   font-size: 13px;
   opacity: 0.75;
 }
+
+.commit-link,
+.commit-hash {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+}

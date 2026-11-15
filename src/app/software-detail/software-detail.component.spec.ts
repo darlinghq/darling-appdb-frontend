@@ -143,4 +143,27 @@ describe('SoftwareDetailComponent history', () => {
     el = load({ ...base, lastVersion: null });
     expect(el.querySelector('.version-history')).toBeNull();
   });
+
+  it('shows the history for a single version that has several reports', () => {
+    const el = load({
+      ...base,
+      lastVersion: { version: '1.0', download: '', issues: [], lastReport: null },
+      versions: [{ version: '1.0', reportCount: 3, status: 'gold' }]
+    });
+    const rows = el.querySelectorAll('.version-history li');
+    expect(rows.length).toBe(1);
+    expect(rows[0].textContent).toContain('3 reports');
+    expect(rows[0].querySelector('a')!.getAttribute('href')).toBe('/software/app/versions/1.0');
+  });
+
+  it('shows the commit link next to the byline', () => {
+    const el = load({
+      ...base,
+      lastVersion: {
+        version: '1.0', download: '', issues: [],
+        lastReport: { status: 'gold', description: 'x', commit: '0123456789abcdef0123456789abcdef01234567', commitUrl: 'https://github.com/darlinghq/darling-appdb-database/commit/0123456789abcdef0123456789abcdef01234567' }
+      }
+    });
+    expect(el.querySelector('.report a.commit-link')?.textContent?.trim()).toBe('0123456');
+  });
 });

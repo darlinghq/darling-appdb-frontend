@@ -32,6 +32,15 @@ export class SoftwareDetailComponent implements OnInit {
       .map(([key, url]) => ({ key, url }));
   }
 
+  /**
+   * The history is how older versions, and older reports of a version, are
+   * reached: show it when there is anything beyond the newest report.
+   */
+  showHistory(software: SoftwareDetail): boolean {
+    const versions = software.versions ?? [];
+    return versions.length > 1 || versions.some(v => v.reportCount > 1);
+  }
+
   openScreenshot(event: MouseEvent, urls: string[], index: number) {
     // Let ctrl/cmd/middle-click keep the native open-in-new-tab behaviour.
     if (event.ctrlKey || event.metaKey || event.shiftKey || event.button !== 0) { return; }
