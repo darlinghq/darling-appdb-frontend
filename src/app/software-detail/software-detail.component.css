@@ -87,8 +87,19 @@ mat-card-content {
 .report-description {
   margin: 0;
   line-height: 1.5;
-  white-space: pre-line;
+  overflow-wrap: anywhere;
 }
+
+:host ::ng-deep .report-description > :first-child { margin-top: 0; }
+:host ::ng-deep .report-description > :last-child { margin-bottom: 0; }
+:host ::ng-deep .report-description img { max-width: 100%; }
+:host ::ng-deep .report-description pre {
+  overflow-x: auto;
+  padding: 8px;
+  border-radius: 4px;
+  background: rgba(128, 128, 128, 0.15);
+}
+:host ::ng-deep .report-description code { font-size: 0.9em; }
 
 .empty {
   margin: 16px 0 0;

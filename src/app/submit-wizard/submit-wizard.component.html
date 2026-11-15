@@ -150,6 +150,7 @@
               <mat-form-field appearance="outline">
                 <mat-label>Description</mat-label>
                 <textarea matInput formControlName="description" rows="4"></textarea>
+                <mat-hint>Markdown is supported</mat-hint>
                 @if (form.get('report.description')?.hasError('required') && form.get('report.description')?.touched) {
                   <mat-error>Description is required</mat-error>
                 } @else if (serverErrors()['report.description']) {
