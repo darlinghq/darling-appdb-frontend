@@ -1,0 +1,16 @@
+@if (submitter() || submittedAt()) {
+  <p class="byline">
+    @if (submitter(); as s) {
+      Reported by
+      @if (linkLogin(); as login) {
+        <a [href]="'https://github.com/' + login" target="_blank" rel="noopener noreferrer">@{{ login }}</a>
+      } @else {
+        <span class="byline-name">{{ s.name }}</span>
+      }
+    }
+    @if (submittedAt(); as at) {
+      @if (submitter()) { · }
+      <time [attr.datetime]="at">{{ at | date: 'mediumDate' }}</time>
+    }
+  </p>
+}

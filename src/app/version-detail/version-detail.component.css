@@ -1,0 +1,91 @@
+.back-link {
+  display: inline-block;
+  margin-bottom: 8px;
+  font-size: 13px;
+}
+
+.version-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+}
+
+.version-title {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 500;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+.version-pill {
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.6;
+  font-variant-numeric: tabular-nums;
+  border: 1px solid currentColor;
+  opacity: 0.8;
+}
+
+.compact-link-btn {
+  --mat-button-outlined-container-height: 26px;
+  --mat-button-outlined-horizontal-padding: 10px;
+  --mat-button-outlined-icon-spacing: 4px;
+  --mat-button-outlined-label-text-size: 12px;
+  --mat-button-outlined-label-text-weight: 600;
+  --mat-button-outlined-container-shape: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.compact-link-btn mat-icon {
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+  margin: 0 4px 0 0;
+}
+
+.screenshot-gallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.screenshot-gallery img {
+  width: 160px;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.report-entry {
+  margin: 12px 0;
+  padding: 8px 12px;
+  border: 1px solid rgba(128, 128, 128, 0.3);
+  border-radius: 8px;
+}
+
+.report-entry summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 12px;
+  cursor: pointer;
+}
+
+.report-entry summary app-report-byline {
+  margin: 0;
+}
+
+.report-description {
+  margin-top: 12px;
+}
+
+:host ::ng-deep .report-description > :first-child { margin-top: 0; }
+:host ::ng-deep .report-description > :last-child { margin-bottom: 0; }
+:host ::ng-deep .report-description img { max-width: 100%; }

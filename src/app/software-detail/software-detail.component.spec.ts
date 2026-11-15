@@ -2,9 +2,11 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { RouterTestingModule } from '@angular/router/testing';
+import { ActivatedRoute, convertToParamMap } from '@angular/router';
 
 import { SoftwareDetailComponent } from './software-detail.component';
 import { StatusBadgeComponent } from '../status-badge/status-badge.component';
+import { ReportBylineComponent } from '../report-byline/report-byline.component';
 import { MarkdownPipe } from '../markdown/markdown.pipe';
 import { MaterialModule } from '../material.module';
 
@@ -28,7 +30,7 @@ describe('SoftwareDetailComponent links', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [RouterTestingModule, MaterialModule],
-      declarations: [SoftwareDetailComponent, StatusBadgeComponent, MarkdownPipe],
+      declarations: [SoftwareDetailComponent, StatusBadgeComponent, ReportBylineComponent, MarkdownPipe],
       providers: [provideHttpClient(), provideHttpClientTesting()]
     });
     http = TestBed.inject(HttpTestingController);
@@ -70,5 +72,75 @@ describe('SoftwareDetailComponent links', () => {
   it('omits the CPU list when none are given', () => {
     const el = load({ ...base, cpu: [], links: {}, lastVersion: version });
     expect(el.querySelector('.cpu-list')).toBeNull();
+  });
+});
+
+describe('SoftwareDetailComponent history', () => {
+  let http: HttpTestingController;
+
+  function load(software: object): HTMLElement {
+    const fixture = TestBed.createComponent(SoftwareDetailComponent);
+    fixture.detectChanges();
+    http.expectOne(r => r.url.startsWith('/api/software/')).flush(software);
+    http.match('/api/category');
+    fixture.detectChanges();
+    return fixture.nativeElement as HTMLElement;
+  }
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [RouterTestingModule, MaterialModule],
+      declarations: [SoftwareDetailComponent, StatusBadgeComponent, ReportBylineComponent, MarkdownPipe],
+      providers: [provideHttpClient(), provideHttpClientTesting(), { provide: ActivatedRoute, useValue: { snapshot: { paramMap: convertToParamMap({ name: 'app' }) } } }]
+    });
+    http = TestBed.inject(HttpTestingController);
+  });
+
+  const base = { name: 'app', links: {}, cpu: [], free: true, categories: [] };
+
+  it('shows who submitted the current report, linked to GitHub', () => {
+    const el = load({
+      ...base,
+      lastVersion: {
+        version: '2.0', download: '', issues: [],
+        lastReport: { status: 'gold', description: 'works', submitter: { name: 'Alice', login: 'alice' }, submittedAt: '2026-06-01T00:00:00Z' }
+      }
+    });
+    const a = el.querySelector('.report a[href="https://github.com/alice"]');
+    expect(a).not.toBeNull();
+  });
+
+  it('lists every version with links to its page', () => {
+    const el = load({
+      ...base,
+      lastVersion: { version: '2.0', download: '', issues: [], lastReport: null },
+      versions: [
+        { version: '2.0', reportCount: 2, status: 'gold', submittedAt: '2026-06-01T10:00:00Z' },
+        { version: '1.0', reportCount: 0 }
+      ]
+    });
+    const rows = el.querySelectorAll('.version-history li');
+    expect(rows.length).toBe(2);
+    expect(rows[0].querySelector('a')!.getAttribute('href')).toBe('/software/app/versions/2.0');
+    expect(rows[1].querySelector('a')!.getAttribute('href')).toBe('/software/app/versions/1.0');
+    expect(rows[0].querySelector('app-status-badge')).not.toBeNull();
+    expect(rows[1].querySelector('app-status-badge')).toBeNull();
+    expect(rows[1].textContent).toContain('0 reports');
+    expect(rows[0].querySelector('time')?.textContent).toContain('2026');
+    expect(rows[1].querySelector('time')).toBeNull();
+  });
+
+  it('hides the history with a single version or none', () => {
+    let el = load({ ...base, lastVersion: { version: '1.0', download: '', issues: [], lastReport: null }, versions: [{ version: '1.0', reportCount: 0 }] });
+    expect(el.querySelector('.version-history')).toBeNull();
+    TestBed.resetTestingModule();
+    TestBed.configureTestingModule({
+      imports: [RouterTestingModule, MaterialModule],
+      declarations: [SoftwareDetailComponent, StatusBadgeComponent, ReportBylineComponent, MarkdownPipe],
+      providers: [provideHttpClient(), provideHttpClientTesting(), { provide: ActivatedRoute, useValue: { snapshot: { paramMap: convertToParamMap({ name: 'app' }) } } }]
+    });
+    http = TestBed.inject(HttpTestingController);
+    el = load({ ...base, lastVersion: null });
+    expect(el.querySelector('.version-history')).toBeNull();
   });
 });
