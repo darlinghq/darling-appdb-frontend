@@ -30,7 +30,14 @@
       <div class="software-meta">
         <mat-chip-set aria-label="Categories">
           @for (cat of software.categories; track cat) {
-            <mat-chip><a class="category-link" [routerLink]="['/category', cat]">{{ categoryNames()[cat] ?? cat }}</a></mat-chip>
+            <mat-chip>
+              <a class="category-link" [routerLink]="['/category', cat]">
+                @if (categoryIcons()[cat]; as icon) {
+                  <img class="category-icon" [src]="icon" alt="" width="16" height="16" />
+                }
+                {{ categoryNames()[cat] ?? cat }}
+              </a>
+            </mat-chip>
           }
         </mat-chip-set>
         @if (software.cpu?.length) {

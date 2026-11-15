@@ -167,3 +167,38 @@ describe('SoftwareDetailComponent history', () => {
     expect(el.querySelector('.report a.commit-link')?.textContent?.trim()).toBe('0123456');
   });
 });
+
+describe('SoftwareDetailComponent category icons', () => {
+  let http: HttpTestingController;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [RouterTestingModule, MaterialModule],
+      declarations: [SoftwareDetailComponent, StatusBadgeComponent, ReportBylineComponent, MarkdownPipe],
+      providers: [provideHttpClient(), provideHttpClientTesting()]
+    });
+    http = TestBed.inject(HttpTestingController);
+  });
+
+  it('shows the category icon next to its name, and none for categories without one', () => {
+    const fixture = TestBed.createComponent(SoftwareDetailComponent);
+    fixture.detectChanges();
+    http.expectOne(r => r.url.startsWith('/api/software/')).flush({
+      name: 'app', links: {}, cpu: [], free: true, categories: ['games', 'misc'], lastVersion: null
+    });
+    http.expectOne('/api/category').flush({
+      games: { name: { en: 'Games' }, icon: '/api/category/games/icon' },
+      misc: { name: { en: 'Misc' } }
+    });
+    fixture.detectChanges();
+
+    const chips = (fixture.nativeElement as HTMLElement).querySelectorAll('mat-chip');
+    expect(chips.length).toBe(2);
+    const img = chips[0].querySelector('img.category-icon');
+    expect(img?.getAttribute('src')).toBe('/api/category/games/icon');
+    expect(img?.getAttribute('alt')).toBe('');
+    expect(chips[0].textContent).toContain('Games');
+    expect(chips[1].querySelector('img')).toBeNull();
+  });
+});
+
