@@ -37,4 +37,23 @@ describe('AppComponent', () => {
     const compiled = fixture.debugElement.nativeElement;
     expect(compiled.querySelector('span.title').textContent).toContain('Darling AppDB');
   });
+
+  describe('displayName', () => {
+    function nameFor(user: object | null): string {
+      const fixture = TestBed.createComponent(AppComponent);
+      const app = fixture.componentInstance;
+      vi.spyOn(app.auth, 'user').mockReturnValue(user as never);
+      return app.displayName();
+    }
+
+    it('prefers name, then GitHub login, then email', () => {
+      expect(nameFor({ name: 'Ann', login: 'ann', email: 'a@b.c' })).toBe('Ann');
+      expect(nameFor({ name: '', login: 'ann', email: 'a@b.c' })).toBe('ann');
+      expect(nameFor({ name: '', login: '', email: 'a@b.c' })).toBe('a@b.c');
+    });
+
+    it('falls back to a generic label', () => {
+      expect(nameFor({ name: '', login: '', email: '' })).toBe('Logged in');
+    });
+  });
 });
