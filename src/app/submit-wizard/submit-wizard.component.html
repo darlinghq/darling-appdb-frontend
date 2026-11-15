@@ -131,6 +131,11 @@
               <mat-form-field appearance="outline">
                 <mat-label>Status</mat-label>
                 <mat-select formControlName="status">
+                  <mat-select-trigger>
+                    @if (form.get('report.status')?.value; as st) {
+                      <app-status-badge [status]="st"></app-status-badge>
+                    }
+                  </mat-select-trigger>
                   @for (s of statuses; track s) {
                     <mat-option [value]="s"><app-status-badge [status]="s"></app-status-badge></mat-option>
                   }
