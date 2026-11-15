@@ -12,6 +12,15 @@
   <a mat-button href="http://blog.darlinghq.org/">Blog</a>
   <a mat-button href="https://github.com/darlinghq/darling">GitHub</a>
   <a mat-button href="https://discord.gg/XRD3mQA">Discord</a>
+  @if (auth.user()) {
+    <span class="user-info" title="Logged in via {{ auth.user()!.provider }}">
+      <mat-icon>account_circle</mat-icon>
+      <span class="user-name">{{ displayName() }}</span>
+    </span>
+    <button mat-button type="button" (click)="logout()">Log out</button>
+  } @else {
+    <a mat-stroked-button class="login-btn" routerLink="/login" [queryParams]="loginQueryParams()">Sign in</a>
+  }
 </mat-toolbar>
 <div class="container">
   <router-outlet></router-outlet>

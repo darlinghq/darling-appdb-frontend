@@ -54,4 +54,40 @@ describe('AuthService', () => {
 
     expect(await resultPromise).toBe(false);
   });
+
+  it('keeps the user logged in when a later refresh fails with a non-401 error', async () => {
+    vi.useFakeTimers();
+    try {
+      const service: AuthService = TestBed.inject(AuthService);
+      httpMock = TestBed.inject(HttpTestingController);
+      httpMock.expectOne('/api/user').flush({ email: 'a@b.com', name: 'A', provider: 'github' });
+      expect(service.authenticated).toBe(true);
+
+      // Backend restarting during a deploy: nginx answers 502.
+      vi.advanceTimersByTime(5 * 60 * 1000);
+      httpMock.expectOne('/api/user').flush('bad gateway', { status: 502, statusText: 'Bad Gateway' });
+      expect(service.authenticated).toBe(true);
+
+      // A genuine 401 does log the user out.
+      vi.advanceTimersByTime(5 * 60 * 1000);
+      httpMock.expectOne('/api/user').flush('no', { status: 401, statusText: 'Unauthorized' });
+      expect(service.authenticated).toBe(false);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it('logout posts to the backend and clears the user', async () => {
+    const service: AuthService = TestBed.inject(AuthService);
+    httpMock = TestBed.inject(HttpTestingController);
+    httpMock.expectOne('/api/user').flush({ email: 'a@b.com', name: 'A', provider: 'github' });
+
+    const done = firstValueFrom(service.logout());
+    const req = httpMock.expectOne('/api/logout');
+    expect(req.request.method).toBe('POST');
+    req.flush(null, { status: 204, statusText: 'No Content' });
+    await done;
+
+    expect(service.authenticated).toBe(false);
+  });
 });

@@ -68,3 +68,24 @@ footer {
   color: var(--mat-sys-on-surface-variant);
   font-size: 13px;
 }
+
+.user-info {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: 8px;
+  font-size: 14px;
+}
+
+.user-name {
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.login-btn {
+  margin-left: 8px;
+  --mat-button-outlined-label-text-color: #ffffff;
+  --mat-button-outlined-outline-color: rgba(255, 255, 255, 0.6);
+}
