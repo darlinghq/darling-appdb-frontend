@@ -9,7 +9,9 @@
           @if (software.lastVersion; as ver) {
             <span class="version-pill" title="Latest version">v{{ ver.version }}</span>
             @if (ver.lastReport; as report) {
-              <app-status-badge [status]="report.status"></app-status-badge>
+              <a class="status-link" routerLink="/status-levels" [fragment]="report.status" title="What does this status mean?">
+                <app-status-badge [status]="report.status"></app-status-badge>
+              </a>
             }
           }
           @if (software.links?.['product']; as productUrl) {

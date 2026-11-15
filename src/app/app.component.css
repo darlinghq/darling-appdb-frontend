@@ -72,6 +72,10 @@ mat-toolbar {
   padding: 24px 16px;
 }
 
+footer a {
+  color: inherit;
+}
+
 footer {
   text-align: center;
   padding: 24px 16px;

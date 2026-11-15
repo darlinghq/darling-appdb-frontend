@@ -6,6 +6,7 @@ import { LoginComponent } from './login/login.component';
 import { CategoryDetailComponent } from './category-detail/category-detail.component';
 import { SoftwareDetailComponent } from './software-detail/software-detail.component';
 import { SubmitWizardComponent } from './submit-wizard/submit-wizard.component';
+import { StatusLevelsComponent } from './status-levels/status-levels.component';
 import { SearchResultsComponent } from './search-results/search-results.component';
 
 
@@ -14,6 +15,7 @@ const routes: Routes = [
   // (enforced for real by the backend's checkAccess(c, true) on each write
   // endpoint -- these guards just keep logged-out users from reaching a form
   // that would fail anyway).
+  { path: 'status-levels', component: StatusLevelsComponent },
   { path: 'search', component: SearchResultsComponent },
   { path: 'category/:id', component: CategoryDetailComponent },
   { path: 'software/:name', component: SoftwareDetailComponent },
@@ -29,7 +31,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, {})],
+  imports: [RouterModule.forRoot(routes, { anchorScrolling: 'enabled' })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

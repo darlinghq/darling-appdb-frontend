@@ -140,6 +140,7 @@
                     <mat-option [value]="s"><app-status-badge [status]="s"></app-status-badge></mat-option>
                   }
                 </mat-select>
+                <mat-hint>What do these mean? See <a routerLink="/status-levels" target="_blank">status levels</a>.</mat-hint>
                 @if (form.get('report.status')?.hasError('required') && form.get('report.status')?.touched) {
                   <mat-error>Status is required</mat-error>
                 } @else if (serverErrors()['report.status']) {

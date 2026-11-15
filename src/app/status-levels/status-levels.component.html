@@ -1,0 +1,32 @@
+<mat-card>
+  <mat-card-content>
+    <h1>Status levels</h1>
+    <p class="lead">
+      Every compatibility report rates how well an application runs under Darling.
+      The rating is for the specific version and report it belongs to.
+    </p>
+
+    <ul class="levels">
+      @for (level of levels; track level.status) {
+        <li [id]="level.status">
+          <app-status-badge [status]="level.status"></app-status-badge>
+          <div class="level-text">
+            <strong>{{ level.summary }}</strong>
+            <p>{{ level.details }}</p>
+          </div>
+        </li>
+      }
+    </ul>
+
+    <h2>Good to know</h2>
+    <ul class="notes">
+      <li>Reports rate what was actually tested. When in doubt, the lower rating is used and the report explains why.</li>
+      <li>
+        A workaround lowers the rating (to gold at best). Settings Darling expects for a whole class of apps don't:
+        for example, 32-bit (i386) apps need <code>vm.mmap_min_addr</code> set to 4096 or lower
+        (<code>sudo sysctl vm.mmap_min_addr=4096</code>), and reports are rated as if that were set.
+      </li>
+      <li>Read the report itself for the details of what works and what doesn't.</li>
+    </ul>
+  </mat-card-content>
+</mat-card>
