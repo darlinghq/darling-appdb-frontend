@@ -21,9 +21,14 @@ export class SoftwareDetailComponent implements OnInit {
 
   constructor(private route: ActivatedRoute, private softwareService: SoftwareService, private dialog: MatDialog, private categoryService: CategoryService) { }
 
-  linkEntries(software: SoftwareDetail): { key: string; url: string }[] {
+  /**
+   * Links other than "product": that one is the software's website and gets its
+   * own "Website" button in the header, next to "Download" (the latest version's
+   * download URL, a different thing).
+   */
+  extraLinks(software: SoftwareDetail): { key: string; url: string }[] {
     return Object.entries(software.links ?? {})
-      .filter(([, url]) => !!url)
+      .filter(([key, url]) => key !== 'product' && !!url)
       .map(([key, url]) => ({ key, url }));
   }
 
