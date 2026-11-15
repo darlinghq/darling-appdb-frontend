@@ -2,47 +2,58 @@
   <p>Software "{{ softwareName }}" was not found.</p>
 } @else if (software(); as software) {
   <mat-card>
-    <mat-card-header>
-      <mat-card-title>{{ software.name }}</mat-card-title>
-    </mat-card-header>
     <mat-card-content>
-      <mat-chip-set>
-        @for (cat of software.categories; track cat) {
-          <mat-chip><a class="category-link" [routerLink]="['/category', cat]">{{ categoryNames()[cat] ?? cat }}</a></mat-chip>
+      <header class="software-header">
+        <h1 class="software-title">{{ software.name }}</h1>
+        <div class="software-summary">
+          @if (software.lastVersion; as ver) {
+            <span class="version-pill" title="Latest version">v{{ ver.version }}</span>
+            @if (ver.lastReport; as report) {
+              <app-status-badge [status]="report.status"></app-status-badge>
+            }
+            @if (ver.download) {
+              <a mat-stroked-button class="download-btn" [href]="ver.download" target="_blank" rel="noopener noreferrer">
+                <mat-icon>open_in_new</mat-icon> Website
+              </a>
+            }
+          }
+        </div>
+      </header>
+
+      <div class="software-meta">
+        <mat-chip-set aria-label="Categories">
+          @for (cat of software.categories; track cat) {
+            <mat-chip><a class="category-link" [routerLink]="['/category', cat]">{{ categoryNames()[cat] ?? cat }}</a></mat-chip>
+          }
+        </mat-chip-set>
+        @if (linkEntries(software).length) {
+          <ul class="software-links">
+            @for (link of linkEntries(software); track link.key) {
+              <li><a [href]="link.url" target="_blank" rel="noopener noreferrer">{{ link.key }}<mat-icon>open_in_new</mat-icon></a></li>
+            }
+          </ul>
         }
-      </mat-chip-set>
+      </div>
 
-      @if (linkEntries(software).length) {
-        <ul class="software-links">
-          @for (link of linkEntries(software); track link.key) {
-            <li><a [href]="link.url" target="_blank" rel="noopener noreferrer">{{ link.key }}</a></li>
-          }
-        </ul>
-      }
-
-      @if (software.lastVersion) {
-        <p>
-          Latest version: <strong>{{ software.lastVersion.version }}</strong>
-          @if (software.lastVersion.download) {
-            &middot; <a [href]="software.lastVersion.download" target="_blank" rel="noopener noreferrer">Download</a>
-          }
-        </p>
-        @if (software.lastVersion.lastReport; as report) {
-          <p>Status: <app-status-badge [status]="report.status"></app-status-badge></p>
-          <p>{{ report.description }}</p>
-          @if (report.screenshots?.length) {
-            <div class="screenshot-gallery">
-              @for (url of report.screenshots; track url; let i = $index) {
-                <a [href]="url" (click)="openScreenshot($event, report.screenshots!, i)"><img [src]="url" alt="Compatibility report screenshot" /></a>
-              }
-            </div>
+      <section class="report">
+        @if (software.lastVersion; as ver) {
+          @if (ver.lastReport; as report) {
+            <h2>Compatibility report</h2>
+            <p class="report-description">{{ report.description }}</p>
+            @if (report.screenshots?.length) {
+              <div class="screenshot-gallery">
+                @for (url of report.screenshots; track url; let i = $index) {
+                  <a [href]="url" (click)="openScreenshot($event, report.screenshots!, i)"><img [src]="url" alt="Compatibility report screenshot" /></a>
+                }
+              </div>
+            }
+          } @else {
+            <p class="empty">No compatibility report yet for this version.</p>
           }
         } @else {
-          <p>No compatibility report yet for this version.</p>
+          <p class="empty">No versions recorded yet.</p>
         }
-      } @else {
-        <p>No versions recorded yet.</p>
-      }
+      </section>
     </mat-card-content>
     <mat-card-actions>
       <a mat-raised-button color="primary" [routerLink]="['/software', softwareName, 'submit', 'version']">
