@@ -1,5 +1,7 @@
 import { TestBed, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { AppComponent } from './app.component';
 import { MaterialModule } from './material.module';
 
@@ -13,6 +15,7 @@ describe('AppComponent', () => {
       declarations: [
         AppComponent
       ],
+      providers: [provideHttpClient(), provideHttpClientTesting()],
     }).compileComponents();
   }));
 
