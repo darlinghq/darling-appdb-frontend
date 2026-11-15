@@ -5,8 +5,16 @@
   margin-top: 16px;
 }
 
+.category-link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  border-radius: 12px;
+}
+
 .category-card {
   cursor: pointer;
+  height: 100%;
   text-align: center;
   font-weight: 500;
 }
