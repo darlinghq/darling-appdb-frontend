@@ -3,24 +3,50 @@
     <img src="assets/img/darling250.png" alt="Darling logo" class="logo-img" />
     <span class="title">Darling AppDB</span>
   </a>
-  <a mat-flat-button routerLink="/submit/software" class="add-software-btn">+ Add software</a>
+  <a mat-flat-button routerLink="/submit/software" class="add-software-btn">+ <span class="add-long">Add software</span><span class="add-short">Add</span></a>
   <span class="spacer"></span>
   <div class="header-search">
     <input #headerSearch type="search" placeholder="Search software…" (keyup.enter)="search(headerSearch.value)" />
   </div>
-  <a mat-button href="http://docs.darlinghq.org">Docs</a>
-  <a mat-button href="http://blog.darlinghq.org/">Blog</a>
-  <a mat-button href="https://github.com/darlinghq/darling">GitHub</a>
-  <a mat-button href="https://discord.gg/XRD3mQA">Discord</a>
-  @if (auth.user()) {
-    <span class="user-info" title="Logged in via {{ auth.user()!.provider }}">
-      <mat-icon>account_circle</mat-icon>
-      <span class="user-name">{{ displayName() }}</span>
-    </span>
-    <button mat-button type="button" (click)="logout()">Log out</button>
-  } @else {
-    <a mat-stroked-button class="login-btn" routerLink="/login" [queryParams]="loginQueryParams()">Sign in</a>
-  }
+
+  <!-- Wide screens: everything inline. -->
+  <nav class="wide-nav">
+    <a mat-button href="http://docs.darlinghq.org">Docs</a>
+    <a mat-button href="http://blog.darlinghq.org/">Blog</a>
+    <a mat-button href="https://github.com/darlinghq/darling">GitHub</a>
+    <a mat-button href="https://discord.gg/XRD3mQA">Discord</a>
+    @if (auth.user()) {
+      <span class="user-info" title="Logged in via {{ auth.user()!.provider }}">
+        <mat-icon>account_circle</mat-icon>
+        <span class="user-name">{{ displayName() }}</span>
+      </span>
+      <button mat-button type="button" (click)="logout()">Log out</button>
+    } @else {
+      <a mat-stroked-button class="login-btn" routerLink="/login" [queryParams]="loginQueryParams()">Sign in</a>
+    }
+  </nav>
+
+  <!-- Narrow screens: the same links and account actions in a menu. -->
+  <button mat-icon-button class="menu-btn" type="button" [matMenuTriggerFor]="navMenu" aria-label="Menu">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <mat-menu #navMenu="matMenu">
+    @if (auth.user()) {
+      <div class="menu-user" mat-menu-item disabled>
+        <mat-icon>account_circle</mat-icon>
+        <span>{{ displayName() }}</span>
+      </div>
+    }
+    <a mat-menu-item href="http://docs.darlinghq.org">Docs</a>
+    <a mat-menu-item href="http://blog.darlinghq.org/">Blog</a>
+    <a mat-menu-item href="https://github.com/darlinghq/darling">GitHub</a>
+    <a mat-menu-item href="https://discord.gg/XRD3mQA">Discord</a>
+    @if (auth.user()) {
+      <button mat-menu-item type="button" (click)="logout()">Log out</button>
+    } @else {
+      <a mat-menu-item routerLink="/login" [queryParams]="loginQueryParams()">Sign in</a>
+    }
+  </mat-menu>
 </mat-toolbar>
 <div class="container">
   <router-outlet></router-outlet>
