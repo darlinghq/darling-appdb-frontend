@@ -88,5 +88,7 @@ export class AuthService {
 export class UserInfo {
   email!: string;
   name!: string;
+  /** GitHub username; always present for GitHub users, unlike name and email. */
+  login?: string;
   provider!: string;
 }

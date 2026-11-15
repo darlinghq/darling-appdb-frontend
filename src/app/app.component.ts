@@ -14,10 +14,14 @@ export class AppComponent {
 
   constructor(private router: Router, readonly auth: AuthService) { }
 
-  /** Best available label: GitHub users may hide their name and email. */
+  /**
+   * Best available label. GitHub users may hide their name and email, so fall
+   * back to the username (which is always there, except in sessions issued
+   * before the backend started sending it).
+   */
   displayName(): string {
     const u = this.auth.user();
-    return u?.name || u?.email || 'Logged in';
+    return u?.name || u?.login || u?.email || 'Logged in';
   }
 
   /** Send the user back to the page they were on after signing in. */
