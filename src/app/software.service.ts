@@ -34,6 +34,10 @@ export interface ReportData {
   screenshots?: string[];
   submittedAt?: string;
   submitter?: Submitter;
+  /** Hash of the commit that added the report to the database repo. */
+  commit?: string;
+  /** That commit on GitHub; absent when the database repo is not on GitHub. */
+  commitUrl?: string;
 }
 
 /** One row of the version history. */

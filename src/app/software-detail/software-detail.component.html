@@ -54,7 +54,7 @@
         @if (software.lastVersion; as ver) {
           @if (ver.lastReport; as report) {
             <h2>Compatibility report</h2>
-            <app-report-byline [submitter]="report.submitter" [submittedAt]="report.submittedAt"></app-report-byline>
+            <app-report-byline [submitter]="report.submitter" [submittedAt]="report.submittedAt" [commit]="report.commit" [commitUrl]="report.commitUrl"></app-report-byline>
             <div class="report-description" [innerHTML]="report.description | markdown"></div>
             @if (report.screenshots?.length) {
               <div class="screenshot-gallery">
@@ -71,7 +71,7 @@
         }
       </section>
 
-      @if ((software.versions?.length ?? 0) > 1) {
+      @if (showHistory(software)) {
         <section class="version-history">
           <h2>Version history</h2>
           <ul>
