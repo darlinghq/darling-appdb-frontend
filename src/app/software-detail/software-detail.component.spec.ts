@@ -115,7 +115,7 @@ describe('SoftwareDetailComponent history', () => {
       ...base,
       lastVersion: { version: '2.0', download: '', issues: [], lastReport: null },
       versions: [
-        { version: '2.0', reportCount: 2, status: 'gold' },
+        { version: '2.0', reportCount: 2, status: 'gold', submittedAt: '2026-06-01T10:00:00Z' },
         { version: '1.0', reportCount: 0 }
       ]
     });
@@ -126,6 +126,8 @@ describe('SoftwareDetailComponent history', () => {
     expect(rows[0].querySelector('app-status-badge')).not.toBeNull();
     expect(rows[1].querySelector('app-status-badge')).toBeNull();
     expect(rows[1].textContent).toContain('0 reports');
+    expect(rows[0].querySelector('time')?.textContent).toContain('2026');
+    expect(rows[1].querySelector('time')).toBeNull();
   });
 
   it('hides the history with a single version or none', () => {

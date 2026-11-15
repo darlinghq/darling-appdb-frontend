@@ -81,6 +81,9 @@
                 @if (v.status) {
                   <app-status-badge [status]="v.status"></app-status-badge>
                 }
+                @if (v.submittedAt; as at) {
+                  <time class="history-date" [attr.datetime]="at">{{ at | date: 'mediumDate' }}</time>
+                }
                 <span class="history-count">{{ v.reportCount }} {{ v.reportCount === 1 ? 'report' : 'reports' }}</span>
               </li>
             }
