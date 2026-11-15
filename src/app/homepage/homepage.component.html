@@ -1,3 +1,18 @@
+<section class="intro">
+  <img src="assets/img/darling250.png" alt="Darling logo" class="intro-logo" width="125" height="133" />
+  <div class="intro-text">
+    <h1>Darling AppDB</h1>
+    <p>
+      <a href="https://www.darlinghq.org">Darling</a> is a translation layer that lets you run macOS software on Linux.
+      The AppDB is a community-maintained database of applications and how well they work under Darling.
+    </p>
+    <p>
+      Browse the categories below to see what runs, or use the search box to look up a specific app.
+      Tried something yourself? Use <strong>+ Add software</strong> to share your results and help other users.
+    </p>
+  </div>
+</section>
+
 @if (categories() !== null) {
   <div class="categories-grid">
     @for (cat of categories(); track cat) {
