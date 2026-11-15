@@ -16,14 +16,16 @@
 @if (categories() !== null) {
   <div class="categories-grid">
     @for (cat of categories(); track cat) {
-      <mat-card [routerLink]="cat.link" class="category-card">
-        <mat-card-content>
-        @if (cat.icon) {
-          <img [src]="cat.icon" alt="" class="category-icon" width="40" height="40" />
-        }
-        <span>{{ cat.name }}</span>
-      </mat-card-content>
-      </mat-card>
+      <a [routerLink]="cat.link" class="category-link">
+        <mat-card class="category-card">
+          <mat-card-content>
+            @if (cat.icon) {
+              <img [src]="cat.icon" alt="" class="category-icon" width="40" height="40" />
+            }
+            <span>{{ cat.name }}</span>
+          </mat-card-content>
+        </mat-card>
+      </a>
     }
   </div>
 }
