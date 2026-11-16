@@ -8,6 +8,7 @@ import { SoftwareDetailComponent } from './software-detail/software-detail.compo
 import { SubmitWizardComponent } from './submit-wizard/submit-wizard.component';
 import { VersionDetailComponent } from './version-detail/version-detail.component';
 import { StatusLevelsComponent } from './status-levels/status-levels.component';
+import { CpuArchitecturesComponent } from './cpu-architectures/cpu-architectures.component';
 import { SearchResultsComponent } from './search-results/search-results.component';
 
 
@@ -17,6 +18,7 @@ const routes: Routes = [
   // endpoint -- these guards just keep logged-out users from reaching a form
   // that would fail anyway).
   { path: 'status-levels', component: StatusLevelsComponent },
+  { path: 'cpu-architectures', component: CpuArchitecturesComponent },
   { path: 'search', component: SearchResultsComponent },
   { path: 'category/:id', component: CategoryDetailComponent },
   { path: 'software/:name', component: SoftwareDetailComponent },

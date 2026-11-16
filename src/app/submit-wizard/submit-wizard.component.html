@@ -65,6 +65,7 @@
                   <mat-option [value]="arch">{{ arch }}</mat-option>
                 }
               </mat-select>
+              <mat-hint>Not sure? See <a routerLink="/cpu-architectures" target="_blank">CPU architectures</a>.</mat-hint>
               @if (form.get('software.cpu')?.hasError('required') && form.get('software.cpu')?.touched) {
                 <mat-error>At least one CPU architecture is required</mat-error>
               }

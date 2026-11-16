@@ -69,6 +69,18 @@ describe('SoftwareDetailComponent links', () => {
     expect(cpus).toEqual(['x86-64', 'arm64']);
   });
 
+  it('links each CPU architecture to its explanation', () => {
+    const el = load({ ...base, cpu: ['i386', 'ppc'], links: {}, lastVersion: version });
+    const hrefs = Array.from(el.querySelectorAll('.cpu-list li a')).map(a => a.getAttribute('href'));
+    expect(hrefs).toEqual(['/cpu-architectures#i386', '/cpu-architectures#ppc']);
+  });
+
+  it('links each CPU architecture to its explanation', () => {
+    const el = load({ ...base, cpu: ['i386', 'ppc'], links: {}, lastVersion: version });
+    const hrefs = Array.from(el.querySelectorAll('.cpu-list li a')).map(a => a.getAttribute('href'));
+    expect(hrefs).toEqual(['/cpu-architectures#i386', '/cpu-architectures#ppc']);
+  });
+
   it('omits the CPU list when none are given', () => {
     const el = load({ ...base, cpu: [], links: {}, lastVersion: version });
     expect(el.querySelector('.cpu-list')).toBeNull();

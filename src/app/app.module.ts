@@ -15,6 +15,7 @@ import { MarkdownPipe } from './markdown/markdown.pipe';
 import { ReportBylineComponent } from './report-byline/report-byline.component';
 import { VersionDetailComponent } from './version-detail/version-detail.component';
 import { StatusLevelsComponent } from './status-levels/status-levels.component';
+import { CpuArchitecturesComponent } from './cpu-architectures/cpu-architectures.component';
 import { NeedAuthGuard } from './needauth';
 import { provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -34,6 +35,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
         ScreenshotLightboxComponent,
         MarkdownPipe,
         StatusLevelsComponent,
+        CpuArchitecturesComponent,
         ReportBylineComponent,
         VersionDetailComponent
     ],
