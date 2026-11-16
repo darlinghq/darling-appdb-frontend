@@ -58,3 +58,8 @@
     text-align: center;
   }
 }
+
+.category-skeleton {
+  height: 108px;
+  border-radius: 12px;
+}

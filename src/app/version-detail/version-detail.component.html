@@ -41,4 +41,13 @@
       </a>
     </mat-card-actions>
   </mat-card>
+} @else {
+  <mat-card aria-busy="true" aria-label="Loading version">
+    <mat-card-content>
+      <div class="skeleton" style="height: 32px; width: 40%"></div>
+      <div class="skeleton" style="height: 24px; width: 25%; margin-top: 24px"></div>
+      <div class="skeleton" style="height: 48px; margin-top: 16px"></div>
+      <div class="skeleton" style="height: 48px; margin-top: 8px"></div>
+    </mat-card-content>
+  </mat-card>
 }
