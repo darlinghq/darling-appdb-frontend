@@ -104,6 +104,15 @@ mat-card-content {
   background: rgba(128, 128, 128, 0.15);
 }
 
+.cpu-list li a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.cpu-list li a:hover {
+  text-decoration: underline;
+}
+
 .software-links {
   display: flex;
   flex-wrap: wrap;

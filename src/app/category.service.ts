@@ -88,7 +88,7 @@ export class Category {
 }
 
 /** Must match the CPU values the backend accepts (no closed enum server-side, but this is the known set). */
-export const CPU_ARCHITECTURES = ['x86-64', 'i386', 'arm64'];
+export const CPU_ARCHITECTURES = ['x86-64', 'i386', 'arm64', 'ppc'];
 
 export interface SoftwareOverview {
   name: string;

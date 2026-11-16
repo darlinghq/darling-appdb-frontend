@@ -44,7 +44,7 @@
           <ul class="cpu-list" aria-label="CPU architectures" title="Supported CPU architectures">
             <mat-icon aria-hidden="true">memory</mat-icon>
             @for (cpu of software.cpu; track cpu) {
-              <li>{{ cpu }}</li>
+              <li><a routerLink="/cpu-architectures" [fragment]="cpu" title="What is {{ cpu }}?">{{ cpu }}</a></li>
             }
           </ul>
         }

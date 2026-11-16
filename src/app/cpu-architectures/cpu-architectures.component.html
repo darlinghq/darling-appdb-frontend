@@ -1,0 +1,36 @@
+<mat-card>
+  <mat-card-content>
+    <h1>CPU architectures</h1>
+    <p class="lead">
+      A Mac app is built for one or more CPU architectures. Apps built for several at once are
+      called <em>universal</em> (or <em>fat</em>) binaries. The architectures listed for an app are
+      the ones its executable contains.
+    </p>
+
+    <ul class="archs">
+      @for (a of architectures; track a.arch) {
+        <li [id]="a.arch">
+          <code class="arch">{{ a.arch }}</code>
+          <div class="arch-text">
+            <strong>{{ a.name }}</strong>
+            <p>{{ a.history }}</p>
+            <p><em>Under Darling:</em> {{ a.darling }}</p>
+            <p class="aliases">Also seen as: @for (alias of a.aliases; track alias; let last = $last) {<code>{{ alias }}</code>@if (!last) {, }}</p>
+          </div>
+        </li>
+      }
+    </ul>
+
+    <h2>Good to know</h2>
+    <ul class="notes">
+      <li>
+        To see which architectures an app contains, run <code>file</code> or <code>lipo -archs</code>
+        on the executable inside the app bundle, e.g. <code>lipo -archs Foo.app/Contents/MacOS/Foo</code>.
+      </li>
+      <li>
+        Variants such as <code>x86_64h</code> (Haswell), <code>arm64e</code> (pointer authentication) and
+        <code>ppc64</code> are recorded under their base architecture.
+      </li>
+    </ul>
+  </mat-card-content>
+</mat-card>
