@@ -26,6 +26,7 @@
               "src/assets"
             ],
             "styles": [
+              "node_modules/@fontsource-variable/inter/index.css",
               "src/material-theme.scss"
             ],
             "scripts": [],

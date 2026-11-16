@@ -14,7 +14,7 @@ html {
       primary: brand-theme.$primary-palette,
       tertiary: brand-theme.$tertiary-palette,
     ),
-    typography: Roboto,
+    typography: 'Inter Variable',
     density: 0,
   ));
 }
