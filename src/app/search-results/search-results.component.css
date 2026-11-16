@@ -20,3 +20,8 @@
   gap: 12px;
   align-items: flex-start;
 }
+
+.card-skeleton {
+  height: 240px;
+  border-radius: 12px;
+}
