@@ -28,6 +28,8 @@
         <mat-card [routerLink]="['/software', sw.shortName]" class="software-card">
           @if (sw.screenshots?.length) {
             <img mat-card-image [src]="sw.screenshots![0]" alt="" class="card-screenshot" />
+          } @else {
+            <app-screenshot-placeholder mat-card-image></app-screenshot-placeholder>
           }
           <mat-card-header>
             <mat-card-title>{{ sw.name }}</mat-card-title>

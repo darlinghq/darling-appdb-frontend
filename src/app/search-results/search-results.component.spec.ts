@@ -8,6 +8,7 @@ import { BehaviorSubject } from 'rxjs';
 import { SearchResultsComponent } from './search-results.component';
 import { MaterialModule } from '../material.module';
 import { StatusBadgeComponent } from '../status-badge/status-badge.component';
+import { ScreenshotPlaceholderComponent } from '../screenshot-placeholder/screenshot-placeholder.component';
 
 describe('SearchResultsComponent', () => {
   let fixture: ComponentFixture<SearchResultsComponent>;
@@ -19,7 +20,7 @@ describe('SearchResultsComponent', () => {
 
     TestBed.configureTestingModule({
       imports: [RouterTestingModule, MaterialModule],
-      declarations: [SearchResultsComponent, StatusBadgeComponent],
+      declarations: [SearchResultsComponent, StatusBadgeComponent, ScreenshotPlaceholderComponent],
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),

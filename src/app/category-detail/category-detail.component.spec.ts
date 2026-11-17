@@ -7,6 +7,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { CategoryDetailComponent } from './category-detail.component';
 import { MaterialModule } from '../material.module';
 import { StatusBadgeComponent } from '../status-badge/status-badge.component';
+import { ScreenshotPlaceholderComponent } from '../screenshot-placeholder/screenshot-placeholder.component';
 
 describe('CategoryDetailComponent', () => {
   let fixture: ComponentFixture<CategoryDetailComponent>;
@@ -15,7 +16,7 @@ describe('CategoryDetailComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [RouterTestingModule, MaterialModule],
-      declarations: [CategoryDetailComponent, StatusBadgeComponent],
+      declarations: [CategoryDetailComponent, StatusBadgeComponent, ScreenshotPlaceholderComponent],
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
@@ -51,6 +52,22 @@ describe('CategoryDetailComponent', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.textContent).toContain('pearCalc');
     expect(compiled.textContent).toContain('Productivity');
+  });
+
+  it('shows the first screenshot, or a placeholder for software without screenshots', () => {
+    fixture.detectChanges();
+    httpMock.expectOne('/api/category').flush({});
+    httpMock.expectOne('/api/category/productivity').flush([
+      { name: 'With', shortName: 'with', screenshots: ['/shot.png'] },
+      { name: 'Without', shortName: 'without' }
+    ]);
+    fixture.detectChanges();
+
+    const cards = (fixture.nativeElement as HTMLElement).querySelectorAll('.software-card');
+    expect(cards[0].querySelector('img.card-screenshot')?.getAttribute('src')).toBe('/shot.png');
+    expect(cards[0].querySelector('app-screenshot-placeholder')).toBeNull();
+    expect(cards[1].querySelector('img.card-screenshot')).toBeNull();
+    expect(cards[1].querySelector('app-screenshot-placeholder')).not.toBeNull();
   });
 
   it('re-fetches with status and q query params when the filters change', () => {

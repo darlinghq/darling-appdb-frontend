@@ -10,6 +10,7 @@ import { SoftwareDetailComponent } from './software-detail/software-detail.compo
 import { SubmitWizardComponent } from './submit-wizard/submit-wizard.component';
 import { SearchResultsComponent } from './search-results/search-results.component';
 import { StatusBadgeComponent } from './status-badge/status-badge.component';
+import { ScreenshotPlaceholderComponent } from './screenshot-placeholder/screenshot-placeholder.component';
 import { ScreenshotLightboxComponent } from './screenshot-lightbox/screenshot-lightbox.component';
 import { MarkdownPipe } from './markdown/markdown.pipe';
 import { ReportBylineComponent } from './report-byline/report-byline.component';
@@ -32,6 +33,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
         SubmitWizardComponent,
         SearchResultsComponent,
         StatusBadgeComponent,
+        ScreenshotPlaceholderComponent,
         ScreenshotLightboxComponent,
         MarkdownPipe,
         StatusLevelsComponent,

@@ -1,0 +1,24 @@
+/* Same box as .card-screenshot, so cards with and without screenshots line up. */
+:host {
+  display: block;
+  position: relative;
+  height: 140px;
+  overflow: hidden;
+  background: linear-gradient(
+    135deg,
+    var(--mat-sys-surface-container-high) 0%,
+    var(--mat-sys-surface-container) 100%
+  );
+}
+
+.logo {
+  position: absolute;
+  right: -14px;
+  bottom: -30px;
+  width: 128px;
+  transform: rotate(-18deg);
+  filter: grayscale(1);
+  opacity: 0.16;
+  pointer-events: none;
+  user-select: none;
+}
