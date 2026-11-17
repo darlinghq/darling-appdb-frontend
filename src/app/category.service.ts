@@ -96,6 +96,8 @@ export interface SoftwareOverview {
   lastVersion?: string;
   status?: string;
   screenshots?: string[];
+  /** Scaled-down first screenshot for listing cards; absent from older backends. */
+  preview?: string;
 }
 
 /** Must match the backend's validReportStatuses enum (validation.go). */

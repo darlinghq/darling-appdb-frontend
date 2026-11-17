@@ -72,6 +72,18 @@ describe('CategoryDetailComponent', () => {
     expect(cards[1].querySelector('.card-title')?.getAttribute('title')).toBe('Without');
   });
 
+  it('uses the scaled-down preview when the backend provides one', () => {
+    fixture.detectChanges();
+    httpMock.expectOne('/api/category').flush({});
+    httpMock.expectOne('/api/category/productivity').flush([
+      { name: 'App', shortName: 'app', screenshots: ['/shot.png'], preview: '/shot.png/preview' }
+    ]);
+    fixture.detectChanges();
+
+    const img = (fixture.nativeElement as HTMLElement).querySelector('img.card-screenshot');
+    expect(img?.getAttribute('src')).toBe('/shot.png/preview');
+  });
+
   it('re-fetches with status and q query params when the filters change', () => {
     fixture.detectChanges();
     httpMock.expectOne(r => r.url === '/api/category').flush({});
