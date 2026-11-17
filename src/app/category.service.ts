@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 
 /** Raw shape of one entry in the backend's GET /api/category map response. */
@@ -55,17 +55,27 @@ export class CategoryService {
     }));
   }
 
-  public getCategoryContents(id: string, filter?: SoftwareFilter): Observable<SoftwareOverview[]> {
-    return this.httpClient.get<SoftwareOverview[]>('/api/category/' + id, { params: toHttpParams(filter) });
+  /** One page (see SoftwareFilter.page) of a category's software. */
+  public getCategoryContents(id: string, filter?: SoftwareFilter): Observable<SoftwarePage> {
+    return this.httpClient.get<SoftwareOverview[]>('/api/category/' + id, { params: toHttpParams(filter), observe: 'response' })
+      .pipe(map(toSoftwarePage));
   }
 
-  public search(filter: SoftwareFilter): Observable<SoftwareOverview[]> {
-    return this.httpClient.get<SoftwareOverview[]>('/api/search', { params: toHttpParams(filter) });
+  /** One page (see SoftwareFilter.page) of software matching filter.q in any category. */
+  public search(filter: SoftwareFilter): Observable<SoftwarePage> {
+    return this.httpClient.get<SoftwareOverview[]>('/api/search', { params: toHttpParams(filter), observe: 'response' })
+      .pipe(map(toSoftwarePage));
   }
 }
 
+/** Number of software cards per listing page: fills 2-, 3- and 4-column grids evenly. */
+export const PAGE_SIZE = 24;
+
 function toHttpParams(filter?: SoftwareFilter): HttpParams {
-  let params = new HttpParams();
+  const page = Math.max(1, filter?.page ?? 1);
+  let params = new HttpParams()
+    .set('from', (page - 1) * PAGE_SIZE)
+    .set('count', PAGE_SIZE);
   if (filter?.status) {
     params = params.set('status', filter.status);
   }
@@ -75,9 +85,25 @@ function toHttpParams(filter?: SoftwareFilter): HttpParams {
   return params;
 }
 
+/** The backend sends the item count across all pages in X-Total-Count. */
+function toSoftwarePage(response: HttpResponse<SoftwareOverview[]>): SoftwarePage {
+  const items = response.body ?? [];
+  const total = Number(response.headers.get('X-Total-Count'));
+  // An older backend without the header: only what was returned is known.
+  return { items, total: Number.isFinite(total) && total >= items.length ? total : items.length };
+}
+
 export interface SoftwareFilter {
   status?: string;
   q?: string;
+  /** 1-based page number; defaults to the first page. */
+  page?: number;
+}
+
+export interface SoftwarePage {
+  items: SoftwareOverview[];
+  /** Number of matching software across all pages. */
+  total: number;
 }
 export class Category {
   id!: string;

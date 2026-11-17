@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient } from '@angular/common/http';
-import { ActivatedRoute, convertToParamMap } from '@angular/router';
+import { ActivatedRoute, Router, convertToParamMap } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { BehaviorSubject } from 'rxjs';
 
@@ -65,5 +65,38 @@ describe('SearchResultsComponent', () => {
 
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.textContent).toContain('No software matches');
+  });
+
+  it('requests the page and status from the URL and shows a paginator for several pages', () => {
+    queryParamMap.next(convertToParamMap({ q: 'pear', status: 'gold', page: '2' }));
+    fixture.detectChanges();
+
+    const req = httpMock.expectOne(r => r.url === '/api/search');
+    expect(req.request.params.get('from')).toBe('24');
+    expect(req.request.params.get('status')).toBe('gold');
+    req.flush([{ name: 'pearCalc', shortName: 'pearcalc' }], { headers: { 'X-Total-Count': '30' } });
+    fixture.detectChanges();
+
+    expect((fixture.nativeElement as HTMLElement).querySelector('mat-paginator')?.textContent).toContain('25 – 30 of 30');
+  });
+
+  it('puts the status filter and page in the URL', () => {
+    const navigate = vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
+    vi.spyOn(window, 'scrollTo').mockImplementation(() => {});
+    fixture.detectChanges();
+    httpMock.expectOne(r => r.url === '/api/search').flush([]);
+
+    fixture.componentInstance.onStatusFilterChange('gold');
+    expect(navigate).toHaveBeenCalledWith([], expect.objectContaining({ queryParams: { status: 'gold', page: null } }));
+
+    fixture.componentInstance.onPage({ pageIndex: 1, previousPageIndex: 0, pageSize: 24, length: 30 });
+    expect(navigate).toHaveBeenCalledWith([], expect.objectContaining({ queryParams: { page: 2 } }));
+  });
+
+  it('does not search without a query', () => {
+    queryParamMap.next(convertToParamMap({}));
+    fixture.detectChanges();
+    httpMock.expectNone(r => r.url === '/api/search');
+    expect((fixture.nativeElement as HTMLElement).textContent).toContain('No software matches');
   });
 });

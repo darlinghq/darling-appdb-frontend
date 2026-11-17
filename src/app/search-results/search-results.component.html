@@ -13,8 +13,13 @@
 </div>
 
 @if (results() !== null) {
-  @if (results()!.length === 0) {
+  @if (total() === 0) {
     <p>No software matches "{{ query() }}".</p>
+  } @else if (results()!.length === 0) {
+    <p class="past-end">
+      There is no page {{ page() }}.
+      <a [routerLink]="[]" [queryParams]="{ page: null }" queryParamsHandling="merge">Go to the first page</a>
+    </p>
   } @else {
     <div class="software-grid">
       @for (sw of results(); track sw.shortName) {
@@ -38,6 +43,17 @@
         </mat-card>
       }
     </div>
+  }
+  @if (total() > pageSize && results()!.length > 0) {
+    <mat-paginator
+      [length]="total()"
+      [pageSize]="pageSize"
+      [pageIndex]="page() - 1"
+      [hidePageSize]="true"
+      [showFirstLastButtons]="true"
+      (page)="onPage($event)"
+      aria-label="Choose page">
+    </mat-paginator>
   }
 } @else {
   <div class="software-grid" aria-busy="true" aria-label="Loading software">

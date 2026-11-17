@@ -12,6 +12,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 const MATERIAL_MODULES = [
   MatToolbarModule,
@@ -27,6 +28,7 @@ const MATERIAL_MODULES = [
   MatProgressSpinnerModule,
   MatDialogModule,
   MatMenuModule,
+  MatPaginatorModule,
 ];
 
 @NgModule({

@@ -54,3 +54,8 @@
   height: 240px;
   border-radius: 12px;
 }
+
+mat-paginator {
+  margin-top: 16px;
+  background: transparent;
+}
