@@ -27,7 +27,7 @@
       @for (sw of software(); track sw.shortName) {
         <mat-card [routerLink]="['/software', sw.shortName]" class="software-card">
           @if (sw.screenshots?.length) {
-            <img mat-card-image [src]="sw.screenshots![0]" alt="" class="card-screenshot" />
+            <img mat-card-image [src]="sw.preview ?? sw.screenshots![0]" alt="" class="card-screenshot" loading="lazy" />
           } @else {
             <app-screenshot-placeholder mat-card-image></app-screenshot-placeholder>
           }
