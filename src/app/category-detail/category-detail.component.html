@@ -9,6 +9,14 @@
   <mat-form-field appearance="outline">
     <mat-label>Compatibility</mat-label>
     <mat-select [value]="statusFilter()" (selectionChange)="onStatusFilterChange($event.value)">
+      <!-- Without this the trigger shows the option's plain text, which includes the icon's ligature name ("military_tech Gold"). -->
+      <mat-select-trigger>
+        @if (statusFilter()) {
+          <app-status-badge [status]="statusFilter()"></app-status-badge>
+        } @else {
+          Any
+        }
+      </mat-select-trigger>
       <mat-option value="">Any</mat-option>
       @for (s of statuses; track s) {
         <mat-option [value]="s"><app-status-badge [status]="s"></app-status-badge></mat-option>

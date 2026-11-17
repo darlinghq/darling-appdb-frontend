@@ -105,6 +105,26 @@ describe('CategoryDetailComponent', () => {
     flushPage(next, []);
   });
 
+  it('shows the selected status as a badge in the filter, not as plain text', async () => {
+    queryParamMap.next(convertToParamMap({ status: 'gold' }));
+    start();
+    flushPage(contents(), []);
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    const trigger = el().querySelector('.mat-mdc-select-value')!;
+    expect(trigger.querySelector('app-status-badge mat-icon')).not.toBeNull();
+    expect(trigger.textContent).toContain('Gold');
+  });
+
+  it('shows "Any" in the filter when no status is selected', async () => {
+    start();
+    flushPage(contents(), []);
+    await fixture.whenStable();
+    fixture.detectChanges();
+    expect(el().querySelector('.mat-mdc-select-value')?.textContent?.trim()).toBe('Any');
+  });
+
   it('puts filter changes in the URL and goes back to the first page', () => {
     const navigate = vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
     start();
