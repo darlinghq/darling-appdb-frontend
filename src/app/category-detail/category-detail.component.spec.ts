@@ -80,6 +80,15 @@ describe('CategoryDetailComponent', () => {
     expect(cards[1].querySelector('.card-title')?.getAttribute('title')).toBe('Without');
   });
 
+  it('makes each card a real link, so it can be opened in a new tab', () => {
+    start();
+    flushPage(contents(), [{ name: 'pearCalc', shortName: 'pearcalc' }, { name: 'Angry Birds', shortName: 'AngryBirds' }]);
+
+    const links = el().querySelectorAll('a.software-link');
+    expect(Array.from(links, a => a.getAttribute('href'))).toEqual(['/software/pearcalc', '/software/AngryBirds']);
+    expect(links[0].querySelector('.software-card')?.textContent).toContain('pearCalc');
+  });
+
   it('uses the scaled-down preview when the backend provides one', () => {
     start();
     flushPage(contents(), [{ name: 'App', shortName: 'app', screenshots: ['/shot.png'], preview: '/shot.png/preview' }]);

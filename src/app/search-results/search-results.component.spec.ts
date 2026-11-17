@@ -48,6 +48,15 @@ describe('SearchResultsComponent', () => {
     expect(compiled.textContent).toContain('pearCalc');
   });
 
+  it('makes each result card a real link', () => {
+    fixture.detectChanges();
+    httpMock.expectOne(r => r.url === '/api/search').flush([{ name: 'pearCalc', shortName: 'pearcalc' }]);
+    fixture.detectChanges();
+
+    const link = (fixture.nativeElement as HTMLElement).querySelector('a.software-link');
+    expect(link?.getAttribute('href')).toBe('/software/pearcalc');
+  });
+
   it('re-searches when the query param changes', () => {
     fixture.detectChanges();
     httpMock.expectOne(r => r.url === '/api/search' && r.params.get('q') === 'pear').flush([]);

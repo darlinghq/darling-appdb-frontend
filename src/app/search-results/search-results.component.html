@@ -31,24 +31,27 @@
   } @else {
     <div class="software-grid">
       @for (sw of results(); track sw.shortName) {
-        <mat-card [routerLink]="['/software', sw.shortName]" class="software-card">
-          @if (sw.screenshots?.length) {
-            <img mat-card-image [src]="sw.preview ?? sw.screenshots![0]" alt="" class="card-screenshot" loading="lazy" />
-          } @else {
-            <app-screenshot-placeholder mat-card-image></app-screenshot-placeholder>
-          }
-          <mat-card-header>
-            <mat-card-title class="card-title" [title]="sw.name">{{ sw.name }}</mat-card-title>
-            @if (sw.lastVersion) {
-              <mat-card-subtitle class="card-subtitle" [title]="sw.lastVersion">{{ sw.lastVersion }}</mat-card-subtitle>
+        <!-- A real link, so Ctrl/Cmd+click, middle-click and "open in new tab" work. -->
+        <a [routerLink]="['/software', sw.shortName]" class="software-link">
+          <mat-card class="software-card">
+            @if (sw.screenshots?.length) {
+              <img mat-card-image [src]="sw.preview ?? sw.screenshots![0]" alt="" class="card-screenshot" loading="lazy" />
+            } @else {
+              <app-screenshot-placeholder mat-card-image></app-screenshot-placeholder>
             }
-          </mat-card-header>
-          @if (sw.status) {
-            <mat-card-content class="card-status">
-              <app-status-badge [status]="sw.status"></app-status-badge>
-            </mat-card-content>
-          }
-        </mat-card>
+            <mat-card-header>
+              <mat-card-title class="card-title" [title]="sw.name">{{ sw.name }}</mat-card-title>
+              @if (sw.lastVersion) {
+                <mat-card-subtitle class="card-subtitle" [title]="sw.lastVersion">{{ sw.lastVersion }}</mat-card-subtitle>
+              }
+            </mat-card-header>
+            @if (sw.status) {
+              <mat-card-content class="card-status">
+                <app-status-badge [status]="sw.status"></app-status-badge>
+              </mat-card-content>
+            }
+          </mat-card>
+        </a>
       }
     </div>
   }
