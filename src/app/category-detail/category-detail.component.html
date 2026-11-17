@@ -32,13 +32,13 @@
             <app-screenshot-placeholder mat-card-image></app-screenshot-placeholder>
           }
           <mat-card-header>
-            <mat-card-title>{{ sw.name }}</mat-card-title>
+            <mat-card-title class="card-title" [title]="sw.name">{{ sw.name }}</mat-card-title>
             @if (sw.lastVersion) {
-              <mat-card-subtitle>{{ sw.lastVersion }}</mat-card-subtitle>
+              <mat-card-subtitle class="card-subtitle" [title]="sw.lastVersion">{{ sw.lastVersion }}</mat-card-subtitle>
             }
           </mat-card-header>
           @if (sw.status) {
-            <mat-card-content>
+            <mat-card-content class="card-status">
               <app-status-badge [status]="sw.status"></app-status-badge>
             </mat-card-content>
           }

@@ -7,6 +7,35 @@
 
 .software-card {
   cursor: pointer;
+  min-width: 0; /* let the grid column, not the text, decide the width */
+}
+
+/* Block instead of Material's flex, so the title text can't widen the card. */
+.software-card mat-card-header {
+  display: block;
+  padding-bottom: 12px;
+}
+
+/* Up to two lines, then an ellipsis; long unbroken names break anywhere. */
+.card-title {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+}
+
+.card-subtitle {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Pin the status badge to the bottom so badges line up across a row. */
+.card-status {
+  margin-top: auto;
+  padding-bottom: 16px;
 }
 
 .card-screenshot {

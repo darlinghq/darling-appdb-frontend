@@ -68,6 +68,8 @@ describe('CategoryDetailComponent', () => {
     expect(cards[0].querySelector('app-screenshot-placeholder')).toBeNull();
     expect(cards[1].querySelector('img.card-screenshot')).toBeNull();
     expect(cards[1].querySelector('app-screenshot-placeholder')).not.toBeNull();
+    // Long names and versions are clipped with an ellipsis; the full text stays available on hover.
+    expect(cards[1].querySelector('.card-title')?.getAttribute('title')).toBe('Without');
   });
 
   it('re-fetches with status and q query params when the filters change', () => {
