@@ -84,7 +84,7 @@
           <ul>
             @for (v of software.versions; track v.version) {
               <li>
-                <a [routerLink]="['/software', softwareName, 'versions', v.version]">v{{ v.version }}</a>
+                <a [routerLink]="['/software', softwareName, 'versions', v.id ?? v.version]">v{{ v.version }}</a>
                 @if (v.status) {
                   <app-status-badge [status]="v.status"></app-status-badge>
                 }
@@ -103,7 +103,7 @@
         Add version
       </a>
       @if (software.lastVersion) {
-        <a mat-raised-button [routerLink]="['/software', softwareName, 'versions', software.lastVersion.version, 'submit', 'report']">
+        <a mat-raised-button [routerLink]="['/software', softwareName, 'versions', software.lastVersion.id ?? software.lastVersion.version, 'submit', 'report']">
           Report compatibility
         </a>
       }
