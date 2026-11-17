@@ -5,9 +5,18 @@
   margin-top: 16px;
 }
 
+/* The link is the grid item; the card fills it so badges stay bottom-aligned. */
+.software-link {
+  display: block;
+  min-width: 0; /* let the grid column, not the text, decide the width */
+  color: inherit;
+  text-decoration: none;
+  border-radius: 12px;
+}
+
 .software-card {
   cursor: pointer;
-  min-width: 0; /* let the grid column, not the text, decide the width */
+  height: 100%;
 }
 
 /* Block instead of Material's flex, so the title text can't widen the card. */
