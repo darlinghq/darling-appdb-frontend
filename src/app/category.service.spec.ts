@@ -3,7 +3,7 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { provideHttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 
-import { CategoryService } from './category.service';
+import { CategoryService, PAGE_SIZE } from './category.service';
 
 describe('CategoryService', () => {
   let service: CategoryService;
@@ -86,34 +86,45 @@ describe('CategoryService', () => {
     expect(await resultPromise).toBe('does-not-exist');
   });
 
-  it('getCategoryContents sends status and q as query params when given', async () => {
-    const resultPromise = firstValueFrom(service.getCategoryContents('productivity', { status: 'gold', q: 'calc' }));
+  it('getCategoryContents sends status, q and the page as query params', async () => {
+    const resultPromise = firstValueFrom(service.getCategoryContents('productivity', { status: 'gold', q: 'calc', page: 2 }));
 
     const req = httpMock.expectOne(r => r.url === '/api/category/productivity');
     expect(req.request.params.get('status')).toBe('gold');
     expect(req.request.params.get('q')).toBe('calc');
-    req.flush([]);
+    expect(req.request.params.get('from')).toBe(String(PAGE_SIZE));
+    expect(req.request.params.get('count')).toBe(String(PAGE_SIZE));
+    req.flush([{ name: 'pearCalc', shortName: 'pearcalc' }], { headers: { 'X-Total-Count': '30' } });
 
-    expect(await resultPromise).toEqual([]);
+    expect(await resultPromise).toEqual({ items: [{ name: 'pearCalc', shortName: 'pearcalc' }], total: 30 });
   });
 
-  it('getCategoryContents omits query params when no filter is given', async () => {
+  it('getCategoryContents asks for the first page when no filter is given', async () => {
     const resultPromise = firstValueFrom(service.getCategoryContents('productivity'));
 
     const req = httpMock.expectOne(r => r.url === '/api/category/productivity');
-    expect(req.request.params.keys().length).toBe(0);
-    req.flush([]);
+    expect(req.request.params.keys().sort()).toEqual(['count', 'from']);
+    expect(req.request.params.get('from')).toBe('0');
+    req.flush([], { headers: { 'X-Total-Count': '0' } });
 
-    expect(await resultPromise).toEqual([]);
+    expect(await resultPromise).toEqual({ items: [], total: 0 });
+  });
+
+  it('falls back to the returned items as the total when the backend sends no X-Total-Count', async () => {
+    const resultPromise = firstValueFrom(service.getCategoryContents('productivity'));
+    httpMock.expectOne(r => r.url === '/api/category/productivity').flush([{ name: 'A', shortName: 'a' }]);
+
+    expect(await resultPromise).toEqual({ items: [{ name: 'A', shortName: 'a' }], total: 1 });
   });
 
   it('search hits /api/search with the given query params', async () => {
-    const resultPromise = firstValueFrom(service.search({ q: 'pear' }));
+    const resultPromise = firstValueFrom(service.search({ q: 'pear', page: 3 }));
 
     const req = httpMock.expectOne(r => r.url === '/api/search');
     expect(req.request.params.get('q')).toBe('pear');
-    req.flush([{ name: 'pearCalc', shortName: 'pearcalc' }]);
+    expect(req.request.params.get('from')).toBe(String(2 * PAGE_SIZE));
+    req.flush([{ name: 'pearCalc', shortName: 'pearcalc' }], { headers: { 'X-Total-Count': '49' } });
 
-    expect(await resultPromise).toEqual([{ name: 'pearCalc', shortName: 'pearcalc' }]);
+    expect(await resultPromise).toEqual({ items: [{ name: 'pearCalc', shortName: 'pearcalc' }], total: 49 });
   });
 });

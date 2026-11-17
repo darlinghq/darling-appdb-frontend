@@ -4,6 +4,14 @@
   <mat-form-field appearance="outline">
     <mat-label>Compatibility</mat-label>
     <mat-select [value]="statusFilter()" (selectionChange)="onStatusFilterChange($event.value)">
+      <!-- Without this the trigger shows the option's plain text, which includes the icon's ligature name ("military_tech Gold"). -->
+      <mat-select-trigger>
+        @if (statusFilter()) {
+          <app-status-badge [status]="statusFilter()"></app-status-badge>
+        } @else {
+          Any
+        }
+      </mat-select-trigger>
       <mat-option value="">Any</mat-option>
       @for (s of statuses; track s) {
         <mat-option [value]="s"><app-status-badge [status]="s"></app-status-badge></mat-option>
@@ -13,8 +21,13 @@
 </div>
 
 @if (results() !== null) {
-  @if (results()!.length === 0) {
+  @if (total() === 0) {
     <p>No software matches "{{ query() }}".</p>
+  } @else if (results()!.length === 0) {
+    <p class="past-end">
+      There is no page {{ page() }}.
+      <a [routerLink]="[]" [queryParams]="{ page: null }" queryParamsHandling="merge">Go to the first page</a>
+    </p>
   } @else {
     <div class="software-grid">
       @for (sw of results(); track sw.shortName) {
@@ -38,6 +51,17 @@
         </mat-card>
       }
     </div>
+  }
+  @if (total() > pageSize && results()!.length > 0) {
+    <mat-paginator
+      [length]="total()"
+      [pageSize]="pageSize"
+      [pageIndex]="page() - 1"
+      [hidePageSize]="true"
+      [showFirstLastButtons]="true"
+      (page)="onPage($event)"
+      aria-label="Choose page">
+    </mat-paginator>
   }
 } @else {
   <div class="software-grid" aria-busy="true" aria-label="Loading software">
