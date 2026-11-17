@@ -142,6 +142,20 @@ describe('SoftwareDetailComponent history', () => {
     expect(rows[1].querySelector('time')).toBeNull();
   });
 
+  it('links versions by their id and shows their display text', () => {
+    const el = load({
+      ...base,
+      lastVersion: { id: '2.0_beta', version: '2.0 beta', download: '', issues: [], lastReport: null },
+      versions: [
+        { id: '2.0_beta', version: '2.0 beta', reportCount: 0 },
+        { id: '1.0', version: '1.0', reportCount: 0 }
+      ]
+    });
+    const link = el.querySelector('.version-history li a')!;
+    expect(link.getAttribute('href')).toBe('/software/app/versions/2.0_beta');
+    expect(link.textContent).toContain('v2.0 beta');
+  });
+
   it('hides the history with a single version or none', () => {
     let el = load({ ...base, lastVersion: { version: '1.0', download: '', issues: [], lastReport: null }, versions: [{ version: '1.0', reportCount: 0 }] });
     expect(el.querySelector('.version-history')).toBeNull();

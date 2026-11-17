@@ -42,6 +42,8 @@ export interface ReportData {
 
 /** One row of the version history. */
 export interface VersionSummary {
+  /** Directory name that addresses the version in URLs; absent from older backends. */
+  id?: string;
   version: string;
   reportCount: number;
   status?: string;
@@ -49,6 +51,8 @@ export interface VersionSummary {
 }
 
 export interface VersionDetail {
+  /** Directory name that addresses the version in URLs; absent from older backends. */
+  id?: string;
   version: string;
   download: string;
   issues: number[];
@@ -56,6 +60,8 @@ export interface VersionDetail {
 }
 
 export interface VersionData {
+  /** Directory name that addresses the version in URLs; absent from older backends. */
+  id?: string;
   version: string;
   download: string;
   issues: number[];

@@ -36,7 +36,7 @@
       </section>
     </mat-card-content>
     <mat-card-actions>
-      <a mat-raised-button color="primary" [routerLink]="['/software', softwareName, 'versions', ver.version, 'submit', 'report']">
+      <a mat-raised-button color="primary" [routerLink]="['/software', softwareName, 'versions', ver.id ?? ver.version, 'submit', 'report']">
         Report compatibility
       </a>
     </mat-card-actions>

@@ -11,6 +11,10 @@ import { ScreenshotResizeService } from '../screenshot-resize.service';
 import { buildBundlePayload, VersionMode } from '../bundle-payload';
 
 /** Server error keys that describe the submission as a whole, not one field. */
+// Keep in sync with maxSoftwareNameLength / maxVersionLength in the backend (validation.go).
+export const MAX_SOFTWARE_NAME_LENGTH = 100;
+export const MAX_VERSION_LENGTH = 50;
+
 const GENERAL_ERROR_KEYS = ['submission', 'software', 'softwareName', 'version', 'versionId', 'report'];
 
 /**
@@ -48,6 +52,8 @@ export class SubmitWizardComponent implements OnInit {
   readonly cpuArchitectures = CPU_ARCHITECTURES;
   readonly statuses = REPORT_STATUSES;
   readonly maxScreenshots = MAX_SCREENSHOTS;
+  readonly maxSoftwareNameLength = MAX_SOFTWARE_NAME_LENGTH;
+  readonly maxVersionLength = MAX_VERSION_LENGTH;
 
   constructor(
     route: ActivatedRoute,
@@ -66,14 +72,14 @@ export class SubmitWizardComponent implements OnInit {
 
     this.form = this.fb.group({
       software: this.fb.group({
-        name: ['', Validators.required],
+        name: ['', [Validators.required, Validators.maxLength(MAX_SOFTWARE_NAME_LENGTH)]],
         productLink: ['', Validators.required],
         categories: [[] as string[], Validators.required],
         cpu: [['x86-64'] as string[], Validators.required],
         free: [true],
       }),
       version: this.fb.group({
-        version: ['', Validators.required],
+        version: ['', [Validators.required, Validators.maxLength(MAX_VERSION_LENGTH)]],
         download: ['', Validators.required],
       }),
       report: this.fb.group({
@@ -97,7 +103,7 @@ export class SubmitWizardComponent implements OnInit {
       this.categoryService.getCategories().subscribe(v => this.categories.set(v));
     } else if (!this.existingVersionId()) {
       this.softwareService.getSoftware(this.softwareName).subscribe({
-        next: sw => this.lastVersion.set(sw.lastVersion?.version ?? null),
+        next: sw => this.lastVersion.set(sw.lastVersion ? (sw.lastVersion.id ?? sw.lastVersion.version) : null),
         error: () => { /* the server rejects an unknown software on submit */ },
       });
     }
