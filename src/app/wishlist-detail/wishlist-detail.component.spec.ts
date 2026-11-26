@@ -19,8 +19,7 @@ describe('WishlistDetailComponent', () => {
     name: 'PearCalc',
     description: 'A calculator',
     votes: 4,
-    links: { product: 'https://pearcalc.example.com' },
-    categories: ['utilities', 'math'],
+    links: { homepage: 'https://pearcalc.example.com', 'source-code': 'https://git.example.com/pear' },
     myVote: true
   };
 
@@ -47,11 +46,14 @@ describe('WishlistDetailComponent', () => {
     expect(detail).toHaveBeenCalledWith('pearcalc');
     expect(el.querySelector('h1')?.textContent).toContain('PearCalc');
     expect(el.textContent).toContain('A calculator');
-    expect(el.textContent).toContain('utilities');
-    expect(el.textContent).toContain('math');
+    expect(el.querySelector('mat-chip-set')).toBeNull();
     expect(el.querySelector('app-star-button')).not.toBeNull();
     const hrefs = Array.from(el.querySelectorAll('a')).map(a => a.getAttribute('href'));
     expect(hrefs).toContain('https://pearcalc.example.com');
+    expect(hrefs).toContain('https://git.example.com/pear');
+    const anchors = Array.from(el.querySelectorAll('.entry-links a')) as HTMLAnchorElement[];
+    expect(anchors.map(a => a.textContent?.trim())).toEqual(['Homepage', 'Source code']);
+    anchors.forEach(a => expect(a.getAttribute('rel')).toBe('noopener noreferrer'));
     expect(hrefs).toContain('https://github.com/darlinghq/darling-appdb-database/blob/master/data/wishlist/p/pe/pearcalc/index.json');
     expect(hrefs).toContain('https://github.com/darlinghq/darling-appdb-database/commits/master/data/wishlist/p/pe/pearcalc');
   });

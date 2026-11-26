@@ -62,12 +62,24 @@ describe('AppComponent', () => {
     });
   });
 
-  it('has a Wishlist nav link to /wishlist in the wide nav', () => {
+  it('has a Wishlist link right after Add software, not in the wide nav', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
-    const wide = fixture.nativeElement.querySelector('nav.wide-nav a[href="/wishlist"]');
-    expect(wide).toBeTruthy();
-    expect(wide.textContent).toContain('Wishlist');
+    const el = fixture.nativeElement as HTMLElement;
+    const add = el.querySelector('a.add-software-btn')!;
+    const wishlist = add.nextElementSibling as HTMLAnchorElement;
+    expect(wishlist.getAttribute('href')).toBe('/wishlist');
+    expect(wishlist.textContent).toContain('Wishlist');
+    expect(el.querySelector('nav.wide-nav a[href="/wishlist"]')).toBeNull();
+  });
+
+  it('keeps a Wishlist entry in the mobile menu', () => {
+    const fixture = TestBed.createComponent(AppComponent);
+    fixture.detectChanges();
+    (fixture.nativeElement.querySelector('button.menu-btn') as HTMLButtonElement).click();
+    fixture.detectChanges();
+    const items = Array.from(document.querySelectorAll('.mat-mdc-menu-panel a[mat-menu-item]')).map(a => a.getAttribute('href'));
+    expect(items).toContain('/wishlist');
   });
 });
 

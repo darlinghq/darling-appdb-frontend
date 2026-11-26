@@ -4,6 +4,7 @@
     <span class="title">Darling AppDB</span>
   </a>
   <a mat-flat-button routerLink="/submit/software" class="add-software-btn">+ <span class="add-long">Add software</span><span class="add-short">Add</span></a>
+  <a mat-button routerLink="/wishlist" class="wishlist-link">Wishlist</a>
   <span class="spacer"></span>
   <div class="header-search">
     <input #headerSearch type="search" placeholder="Search software…" (keyup.enter)="search(headerSearch.value)" />
@@ -11,7 +12,6 @@
 
   <!-- Wide screens: everything inline. -->
   <nav class="wide-nav">
-    <a mat-button routerLink="/wishlist">Wishlist</a>
     <a mat-button href="http://docs.darlinghq.org">Docs</a>
     <a mat-button href="http://blog.darlinghq.org/">Blog</a>
     <a mat-button href="https://github.com/darlinghq/darling">GitHub</a>

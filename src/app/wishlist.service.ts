@@ -57,8 +57,8 @@ export interface WishlistItem {
 }
 
 export interface WishlistDetail extends WishlistItem {
+  /** Labelled links (key = slugified label), present on the detail response only. */
   links: { [key: string]: string };
-  categories: string[];
   /** Only present when the viewer is logged in. */
   myVote?: boolean;
 }
@@ -76,8 +76,8 @@ export interface VoteResult {
 export interface WishlistProposal {
   name: string;
   description: string;
-  links: { product: string };
-  categories: string[];
+  /** Keys are slugified labels (^[a-z0-9][a-z0-9-]{0,31}$), values http(s) URLs. */
+  links: { [key: string]: string };
 }
 
 export interface ProposeResult {

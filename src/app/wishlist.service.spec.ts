@@ -50,7 +50,7 @@ describe('WishlistService', () => {
   });
 
   it('propose posts the body', () => {
-    const body = { name: 'N', description: 'D', links: { product: 'https://x' }, categories: ['c'] };
+    const body = { name: 'N', description: 'D', links: { homepage: 'https://x' } };
     let got: unknown;
     service.propose(body).subscribe(r => got = r);
     const req = http.expectOne('/api/wishlist');

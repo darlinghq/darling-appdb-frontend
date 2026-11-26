@@ -23,21 +23,45 @@
           <textarea matInput rows="4" formControlName="description" [attr.maxlength]="maxDescription"></textarea>
         </mat-form-field>
 
-        <mat-form-field appearance="outline" class="full">
-          <mat-label>Product link (optional)</mat-label>
-          <input matInput formControlName="productLink" placeholder="https://" />
-          @if (form.controls.productLink.hasError('pattern')) {
-            <mat-error>Must start with http:// or https://</mat-error>
+        <fieldset class="links" formArrayName="links">
+          <legend>Links</legend>
+          <p class="hint">Add at least one link, for example the product's homepage, so people know which software is meant.</p>
+          @for (row of links.controls; track row; let i = $index) {
+            <div class="link-row" [formGroupName]="i">
+              <mat-form-field appearance="outline" class="link-label">
+                <mat-label>Label</mat-label>
+                <input matInput formControlName="label" placeholder="Homepage" />
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="link-url">
+                <mat-label>URL</mat-label>
+                <input matInput formControlName="url" placeholder="https://" />
+              </mat-form-field>
+              <button mat-icon-button type="button" class="remove-link" aria-label="Remove link" (click)="removeLink(i)">
+                <mat-icon>close</mat-icon>
+              </button>
+            </div>
+            @if (row.touched || form.controls.name.touched) {
+              @if (row.hasError('labelRequired')) {
+                <p class="form-error" role="alert">Enter a label for link {{ i + 1 }}.</p>
+              } @else if (row.hasError('badLabel')) {
+                <p class="form-error" role="alert">The label of link {{ i + 1 }} needs letters or digits.</p>
+              } @else if (row.hasError('urlRequired')) {
+                <p class="form-error" role="alert">Enter a URL for link {{ i + 1 }}.</p>
+              } @else if (row.hasError('badUrl')) {
+                <p class="form-error" role="alert">The URL of link {{ i + 1 }} must start with http:// or https://</p>
+              }
+            }
           }
-        </mat-form-field>
-
-        <mat-form-field appearance="outline" class="full">
-          <mat-label>Categories (comma-separated)</mat-label>
-          <input matInput formControlName="categories" placeholder="utilities, developer-tools" />
-          @if (form.controls.categories.errors?.['badCategories']; as bad) {
-            <mat-error>Invalid categories: {{ bad.join(', ') }}. Use lowercase letters, digits and hyphens.</mat-error>
+          @if (links.touched || form.controls.name.touched) {
+            @if (links.hasError('noLink')) {
+              <p class="form-error" role="alert">Add at least one link.</p>
+            }
+            @if (links.errors?.['duplicateKey']; as key) {
+              <p class="form-error" role="alert">Two links use the same label ({{ key }}). Give each link a different label.</p>
+            }
           }
-        </mat-form-field>
+          <button mat-button type="button" class="add-link" (click)="addLink()">Add another link</button>
+        </fieldset>
 
         @if (duplicate()) {
           <p class="form-error" role="alert">

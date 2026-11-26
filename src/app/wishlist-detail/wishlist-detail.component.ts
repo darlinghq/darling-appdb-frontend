@@ -17,6 +17,12 @@ export function wishlistIndexPath(slug: string): string {
   return `${wishlistEntryDir(slug)}/index.json`;
 }
 
+/** Turns a link key back into words: dashes become spaces, first letter capitalised. */
+export function labelFromKey(key: string): string {
+  const words = key.replace(/-+/g, ' ').trim();
+  return words.charAt(0).toUpperCase() + words.slice(1);
+}
+
 @Component({
   selector: 'app-wishlist-detail',
   templateUrl: './wishlist-detail.component.html',
@@ -54,10 +60,10 @@ export class WishlistDetailComponent implements OnInit {
     });
   }
 
-  links(entry: WishlistDetail): { key: string; url: string }[] {
+  links(entry: WishlistDetail): { key: string; label: string; url: string }[] {
     return Object.entries(entry.links ?? {})
       .filter(([, url]) => !!url)
-      .map(([key, url]) => ({ key, url }));
+      .map(([key, url]) => ({ key, label: labelFromKey(key), url }));
   }
 
   onVote(result: VoteResult) {

@@ -48,6 +48,10 @@ mat-toolbar {
   --mat-button-filled-label-text-color: #ffffff;
 }
 
+.wishlist-link {
+  margin-left: 8px;
+}
+
 .header-search {
   margin-right: 8px;
 }
@@ -123,7 +127,9 @@ footer {
     padding: 8px 12px;
   }
 
+  /* The Wishlist link lives in the menu on narrow screens. */
   .wide-nav,
+  .wishlist-link,
   .add-long {
     display: none;
   }
