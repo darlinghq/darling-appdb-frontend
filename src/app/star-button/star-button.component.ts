@@ -15,6 +15,7 @@ const SHOW_SERVER_MESSAGE = new Set([400, 429, 503]);
 @Component({
   selector: 'app-star-button',
   templateUrl: './star-button.component.html',
+  styleUrls: ['./star-button.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false
 })
