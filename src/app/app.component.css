@@ -154,3 +154,11 @@ footer {
   .logo-img { height: 32px; width: 32px; margin-right: 8px; }
   .title { font-size: 17px; white-space: nowrap; }
 }
+
+.wishlist-link .header-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  margin-right: 4px;
+  vertical-align: middle;
+}
