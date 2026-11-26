@@ -94,3 +94,11 @@ mat-paginator {
   margin-left: 4px;
   vertical-align: middle;
 }
+
+.propose-btn .propose-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  margin-right: 4px;
+  vertical-align: middle;
+}
