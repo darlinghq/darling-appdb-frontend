@@ -44,3 +44,20 @@ mat-paginator {
   margin-top: 16px;
   background: transparent;
 }
+
+.page-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.page-head h1 {
+  margin: 0.5rem 0;
+}
+
+.intro {
+  max-width: 60ch;
+  color: rgba(0, 0, 0, 0.7);
+}
