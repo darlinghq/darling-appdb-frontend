@@ -104,18 +104,15 @@ describe('WishlistListComponent', () => {
     expect(link.getAttribute('href')).toBe('/wishlist/foo');
   });
 
-  it('has a Propose software button (not a link) that goes to /wishlist/new', async () => {
+  it('has a Propose software button that is a real HTTP link to /wishlist/new', async () => {
     setup({}, 2);
     const el = fixture.nativeElement as HTMLElement;
-    expect(el.querySelector('a[href="/wishlist/new"]')).toBeNull();
-    const button = el.querySelector('button.propose-btn') as HTMLButtonElement;
-    expect(button.textContent).toContain('Propose software');
-    expect(button.getAttribute('type')).toBe('button');
-    expect(button.hasAttribute('mat-flat-button')).toBe(true);
-    const navigate = vi.spyOn(TestBed.inject(Router), 'navigateByUrl').mockResolvedValue(true);
-    button.click();
-    expect(navigate).toHaveBeenCalled();
-    expect(String(navigate.mock.calls[0][0])).toContain('/wishlist/new');
+    const link = el.querySelector('a.propose-btn') as HTMLAnchorElement;
+    expect(link).not.toBeNull();
+    expect(link.getAttribute('href')).toBe('/wishlist/new');
+    expect(link.textContent).toContain('Propose software');
+    expect(link.hasAttribute('mat-flat-button')).toBe(true);
+    expect(el.querySelector('button.propose-btn')).toBeNull();
   });
 
   it('renders the star pressed for a row the logged-in user voted for', () => {
