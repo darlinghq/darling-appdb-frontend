@@ -1,0 +1,27 @@
+.entry-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.entry-title {
+  margin: 0;
+}
+
+.entry-description {
+  white-space: pre-line;
+}
+
+.entry-links {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.entry-history {
+  margin-top: 16px;
+}

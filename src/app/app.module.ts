@@ -19,6 +19,8 @@ import { StatusLevelsComponent } from './status-levels/status-levels.component';
 import { CpuArchitecturesComponent } from './cpu-architectures/cpu-architectures.component';
 import { StarButtonComponent } from './star-button/star-button.component';
 import { WishlistListComponent } from './wishlist-list/wishlist-list.component';
+import { WishlistDetailComponent } from './wishlist-detail/wishlist-detail.component';
+import { WishlistNewComponent } from './wishlist-new/wishlist-new.component';
 import { NeedAuthGuard } from './needauth';
 import { provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -43,7 +45,9 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
         ReportBylineComponent,
         VersionDetailComponent,
         StarButtonComponent,
-        WishlistListComponent
+        WishlistListComponent,
+        WishlistDetailComponent,
+        WishlistNewComponent
     ],
     bootstrap: [AppComponent], imports: [BrowserModule,
         AppRoutingModule,

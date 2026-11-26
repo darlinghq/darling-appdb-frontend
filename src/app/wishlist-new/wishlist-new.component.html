@@ -1,0 +1,58 @@
+@if (result(); as result) {
+  <mat-card>
+    <mat-card-content>
+      <p>Thanks! Your proposal opened <a [href]="result.prUrl" target="_blank" rel="noopener">pull request #{{ result.prNumber }}</a>.</p>
+      <p>A maintainer needs to review and merge it before it shows up on the wishlist.</p>
+    </mat-card-content>
+  </mat-card>
+} @else {
+  <mat-card>
+    <mat-card-content>
+      <h1>Propose software</h1>
+      <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+        <mat-form-field appearance="outline" class="full">
+          <mat-label>Name</mat-label>
+          <input matInput formControlName="name" [attr.maxlength]="maxName" />
+          @if (form.controls.name.hasError('required')) {
+            <mat-error>Name is required</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full">
+          <mat-label>Description</mat-label>
+          <textarea matInput rows="4" formControlName="description" [attr.maxlength]="maxDescription"></textarea>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full">
+          <mat-label>Product link (optional)</mat-label>
+          <input matInput formControlName="productLink" placeholder="https://" />
+          @if (form.controls.productLink.hasError('pattern')) {
+            <mat-error>Must start with http:// or https://</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full">
+          <mat-label>Categories (comma-separated)</mat-label>
+          <input matInput formControlName="categories" placeholder="utilities, developer-tools" />
+          @if (form.controls.categories.errors?.['badCategories']; as bad) {
+            <mat-error>Invalid categories: {{ bad.join(', ') }}. Use lowercase letters, digits and hyphens.</mat-error>
+          }
+        </mat-form-field>
+
+        @if (duplicate()) {
+          <p class="form-error" role="alert">
+            That app is already on the wishlist.
+            @if (existingSlug(); as slug) {
+              <a [routerLink]="['/wishlist', slug]">View the existing entry</a>
+            }
+          </p>
+        }
+        @if (error()) {
+          <p class="form-error" role="alert">{{ error() }}</p>
+        }
+
+        <button mat-raised-button color="primary" type="submit" [disabled]="submitting()">Submit</button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+}
