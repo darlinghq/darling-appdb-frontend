@@ -28,6 +28,16 @@ describe('WishlistService', () => {
     expect(got).toEqual({ items, total: 42 });
   });
 
+  it('list adds mine=1 only when mine is true', () => {
+    service.list('', 'votes', 1, 20, true).subscribe();
+    expect(http.expectOne(r => r.url === '/api/wishlist').request.params.get('mine')).toBe('1');
+    service.list('', 'votes', 1, 20, false).subscribe();
+    service.list('', 'votes', 1, 20).subscribe();
+    for (const r of http.match(r => r.url === '/api/wishlist')) {
+      expect(r.request.params.has('mine')).toBe(false);
+    }
+  });
+
   it('vote posts to /api/wishlist/:slug/vote', () => {
     let got: unknown;
     service.vote('my app').subscribe(r => got = r);

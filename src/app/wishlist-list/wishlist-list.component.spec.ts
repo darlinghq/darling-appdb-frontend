@@ -9,7 +9,7 @@ import { StarButtonComponent } from '../star-button/star-button.component';
 import { MaterialModule } from '../material.module';
 import { AuthService } from '../auth.service';
 import { WishlistService } from '../wishlist.service';
-import { signal } from '@angular/core';
+import { WritableSignal, signal } from '@angular/core';
 
 describe('WishlistListComponent', () => {
   let fixture: ComponentFixture<WishlistListComponent>;
@@ -22,7 +22,10 @@ describe('WishlistListComponent', () => {
     { slug: 'bar', name: 'Bar', description: 'Does bar', votes: 1 }
   ];
 
-  function setup(params: Record<string, string>, total = 2, rows: object[] = items, response?: Observable<unknown>) {
+  let user: WritableSignal<{ login: string } | null>;
+
+  function setup(params: Record<string, string>, total = 2, rows: object[] = items, response?: Observable<unknown>, loggedIn = false) {
+    user = signal(loggedIn ? { login: 'ann' } : null);
     queryParamMap = new BehaviorSubject(convertToParamMap(params));
     wishlist = { list: vi.fn().mockReturnValue(response ?? of({ items: rows, total })) };
     TestBed.configureTestingModule({
@@ -31,7 +34,7 @@ describe('WishlistListComponent', () => {
       providers: [
         { provide: ActivatedRoute, useValue: { queryParamMap } },
         { provide: WishlistService, useValue: wishlist },
-        { provide: AuthService, useValue: { user: signal(null), waitUntilChecked: () => of(false) } }
+        { provide: AuthService, useValue: { user, waitUntilChecked: () => of(false) } }
       ]
     });
     router = { navigate: vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true) as unknown as ReturnType<typeof vi.fn> };
@@ -146,5 +149,61 @@ describe('WishlistListComponent', () => {
     vi.spyOn(window, 'scrollTo').mockImplementation(() => undefined);
     fixture.componentInstance.onPage({ pageIndex: 2, pageSize: 20, length: 50 });
     expect(router.navigate.mock.calls[0][1]).toMatchObject({ queryParams: { page: 3 } });
+  });
+
+  describe('Show only my votes', () => {
+    const toggle = () => (fixture.nativeElement as HTMLElement).querySelector('mat-slide-toggle') as HTMLElement;
+    const toggleInput = () => toggle().querySelector('button[role="switch"], input') as HTMLButtonElement;
+    const hint = 'Log in to see the wishlist items you starred.';
+
+    it('is labelled and driven by ?mine=1 when logged in', () => {
+      setup({ mine: '1' }, 2, items, undefined, true);
+      const el = fixture.nativeElement as HTMLElement;
+      expect(toggle().textContent).toContain('Show only my votes');
+      expect(toggleInput().getAttribute('aria-checked') ?? String((toggleInput() as unknown as HTMLInputElement).checked)).toBe('true');
+      expect(toggleInput().disabled).toBe(false);
+      expect(el.textContent).not.toContain(hint);
+      expect(wishlist.list).toHaveBeenCalledWith('', 'votes', 1, 20, true);
+    });
+
+    it('is off without the param and sends no mine', () => {
+      setup({}, 2, items, undefined, true);
+      expect(toggleInput().getAttribute('aria-checked')).toBe('false');
+      expect(wishlist.list).toHaveBeenCalledWith('', 'votes', 1, 20);
+    });
+
+    it('is disabled with a hint when logged out, and mine=1 in the URL is not sent', () => {
+      setup({ mine: '1' });
+      const el = fixture.nativeElement as HTMLElement;
+      expect(toggleInput().disabled).toBe(true);
+      expect(el.textContent).toContain(hint);
+      expect(wishlist.list).toHaveBeenCalled();
+      for (const call of wishlist.list.mock.calls) {
+        expect(call[4]).not.toBe(true);
+      }
+      expect(el.querySelectorAll('.wishlist-row').length).toBe(2);
+    });
+
+    it('changing the toggle navigates with mine=1 and resets the page, off removes it', () => {
+      setup({ page: '2' }, 50, items, undefined, true);
+      fixture.componentInstance.onMineChange(true);
+      expect(router.navigate.mock.calls[0][1]).toMatchObject({ queryParams: { mine: '1', page: null }, queryParamsHandling: 'merge' });
+      fixture.componentInstance.onMineChange(false);
+      expect(router.navigate.mock.calls[1][1]).toMatchObject({ queryParams: { mine: null, page: null } });
+    });
+
+    it('shows the not-starred message when filtered and empty', () => {
+      setup({ mine: '1' }, 0, [], undefined, true);
+      const el = fixture.nativeElement as HTMLElement;
+      expect(el.textContent).toContain('You have not starred any wishlist items yet.');
+      expect(el.textContent).not.toContain('No wishlist entries match.');
+    });
+
+    it('keeps the normal empty message when logged out with mine=1', () => {
+      setup({ mine: '1' }, 0, []);
+      const el = fixture.nativeElement as HTMLElement;
+      expect(el.textContent).toContain('No wishlist entries match.');
+      expect(el.textContent).not.toContain('You have not starred');
+    });
   });
 });

@@ -5,6 +5,19 @@
   align-items: flex-start;
 }
 
+.mine-filter {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 56px;
+}
+
+.mine-hint {
+  margin: 0;
+  font-size: 0.8rem;
+  opacity: 0.75;
+}
+
 .wishlist-rows {
   list-style: none;
   margin: 0;

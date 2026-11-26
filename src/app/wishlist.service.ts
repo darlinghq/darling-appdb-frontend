@@ -11,12 +11,15 @@ export class WishlistService {
   constructor(private httpClient: HttpClient) { }
 
   /** One page of the wishlist; `total` is the unpaginated count from X-Total-Count. */
-  public list(q: string, sort: string, page: number, limit: number): Observable<WishlistPage> {
-    const params = new HttpParams()
+  public list(q: string, sort: string, page: number, limit: number, mine = false): Observable<WishlistPage> {
+    let params = new HttpParams()
       .set('q', q)
       .set('sort', sort)
       .set('page', String(page))
       .set('limit', String(limit));
+    if (mine) {
+      params = params.set('mine', '1');
+    }
     return this.httpClient.get<WishlistItem[]>('/api/wishlist', { params, observe: 'response' }).pipe(
       map(response => ({
         items: response.body ?? [],

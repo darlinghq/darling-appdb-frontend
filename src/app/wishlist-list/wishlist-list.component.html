@@ -20,12 +20,20 @@
       <mat-option value="name">Name</mat-option>
     </mat-select>
   </mat-form-field>
+  <div class="mine-filter">
+    <mat-slide-toggle [checked]="mine()" [disabled]="!loggedIn()" (change)="onMineChange($event.checked)">Show only my votes</mat-slide-toggle>
+    @if (!loggedIn()) {
+      <p class="mine-hint">Log in to see the wishlist items you starred.</p>
+    }
+  </div>
 </div>
 
 @if (failed()) {
   <p class="load-error" role="alert">Could not load the wishlist. Try again.</p>
 } @else if (items() !== null) {
-  @if (total() === 0) {
+  @if (total() === 0 && mine()) {
+    <p>You have not starred any wishlist items yet.</p>
+  } @else if (total() === 0) {
     <p>No wishlist entries match.</p>
   } @else if (items()!.length === 0) {
     <p class="past-end">
