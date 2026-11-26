@@ -76,6 +76,13 @@ mat-paginator {
 
 .intro {
   max-width: 60ch;
+  padding: 16px 20px;
+  border-radius: 12px;
+  background: linear-gradient(
+    135deg,
+    var(--mat-sys-surface-container-high) 0%,
+    var(--mat-sys-surface-container) 100%
+  );
   color: rgba(0, 0, 0, 0.7);
 }
 
