@@ -83,7 +83,7 @@ mat-paginator {
     var(--mat-sys-surface-container-high) 0%,
     var(--mat-sys-surface-container) 100%
   );
-  color: rgba(0, 0, 0, 0.7);
+  color: #000;
   position: relative;
   overflow: hidden;
 }
