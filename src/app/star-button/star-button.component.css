@@ -1,0 +1,5 @@
+
+/* Material Symbols draws `star` as an outline unless FILL is set; a pressed star should be solid. */
+.voted-icon {
+  font-variation-settings: 'FILL' 1;
+}

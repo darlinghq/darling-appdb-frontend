@@ -94,7 +94,7 @@ describe('WishlistListComponent', () => {
     expect(el.textContent).toContain('Foo');
     expect(el.textContent).toContain('Does bar');
     expect(el.querySelectorAll('app-star-button').length).toBe(2);
-    expect(el.textContent).toContain('2 requested');
+    expect(el.textContent).not.toContain('requested');
   });
 
   it('shows an empty message when there are no results', () => {

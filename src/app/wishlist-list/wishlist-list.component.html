@@ -41,7 +41,6 @@
       <a [routerLink]="[]" [queryParams]="{ page: null }" queryParamsHandling="merge">Go to the first page</a>
     </p>
   } @else {
-    <p class="total">{{ total() }} requested</p>
     <ul class="wishlist-rows">
       @for (item of items(); track item.slug) {
         <li class="wishlist-row">
