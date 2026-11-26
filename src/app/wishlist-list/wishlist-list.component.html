@@ -33,6 +33,9 @@
           <div class="row-text">
             <span class="row-name"><a [routerLink]="['/wishlist', item.slug]">{{ item.name }}</a></span>
             <span class="row-description">{{ item.description }}</span>
+            @if (item.productLink) {
+              <a class="row-link" [href]="item.productLink" target="_blank" rel="noopener noreferrer">{{ item.productLink }}</a>
+            }
           </div>
           <app-star-button [slug]="item.slug" [votes]="item.votes" [myVote]="item.myVote ?? false"></app-star-button>
         </li>

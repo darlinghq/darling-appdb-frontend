@@ -52,6 +52,8 @@ export interface WishlistItem {
   name: string;
   description: string;
   votes: number;
+  /** The entry's product link; omitted by the backend when empty. */
+  productLink?: string;
   /** Only present when the viewer is logged in. */
   myVote?: boolean;
 }
@@ -76,8 +78,8 @@ export interface VoteResult {
 export interface WishlistProposal {
   name: string;
   description: string;
-  /** Keys are slugified labels (^[a-z0-9][a-z0-9-]{0,31}$), values http(s) URLs. */
-  links: { [key: string]: string };
+  /** An http(s) URL identifying the product. */
+  productLink: string;
 }
 
 export interface ProposeResult {

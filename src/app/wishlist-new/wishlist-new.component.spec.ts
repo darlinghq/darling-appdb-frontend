@@ -6,7 +6,7 @@ import { of, throwError } from 'rxjs';
 import { vi } from 'vitest';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
 
-import { WishlistNewComponent, linkKeyFromLabel } from './wishlist-new.component';
+import { WishlistNewComponent } from './wishlist-new.component';
 import { MaterialModule } from '../material.module';
 import { WishlistService } from '../wishlist.service';
 
@@ -25,25 +25,12 @@ describe('WishlistNewComponent', () => {
     fixture.detectChanges();
   }
 
-  type Row = { label: string; url: string };
-
-  function fill(values: { name?: string; description?: string; links?: Row[] }) {
-    const { links, ...rest } = values;
-    const c = fixture.componentInstance;
-    c.form.patchValue(rest);
-    if (links) {
-      while (c.links.length < links.length) {
-        c.addLink();
-      }
-      while (c.links.length > links.length) {
-        c.removeLink(c.links.length - 1);
-      }
-      c.links.setValue(links);
-    }
+  function fill(values: { name?: string; description?: string; productLink?: string }) {
+    fixture.componentInstance.form.patchValue(values);
     fixture.detectChanges();
   }
 
-  const home: Row = { label: 'Homepage', url: 'https://pear.example.com' };
+  const link = 'https://pear.example.com';
 
   function submit() {
     const form = (fixture.nativeElement as HTMLElement).querySelector('form')!;
@@ -53,91 +40,55 @@ describe('WishlistNewComponent', () => {
 
   const el = () => fixture.nativeElement as HTMLElement;
 
-  it('submits the form with slugified link keys and shows the PR link', () => {
+  it('submits name, description and a trimmed productLink and shows the PR link', () => {
     setup(of({ prUrl: 'https://github.com/x/y/pull/7', prNumber: 7 }));
-    fill({ name: 'PearCalc', description: 'A calculator', links: [
-      { label: ' Home Page! ', url: ' https://pear.example.com ' },
-      { label: 'Source code', url: 'http://git.example.com/pear' },
-      { label: '', url: '' }
-    ] });
+    fill({ name: ' PearCalc ', description: 'A calculator', productLink: ' https://pear.example.com/p ' });
     submit();
 
     expect(propose).toHaveBeenCalledWith({
       name: 'PearCalc',
       description: 'A calculator',
-      links: { 'home-page': 'https://pear.example.com', 'source-code': 'http://git.example.com/pear' }
+      productLink: 'https://pear.example.com/p'
     });
-    expect(Object.keys(propose.mock.calls[0][0])).not.toContain('categories');
-    const link = el().querySelector('a[href="https://github.com/x/y/pull/7"]');
-    expect(link).not.toBeNull();
-    expect(link?.getAttribute('rel')).toContain('noopener');
+    const pr = el().querySelector('a[href="https://github.com/x/y/pull/7"]');
+    expect(pr).not.toBeNull();
+    expect(pr?.getAttribute('rel')).toContain('noopener');
   });
 
-  it('has no categories field and shows the links hint', () => {
+  it('has a single Product link field and no link rows, add button or hint', () => {
     setup(of({}));
     expect(el().textContent).not.toContain('Categories');
-    expect(el().textContent).toContain("Add at least one link, for example the product's homepage, so people know which software is meant.");
+    expect(el().textContent).toContain('Product link');
+    expect(el().querySelector('.link-row')).toBeNull();
+    expect(el().querySelector('.add-link')).toBeNull();
+    expect(el().textContent).not.toContain('Add another link');
+    expect(el().textContent).not.toContain('Add at least one link');
   });
 
-  it('slugifies labels into keys', () => {
-    expect(linkKeyFromLabel('  Source   Code (GitHub) ')).toBe('source-code-github');
-    expect(linkKeyFromLabel('A'.repeat(40))).toBe('a'.repeat(32));
-    expect(linkKeyFromLabel('x'.repeat(31) + '-yyy')).toBe('x'.repeat(31));
-    expect(linkKeyFromLabel('!!!')).toBe('');
-  });
-
-  it('can add and remove link rows', () => {
-    setup(of({}));
-    expect(el().querySelectorAll('.link-row').length).toBe(1);
-    (el().querySelector('.add-link') as HTMLButtonElement).click();
-    fixture.detectChanges();
-    expect(el().querySelectorAll('.link-row').length).toBe(2);
-    (el().querySelector('.remove-link') as HTMLButtonElement).click();
-    fixture.detectChanges();
-    expect(el().querySelectorAll('.link-row').length).toBe(1);
-  });
-
-  it('requires at least one complete link row', () => {
+  it('requires a product link', () => {
     setup(of({ prUrl: 'u', prNumber: 1 }));
-    fill({ name: 'PearCalc', links: [{ label: '', url: '' }] });
+    fill({ name: 'PearCalc', productLink: '   ' });
     submit();
     expect(propose).not.toHaveBeenCalled();
-    expect(fixture.componentInstance.links.hasError('noLink')).toBe(true);
-    expect(el().textContent).toContain('Add at least one link');
+    expect(fixture.componentInstance.form.controls.productLink.hasError('required')).toBe(true);
+    expect(el().textContent).toContain('Product link is required');
   });
 
-  it('a used row needs both label and an http(s) URL', () => {
+  it('rejects product links that are not http(s) URLs with a host', () => {
     setup(of({ prUrl: 'u', prNumber: 1 }));
-    fill({ name: 'PearCalc', links: [{ label: 'Home', url: '' }] });
-    submit();
+    for (const bad of ['ftp://x.example', 'javascript:alert(1)', 'example.com', 'https://', 'http://', 'https://exa mple.com']) {
+      fill({ name: 'PearCalc', productLink: bad });
+      submit();
+      expect(fixture.componentInstance.form.controls.productLink.invalid, bad).toBe(true);
+    }
     expect(propose).not.toHaveBeenCalled();
-    fill({ links: [{ label: '', url: 'https://x.example' }] });
-    submit();
-    expect(propose).not.toHaveBeenCalled();
-    fill({ links: [{ label: 'Home', url: 'ftp://x.example' }] });
-    submit();
-    expect(propose).not.toHaveBeenCalled();
-    fill({ links: [{ label: '!!!', url: 'https://x.example' }] });
-    submit();
-    expect(propose).not.toHaveBeenCalled();
-    fill({ links: [home, { label: 'Extra', url: '' }] });
-    submit();
-    expect(propose).not.toHaveBeenCalled();
-    fill({ links: [home] });
+    fill({ productLink: 'http://x.example/a?b=1' });
     expect(fixture.componentInstance.form.valid).toBe(true);
-  });
-
-  it('two rows with the same key show an inline error', () => {
-    setup(of({ prUrl: 'u', prNumber: 1 }));
-    fill({ name: 'PearCalc', links: [home, { label: 'home-page', url: 'https://other.example' }, { label: 'HOMEPAGE', url: 'https://o2.example' }] });
-    submit();
-    expect(propose).not.toHaveBeenCalled();
-    expect(el().textContent).toContain('Two links use the same label');
   });
 
   it('409 shows the already-exists message', () => {
     setup(throwError(() => new HttpErrorResponse({ status: 409 })));
-    fill({ name: 'Pear  Calc++', links: [home] });
+    fill({ name: 'Pear  Calc++', productLink: link });
     submit();
 
     expect(el().textContent).toContain('That app is already on the wishlist');
@@ -146,14 +97,14 @@ describe('WishlistNewComponent', () => {
 
   it('other errors show a generic message', () => {
     setup(throwError(() => new HttpErrorResponse({ status: 500 })));
-    fill({ name: 'PearCalc', links: [home] });
+    fill({ name: 'PearCalc', productLink: link });
     submit();
     expect(el().textContent).toContain('Something went wrong');
   });
 
   it('a 400 shows the server message', () => {
     setup(throwError(() => new HttpErrorResponse({ status: 400, error: { error: 'invalid link label' } })));
-    fill({ name: 'PearCalc', links: [home] });
+    fill({ name: 'PearCalc', productLink: link });
     submit();
     expect(el().querySelector('.form-error')?.textContent).toContain('invalid link label');
   });

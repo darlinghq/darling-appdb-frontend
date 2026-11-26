@@ -36,6 +36,10 @@
   opacity: 0.75;
 }
 
+.row-link {
+  overflow-wrap: anywhere;
+}
+
 mat-paginator {
   margin-top: 16px;
   background: transparent;

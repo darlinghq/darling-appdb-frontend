@@ -6,29 +6,3 @@
 .form-error {
   color: var(--mat-sys-error, #b3261e);
 }
-
-.links {
-  border: none;
-  margin: 0 0 16px;
-  padding: 0;
-}
-
-.hint {
-  color: var(--mat-sys-on-surface-variant, #555);
-  margin-top: 0;
-}
-
-.link-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  align-items: flex-start;
-}
-
-.link-label {
-  flex: 1 1 160px;
-}
-
-.link-url {
-  flex: 3 1 260px;
-}
