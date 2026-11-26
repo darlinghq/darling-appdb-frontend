@@ -17,6 +17,7 @@ import { ReportBylineComponent } from './report-byline/report-byline.component';
 import { VersionDetailComponent } from './version-detail/version-detail.component';
 import { StatusLevelsComponent } from './status-levels/status-levels.component';
 import { CpuArchitecturesComponent } from './cpu-architectures/cpu-architectures.component';
+import { StarButtonComponent } from './star-button/star-button.component';
 import { NeedAuthGuard } from './needauth';
 import { provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -39,7 +40,8 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
         StatusLevelsComponent,
         CpuArchitecturesComponent,
         ReportBylineComponent,
-        VersionDetailComponent
+        VersionDetailComponent,
+        StarButtonComponent
     ],
     bootstrap: [AppComponent], imports: [BrowserModule,
         AppRoutingModule,
