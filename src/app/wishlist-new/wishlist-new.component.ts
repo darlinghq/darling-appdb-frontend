@@ -39,7 +39,7 @@ function productLinkValidator(control: AbstractControl): ValidationErrors | null
 })
 export class WishlistNewComponent {
   readonly maxName = 100;
-  readonly maxDescription = 5000;
+  readonly maxDescription = 80;
 
   readonly form = new FormGroup({
     name: new FormControl('', { nonNullable: true, validators: [trimmedRequired, Validators.maxLength(this.maxName)] }),
