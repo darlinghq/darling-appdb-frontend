@@ -36,8 +36,12 @@
   opacity: 0.75;
 }
 
-.row-link {
-  overflow-wrap: anywhere;
+.row-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: auto;
+  flex-shrink: 0;
 }
 
 mat-paginator {

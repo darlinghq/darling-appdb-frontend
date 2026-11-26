@@ -43,7 +43,7 @@ describe('WishlistListComponent', () => {
     vi.useRealTimers();
   });
 
-  it('shows the product link as an external anchor, hidden when empty', () => {
+  it('shows a Product link button as an external anchor, hidden when empty', () => {
     setup({});
     const rows = (fixture.nativeElement as HTMLElement).querySelectorAll('.wishlist-row');
     const a = rows[0].querySelector('a.row-link') as HTMLAnchorElement;
@@ -51,7 +51,7 @@ describe('WishlistListComponent', () => {
     expect(a.getAttribute('href')).toBe('https://foo.example/app');
     expect(a.getAttribute('target')).toBe('_blank');
     expect(a.getAttribute('rel')).toBe('noopener noreferrer');
-    expect(a.textContent?.trim()).toBe('https://foo.example/app');
+    expect(a.textContent?.trim()).toBe('Product link');
     expect(rows[1].querySelector('a.row-link')).toBeNull();
   });
 
