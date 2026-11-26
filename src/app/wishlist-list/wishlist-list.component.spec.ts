@@ -51,7 +51,8 @@ describe('WishlistListComponent', () => {
     expect(a.getAttribute('href')).toBe('https://foo.example/app');
     expect(a.getAttribute('target')).toBe('_blank');
     expect(a.getAttribute('rel')).toBe('noopener noreferrer');
-    expect(a.textContent?.trim()).toBe('Product link');
+    expect(a.textContent).toContain('Product link');
+    expect(a.querySelector('mat-icon')?.textContent).toContain('open_in_new');
     expect(rows[1].querySelector('a.row-link')).toBeNull();
   });
 

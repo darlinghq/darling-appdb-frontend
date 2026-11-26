@@ -43,7 +43,7 @@
           </div>
           <div class="row-actions">
             @if (item.productLink) {
-              <a mat-stroked-button class="row-link" [href]="item.productLink" target="_blank" rel="noopener noreferrer">Product link</a>
+              <a mat-stroked-button class="row-link" [href]="item.productLink" target="_blank" rel="noopener noreferrer">Product link<mat-icon class="row-link-icon">open_in_new</mat-icon></a>
             }
             <app-star-button [slug]="item.slug" [votes]="item.votes" [myVote]="item.myVote ?? false"></app-star-button>
           </div>

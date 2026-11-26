@@ -65,3 +65,19 @@ mat-paginator {
   max-width: 60ch;
   color: rgba(0, 0, 0, 0.7);
 }
+
+.row-link {
+  font-size: 0.8rem;
+  line-height: 28px;
+  height: 28px;
+  padding: 0 10px;
+  min-width: 0;
+}
+
+.row-link-icon {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+  margin-left: 4px;
+  vertical-align: middle;
+}
