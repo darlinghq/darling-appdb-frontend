@@ -1,0 +1,30 @@
+@if (notFound()) {
+  <p>Wishlist entry "{{ slug }}" was not found.</p>
+} @else if (failed()) {
+  <p>Could not load this wishlist entry. Please try again later.</p>
+} @else if (entry(); as entry) {
+  <mat-card>
+    <mat-card-content>
+      <header class="entry-header">
+        <h1 class="entry-title">{{ entry.name }}</h1>
+        <app-star-button [slug]="entry.slug" [votes]="entry.votes" [myVote]="entry.myVote ?? false" (changed)="onVote($event)"></app-star-button>
+      </header>
+
+      <p class="entry-description">{{ entry.description }}</p>
+
+      @if (links(entry).length) {
+        <ul class="entry-links">
+          @for (link of links(entry); track link.key) {
+            <li><a [href]="link.url" target="_blank" rel="noopener noreferrer">{{ link.label }}</a></li>
+          }
+        </ul>
+      }
+
+      <p class="entry-history">
+        <a [href]="sourceUrl()" target="_blank" rel="noopener noreferrer">View entry on GitHub</a>
+        &middot;
+        <a [href]="historyUrl()" target="_blank" rel="noopener noreferrer">History</a>
+      </p>
+    </mat-card-content>
+  </mat-card>
+}

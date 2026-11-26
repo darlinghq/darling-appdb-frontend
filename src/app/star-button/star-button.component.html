@@ -1,0 +1,9 @@
+<button mat-button type="button" class="star-button" [attr.aria-pressed]="voted()"
+        [attr.aria-label]="voted() ? 'Remove your vote' : 'Vote for this software'"
+        [disabled]="busy()" (click)="toggle()">
+  <mat-icon [class.voted-icon]="voted()">{{ voted() ? 'star' : 'star_border' }}</mat-icon>
+  <span class="star-count">{{ count() }}</span>
+</button>
+@if (error()) {
+  <span class="star-error" role="alert">{{ error() }}</span>
+}

@@ -1,0 +1,73 @@
+<div class="page-head">
+  <h1>Most wanted software</h1>
+  <a mat-flat-button class="propose-btn" href="/wishlist/new"><mat-icon class="propose-icon">add</mat-icon>Propose software</a>
+</div>
+<p class="intro">
+  <img src="assets/img/darling-logo.svg" alt="" class="intro-logo" />
+  The wishlist collects software that people would like to see working in Darling, the macOS compatibility layer.
+  Anyone can propose an app that doesn't work yet, and anyone can vote for the ones that matter most, so the
+  developers know where to focus. Each vote is public in the database history.
+</p>
+
+<div class="filters">
+  <mat-form-field appearance="outline">
+    <mat-label>Search</mat-label>
+    <input matInput type="search" [value]="query()" (input)="onSearch($any($event.target).value)" />
+  </mat-form-field>
+  <mat-form-field appearance="outline">
+    <mat-label>Sort by</mat-label>
+    <mat-select [value]="sort()" (selectionChange)="onSortChange($event.value)">
+      <mat-option value="votes">Most votes</mat-option>
+      <mat-option value="name">Name</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <div class="mine-filter">
+    <mat-slide-toggle [checked]="mine()" [disabled]="!loggedIn()" (change)="onMineChange($event.checked)">Show only my votes</mat-slide-toggle>
+    @if (!loggedIn()) {
+      <p class="mine-hint">Log in to see the wishlist items you starred.</p>
+    }
+  </div>
+</div>
+
+@if (failed()) {
+  <p class="load-error" role="alert">Could not load the wishlist. Try again.</p>
+} @else if (items() !== null) {
+  @if (total() === 0 && mine()) {
+    <p>You have not starred any wishlist items yet.</p>
+  } @else if (total() === 0) {
+    <p>No wishlist entries match.</p>
+  } @else if (items()!.length === 0) {
+    <p class="past-end">
+      There is no page {{ page() }}.
+      <a [routerLink]="[]" [queryParams]="{ page: null }" queryParamsHandling="merge">Go to the first page</a>
+    </p>
+  } @else {
+    <ul class="wishlist-rows">
+      @for (item of items(); track item.slug) {
+        <li class="wishlist-row">
+          <div class="row-text">
+            <span class="row-name"><a [routerLink]="['/wishlist', item.slug]">{{ item.name }}</a></span>
+            <span class="row-description">{{ item.description }}</span>
+          </div>
+          <div class="row-actions">
+            @if (item.productLink) {
+              <a mat-stroked-button class="row-link" [href]="item.productLink" target="_blank" rel="noopener noreferrer">Product link<mat-icon class="row-link-icon">open_in_new</mat-icon></a>
+            }
+            <app-star-button [slug]="item.slug" [votes]="item.votes" [myVote]="item.myVote ?? false"></app-star-button>
+          </div>
+        </li>
+      }
+    </ul>
+  }
+  @if (total() > pageSize && items()!.length > 0) {
+    <mat-paginator
+      [length]="total()"
+      [pageSize]="pageSize"
+      [pageIndex]="page() - 1"
+      [hidePageSize]="true"
+      [showFirstLastButtons]="true"
+      (page)="onPage($event)"
+      aria-label="Choose page">
+    </mat-paginator>
+  }
+}

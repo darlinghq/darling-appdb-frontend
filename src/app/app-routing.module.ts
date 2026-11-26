@@ -10,6 +10,9 @@ import { VersionDetailComponent } from './version-detail/version-detail.componen
 import { StatusLevelsComponent } from './status-levels/status-levels.component';
 import { CpuArchitecturesComponent } from './cpu-architectures/cpu-architectures.component';
 import { SearchResultsComponent } from './search-results/search-results.component';
+import { WishlistListComponent } from './wishlist-list/wishlist-list.component';
+import { WishlistNewComponent } from './wishlist-new/wishlist-new.component';
+import { WishlistDetailComponent } from './wishlist-detail/wishlist-detail.component';
 
 
 const routes: Routes = [
@@ -30,6 +33,10 @@ const routes: Routes = [
   { path: 'submit/software', component: SubmitWizardComponent, canActivate: [NeedAuthGuard] },
   { path: 'software/:name/submit/version', component: SubmitWizardComponent, canActivate: [NeedAuthGuard], data: { versionMode: 'new' } },
   { path: 'software/:name/versions/:version/submit/report', component: SubmitWizardComponent, canActivate: [NeedAuthGuard] },
+  // 'wishlist/new' must stay before 'wishlist/:slug', or "new" is read as a slug.
+  { path: 'wishlist', component: WishlistListComponent },
+  { path: 'wishlist/new', component: WishlistNewComponent, canActivate: [NeedAuthGuard] },
+  { path: 'wishlist/:slug', component: WishlistDetailComponent },
   { path: '', component: HomepageComponent },
   { path: 'login', component: LoginComponent },
 ];
