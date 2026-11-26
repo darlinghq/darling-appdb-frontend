@@ -1,0 +1,50 @@
+<h1>Most wanted software</h1>
+
+<div class="filters">
+  <mat-form-field appearance="outline">
+    <mat-label>Search</mat-label>
+    <input matInput type="search" [value]="query()" (input)="onSearch($any($event.target).value)" />
+  </mat-form-field>
+  <mat-form-field appearance="outline">
+    <mat-label>Sort by</mat-label>
+    <mat-select [value]="sort()" (selectionChange)="onSortChange($event.value)">
+      <mat-option value="votes">Most votes</mat-option>
+      <mat-option value="name">Name</mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+
+@if (items() !== null) {
+  @if (total() === 0) {
+    <p>No wishlist entries match.</p>
+  } @else if (items()!.length === 0) {
+    <p class="past-end">
+      There is no page {{ page() }}.
+      <a [routerLink]="[]" [queryParams]="{ page: null }" queryParamsHandling="merge">Go to the first page</a>
+    </p>
+  } @else {
+    <p class="total">{{ total() }} requested</p>
+    <ul class="wishlist-rows">
+      @for (item of items(); track item.slug) {
+        <li class="wishlist-row">
+          <div class="row-text">
+            <span class="row-name">{{ item.name }}</span>
+            <span class="row-description">{{ item.description }}</span>
+          </div>
+          <app-star-button [slug]="item.slug" [votes]="item.votes"></app-star-button>
+        </li>
+      }
+    </ul>
+  }
+  @if (total() > pageSize && items()!.length > 0) {
+    <mat-paginator
+      [length]="total()"
+      [pageSize]="pageSize"
+      [pageIndex]="page() - 1"
+      [hidePageSize]="true"
+      [showFirstLastButtons]="true"
+      (page)="onPage($event)"
+      aria-label="Choose page">
+    </mat-paginator>
+  }
+}
