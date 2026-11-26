@@ -6,10 +6,15 @@ import { VoteResult, WishlistDetail, WishlistService } from '../wishlist.service
 const DATABASE_URL = 'https://github.com/darlinghq/darling-appdb-database';
 const WISHLIST_PATH = 'data/wishlist';
 
-/** Where an entry lives in the database repo: data/wishlist/<s1>/<s2>/<slug>/index.json. */
-export function wishlistIndexPath(slug: string): string {
+/** An entry's directory in the database repo: data/wishlist/<s1>/<s2>/<slug>. */
+export function wishlistEntryDir(slug: string): string {
   const second = slug.length > 1 ? slug.slice(0, 2) : '_';
-  return `${WISHLIST_PATH}/${slug.slice(0, 1)}/${second}/${slug}/index.json`;
+  return `${WISHLIST_PATH}/${slug.slice(0, 1)}/${second}/${slug}`;
+}
+
+/** Where an entry's metadata lives: data/wishlist/<s1>/<s2>/<slug>/index.json. */
+export function wishlistIndexPath(slug: string): string {
+  return `${wishlistEntryDir(slug)}/index.json`;
 }
 
 @Component({
@@ -25,9 +30,13 @@ export class WishlistDetailComponent implements OnInit {
   readonly notFound = signal(false);
   readonly failed = signal(false);
 
-  /** Links to the entry's index.json and its history on GitHub (slugs are validated server side; only a-z0-9- reach here). */
-  readonly sourceUrl = computed(() => this.githubUrl('blob'));
-  readonly historyUrl = computed(() => this.githubUrl('commits'));
+  /**
+   * Links to the entry's index.json, and to the history of its whole directory
+   * (index.json and votes.txt) on GitHub. Slugs are validated server side; only
+   * a-z0-9- reach here.
+   */
+  readonly sourceUrl = computed(() => this.githubUrl('blob', wishlistIndexPath));
+  readonly historyUrl = computed(() => this.githubUrl('commits', wishlistEntryDir));
 
   constructor(private route: ActivatedRoute, private wishlist: WishlistService) { }
 
@@ -58,8 +67,8 @@ export class WishlistDetailComponent implements OnInit {
     }
   }
 
-  private githubUrl(kind: 'blob' | 'commits'): string {
+  private githubUrl(kind: 'blob' | 'commits', pathFor: (slug: string) => string): string {
     const slug = this.entry()?.slug;
-    return slug ? `${DATABASE_URL}/${kind}/master/${wishlistIndexPath(slug)}` : '';
+    return slug ? `${DATABASE_URL}/${kind}/master/${pathFor(slug)}` : '';
   }
 }

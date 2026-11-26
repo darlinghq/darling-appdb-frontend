@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute, Router, convertToParamMap } from '@angular/router';
-import { BehaviorSubject, of } from 'rxjs';
+import { ActivatedRoute, Router, RouterModule, convertToParamMap } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
+import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { vi } from 'vitest';
 
 import { WishlistListComponent } from './wishlist-list.component';
@@ -14,27 +15,26 @@ describe('WishlistListComponent', () => {
   let fixture: ComponentFixture<WishlistListComponent>;
   let queryParamMap: BehaviorSubject<ReturnType<typeof convertToParamMap>>;
   let wishlist: { list: ReturnType<typeof vi.fn> };
-  let router: { navigate: ReturnType<typeof vi.fn>; url: string };
+  let router: { navigate: ReturnType<typeof vi.fn> };
 
   const items = [
     { slug: 'foo', name: 'Foo', description: 'Does foo', votes: 3 },
     { slug: 'bar', name: 'Bar', description: 'Does bar', votes: 1 }
   ];
 
-  function setup(params: Record<string, string>, total = 2, rows = items) {
+  function setup(params: Record<string, string>, total = 2, rows: object[] = items, response?: Observable<unknown>) {
     queryParamMap = new BehaviorSubject(convertToParamMap(params));
-    wishlist = { list: vi.fn().mockReturnValue(of({ items: rows, total })) };
-    router = { navigate: vi.fn(), url: '/wishlist' };
+    wishlist = { list: vi.fn().mockReturnValue(response ?? of({ items: rows, total })) };
     TestBed.configureTestingModule({
-      imports: [MaterialModule],
+      imports: [MaterialModule, RouterModule.forRoot([])],
       declarations: [WishlistListComponent, StarButtonComponent],
       providers: [
         { provide: ActivatedRoute, useValue: { queryParamMap } },
-        { provide: Router, useValue: router },
         { provide: WishlistService, useValue: wishlist },
-        { provide: AuthService, useValue: { user: signal(null) } }
+        { provide: AuthService, useValue: { user: signal(null), waitUntilChecked: () => of(false) } }
       ]
     });
+    router = { navigate: vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true) as unknown as ReturnType<typeof vi.fn> };
     fixture = TestBed.createComponent(WishlistListComponent);
     fixture.detectChanges();
   }
@@ -86,6 +86,36 @@ describe('WishlistListComponent', () => {
     const el = fixture.nativeElement as HTMLElement;
     expect(el.querySelectorAll('.wishlist-row').length).toBe(0);
     expect(el.textContent).toContain('No wishlist entries');
+  });
+
+  it('a failed request shows an error, not the empty message', () => {
+    setup({}, 0, [], throwError(() => new HttpErrorResponse({ status: 500 })));
+    const el = fixture.nativeElement as HTMLElement;
+    expect(el.textContent).toContain('Could not load the wishlist. Try again.');
+    expect(el.textContent).not.toContain('No wishlist entries match.');
+    expect(el.querySelectorAll('.wishlist-row').length).toBe(0);
+  });
+
+  it('links each row name to its detail page', () => {
+    setup({}, 2);
+    const el = fixture.nativeElement as HTMLElement;
+    const link = el.querySelector('.wishlist-row .row-name a') as HTMLAnchorElement;
+    expect(link.textContent).toContain('Foo');
+    expect(link.getAttribute('href')).toBe('/wishlist/foo');
+  });
+
+  it('has a Propose software link to /wishlist/new', () => {
+    setup({}, 2);
+    const el = fixture.nativeElement as HTMLElement;
+    const link = el.querySelector('a[href="/wishlist/new"]');
+    expect(link?.textContent).toContain('Propose software');
+  });
+
+  it('renders the star pressed for a row the logged-in user voted for', () => {
+    setup({}, 2, [{ ...items[0], myVote: true }, { ...items[1], myVote: false }]);
+    const buttons = (fixture.nativeElement as HTMLElement).querySelectorAll('app-star-button button');
+    expect(buttons[0].getAttribute('aria-pressed')).toBe('true');
+    expect(buttons[1].getAttribute('aria-pressed')).toBe('false');
   });
 
   it('changing the sort navigates with the new sort and resets the page', () => {

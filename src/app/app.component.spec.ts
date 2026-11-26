@@ -62,7 +62,7 @@ describe('AppComponent', () => {
     });
   });
 
-  it('has a Wishlist nav link to /wishlist in the wide nav and the mobile menu', () => {
+  it('has a Wishlist nav link to /wishlist in the wide nav', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const wide = fixture.nativeElement.querySelector('nav.wide-nav a[href="/wishlist"]');

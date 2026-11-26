@@ -32,7 +32,7 @@ describe('WishlistDetailComponent', () => {
         { provide: ActivatedRoute, useValue: { snapshot: { paramMap: { get: () => slug } } } },
         { provide: Router, useValue: { navigate: vi.fn(), url: '/wishlist/' + slug } },
         { provide: WishlistService, useValue: { detail } },
-        { provide: AuthService, useValue: { user: signal(null) } }
+        { provide: AuthService, useValue: { user: signal(null), waitUntilChecked: () => of(false) } }
       ]
     });
     fixture = TestBed.createComponent(WishlistDetailComponent);
@@ -53,7 +53,7 @@ describe('WishlistDetailComponent', () => {
     const hrefs = Array.from(el.querySelectorAll('a')).map(a => a.getAttribute('href'));
     expect(hrefs).toContain('https://pearcalc.example.com');
     expect(hrefs).toContain('https://github.com/darlinghq/darling-appdb-database/blob/master/data/wishlist/p/pe/pearcalc/index.json');
-    expect(hrefs).toContain('https://github.com/darlinghq/darling-appdb-database/commits/master/data/wishlist/p/pe/pearcalc/index.json');
+    expect(hrefs).toContain('https://github.com/darlinghq/darling-appdb-database/commits/master/data/wishlist/p/pe/pearcalc');
   });
 
   it('uses _ as the second shard for a one-character slug', () => {

@@ -2,12 +2,11 @@ import { Component, OnInit, ChangeDetectionStrategy, DestroyRef, inject, signal 
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { PageEvent } from '@angular/material/paginator';
-import { Subject, of } from 'rxjs';
+import { Observable, Subject, of } from 'rxjs';
 import { catchError, debounceTime, switchMap } from 'rxjs/operators';
 import { WishlistItem, WishlistPage, WishlistService } from '../wishlist.service';
 import { pageFromParam } from '../pagination';
 
-const NO_RESULTS: WishlistPage = { items: [], total: 0 };
 const SEARCH_DEBOUNCE_MS = 300;
 
 /**
@@ -29,6 +28,8 @@ export class WishlistListComponent implements OnInit {
   readonly page = signal(1);
   readonly items = signal<WishlistItem[] | null>(null);
   readonly total = signal(0);
+  /** The last request failed; shown instead of the empty message. */
+  readonly failed = signal(false);
 
   private readonly search$ = new Subject<string>();
   private readonly destroyRef = inject(DestroyRef);
@@ -43,11 +44,18 @@ export class WishlistListComponent implements OnInit {
         this.sort.set(params.get('sort') === 'name' ? 'name' : 'votes');
         this.page.set(pageFromParam(params.get('page')));
         this.items.set(null);
+        this.failed.set(false);
         return this.wishlist.list(this.query(), this.sort(), this.page(), this.pageSize)
-          .pipe(catchError(() => of(NO_RESULTS)));
+          .pipe(catchError((): Observable<WishlistPage | null> => of(null)));
       }),
       takeUntilDestroyed(this.destroyRef)
     ).subscribe(result => {
+      if (result === null) {
+        this.failed.set(true);
+        this.items.set([]);
+        this.total.set(0);
+        return;
+      }
       this.items.set(result.items);
       this.total.set(result.total);
     });

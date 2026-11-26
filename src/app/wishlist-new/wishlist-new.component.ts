@@ -2,8 +2,22 @@ import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ProposeResult, WishlistService } from '../wishlist.service';
+import { serverErrorMessage } from '../http-error-message';
 
 const CATEGORY_PATTERN = /^[a-z0-9][a-z0-9-]*$/;
+const PRODUCT_LINK_PATTERN = /^https?:\/\/\S+$/i;
+const GENERIC_ERROR = 'Something went wrong while submitting. Please try again.';
+
+/** Like Validators.required, but whitespace-only counts as empty. */
+function trimmedRequired(control: AbstractControl): ValidationErrors | null {
+  return String(control.value ?? '').trim() === '' ? { required: true } : null;
+}
+
+/** Empty is allowed; otherwise the trimmed value must be an http(s) URL. */
+function productLinkValidator(control: AbstractControl): ValidationErrors | null {
+  const value = String(control.value ?? '').trim();
+  return value === '' || PRODUCT_LINK_PATTERN.test(value) ? null : { pattern: true };
+}
 
 /** Splits the comma-separated category text: trimmed, lowercased, empty parts dropped. */
 export function parseCategories(text: string): string[] {
@@ -32,9 +46,9 @@ export class WishlistNewComponent {
   readonly maxDescription = 5000;
 
   readonly form = new FormGroup({
-    name: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.maxLength(this.maxName)] }),
+    name: new FormControl('', { nonNullable: true, validators: [trimmedRequired, Validators.maxLength(this.maxName)] }),
     description: new FormControl('', { nonNullable: true, validators: [Validators.maxLength(this.maxDescription)] }),
-    productLink: new FormControl('', { nonNullable: true, validators: [Validators.pattern(/^https?:\/\/\S+$/i)] }),
+    productLink: new FormControl('', { nonNullable: true, validators: [productLinkValidator] }),
     categories: new FormControl('', { nonNullable: true, validators: [categoriesValidator] })
   });
 
@@ -72,8 +86,10 @@ export class WishlistNewComponent {
         if (err?.status === 409) {
           this.duplicate.set(true);
           this.existingSlug.set(slugFromName(name) || null);
+        } else if (err?.status === 400) {
+          this.error.set(serverErrorMessage(err, GENERIC_ERROR));
         } else {
-          this.error.set('Something went wrong while submitting. Please try again.');
+          this.error.set(GENERIC_ERROR);
         }
       }
     });

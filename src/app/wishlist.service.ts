@@ -52,6 +52,8 @@ export interface WishlistItem {
   name: string;
   description: string;
   votes: number;
+  /** Only present when the viewer is logged in. */
+  myVote?: boolean;
 }
 
 export interface WishlistDetail extends WishlistItem {

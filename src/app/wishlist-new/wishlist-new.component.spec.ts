@@ -70,6 +70,34 @@ describe('WishlistNewComponent', () => {
     expect(el().textContent).toContain('Something went wrong');
   });
 
+  it('a 400 shows the server message', () => {
+    setup(throwError(() => new HttpErrorResponse({ status: 400, error: { error: 'unknown category: nope' } })));
+    fill({ name: 'PearCalc' });
+    submit();
+    expect(el().querySelector('.form-error')?.textContent).toContain('unknown category: nope');
+  });
+
+  it('a whitespace-only name is invalid', () => {
+    setup(of({ prUrl: 'u', prNumber: 1 }));
+    fill({ name: '   ' });
+    submit();
+    expect(propose).not.toHaveBeenCalled();
+    expect(fixture.componentInstance.form.controls.name.hasError('required')).toBe(true);
+    expect(el().textContent).toContain('Name is required');
+  });
+
+  it('trims the product link before checking the http(s) pattern', () => {
+    setup(of({ prUrl: 'u', prNumber: 1 }));
+    fill({ name: 'PearCalc', productLink: '  https://pear.example.com  ' });
+    expect(fixture.componentInstance.form.controls.productLink.valid).toBe(true);
+    submit();
+    expect(propose).toHaveBeenCalledWith(expect.objectContaining({ links: { product: 'https://pear.example.com' } }));
+    fill({ productLink: '   ' });
+    expect(fixture.componentInstance.form.controls.productLink.valid).toBe(true);
+    fill({ productLink: ' ftp://x ' });
+    expect(fixture.componentInstance.form.controls.productLink.hasError('pattern')).toBe(true);
+  });
+
   it('rejects an invalid category without calling the service', () => {
     setup(of({ prUrl: 'u', prNumber: 1 }));
     fill({ name: 'PearCalc', categories: 'good, -bad' });
