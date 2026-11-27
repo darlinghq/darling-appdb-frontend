@@ -11,7 +11,7 @@ export class WishlistService {
   constructor(private httpClient: HttpClient) { }
 
   /** One page of the wishlist; `total` is the unpaginated count from X-Total-Count. */
-  public list(q: string, sort: string, page: number, limit: number, mine = false): Observable<WishlistPage> {
+  public list(q: string, sort: string, page: number, limit: number, mine = false, category = ''): Observable<WishlistPage> {
     let params = new HttpParams()
       .set('q', q)
       .set('sort', sort)
@@ -19,6 +19,9 @@ export class WishlistService {
       .set('limit', String(limit));
     if (mine) {
       params = params.set('mine', '1');
+    }
+    if (category) {
+      params = params.set('category', category);
     }
     return this.httpClient.get<WishlistItem[]>('/api/wishlist', { params, observe: 'response' }).pipe(
       map(response => ({
@@ -57,6 +60,12 @@ export interface WishlistItem {
   votes: number;
   /** The entry's product link; omitted by the backend when empty. */
   productLink?: string;
+  /** Optional category IDs when provided by the backend. */
+  categories?: string[];
+  /** Set when this wishlist app already exists in data/software/. */
+  softwareShortName?: string;
+  /** Latest report status when softwareShortName is present. */
+  softwareStatus?: string;
   /** Only present when the viewer is logged in. */
   myVote?: boolean;
 }

@@ -6,8 +6,10 @@ import { vi } from 'vitest';
 
 import { WishlistListComponent } from './wishlist-list.component';
 import { StarButtonComponent } from '../star-button/star-button.component';
+import { StatusBadgeComponent } from '../status-badge/status-badge.component';
 import { MaterialModule } from '../material.module';
 import { AuthService } from '../auth.service';
+import { CategoryService } from '../category.service';
 import { WishlistService } from '../wishlist.service';
 import { WritableSignal, signal } from '@angular/core';
 
@@ -30,10 +32,11 @@ describe('WishlistListComponent', () => {
     wishlist = { list: vi.fn().mockReturnValue(response ?? of({ items: rows, total })) };
     TestBed.configureTestingModule({
       imports: [MaterialModule, RouterModule.forRoot([])],
-      declarations: [WishlistListComponent, StarButtonComponent],
+      declarations: [WishlistListComponent, StarButtonComponent, StatusBadgeComponent],
       providers: [
         { provide: ActivatedRoute, useValue: { queryParamMap } },
         { provide: WishlistService, useValue: wishlist },
+        { provide: CategoryService, useValue: { getCategories: () => of([{ id: 'graphics', name: 'Graphics', link: '/category/graphics' }]) } },
         { provide: AuthService, useValue: { user, waitUntilChecked: () => of(false) } }
       ]
     });
@@ -205,5 +208,21 @@ describe('WishlistListComponent', () => {
       expect(el.textContent).toContain('No wishlist entries match.');
       expect(el.textContent).not.toContain('You have not starred');
     });
+  });
+
+  it('supports sort=newest and category filter from the URL', () => {
+    setup({ sort: 'newest', category: 'graphics' });
+    expect(wishlist.list).toHaveBeenCalledWith('', 'newest', 1, 20, false, 'graphics');
+  });
+
+  it('shows View in AppDB when softwareShortName is set, otherwise Submit to AppDB', () => {
+    setup({}, 2, [
+      { slug: 'foo', name: 'Foo', description: 'Does foo', votes: 3, softwareShortName: 'Foo', softwareStatus: 'gold' },
+      { slug: 'bar', name: 'Bar', description: 'Does bar', votes: 1, productLink: 'https://bar.example', categories: ['graphics'] }
+    ]);
+    const rows = (fixture.nativeElement as HTMLElement).querySelectorAll('.wishlist-row');
+    expect(rows[0].textContent).toContain('View in AppDB');
+    expect(rows[0].querySelector('app-status-badge')).not.toBeNull();
+    expect(rows[1].textContent).toContain('Submit to AppDB');
   });
 });

@@ -52,6 +52,10 @@ mat-toolbar {
   margin-left: 8px;
 }
 
+.recent-link {
+  margin-left: 4px;
+}
+
 .header-search {
   margin-right: 8px;
 }
@@ -127,9 +131,10 @@ footer {
     padding: 8px 12px;
   }
 
-  /* The Wishlist link lives in the menu on narrow screens. */
+  /* The Wishlist and Recent links live in the menu on narrow screens. */
   .wide-nav,
   .wishlist-link,
+  .recent-link,
   .add-long {
     display: none;
   }

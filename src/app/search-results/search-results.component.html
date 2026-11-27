@@ -22,7 +22,10 @@
 
 @if (results() !== null) {
   @if (total() === 0) {
-    <p>No software matches "{{ query() }}".</p>
+    <p>
+      No software matches "{{ query() }}".
+      <a routerLink="/wishlist/new" [queryParams]="{ name: query() }">Propose "{{ query() }}" on the Wishlist</a>.
+    </p>
   } @else if (results()!.length === 0) {
     <p class="past-end">
       There is no page {{ page() }}.

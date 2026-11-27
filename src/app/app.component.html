@@ -5,6 +5,7 @@
   </a>
   <a mat-flat-button routerLink="/submit/software" class="add-software-btn">+ <span class="add-long">Add software</span><span class="add-short">Add</span></a>
   <a mat-button routerLink="/wishlist" class="wishlist-link"><mat-icon class="header-icon">bookmark</mat-icon>Wishlist</a>
+  <a mat-button routerLink="/recent" class="recent-link">Recent</a>
   <span class="spacer"></span>
   <div class="header-search">
     <input #headerSearch type="search" placeholder="Search software…" (keyup.enter)="search(headerSearch.value)" />
@@ -39,6 +40,7 @@
       </div>
     }
     <a mat-menu-item routerLink="/wishlist">Wishlist</a>
+    <a mat-menu-item routerLink="/recent">Recent</a>
     <a mat-menu-item href="http://docs.darlinghq.org">Docs</a>
     <a mat-menu-item href="http://blog.darlinghq.org/">Blog</a>
     <a mat-menu-item href="https://github.com/darlinghq/darling">GitHub</a>

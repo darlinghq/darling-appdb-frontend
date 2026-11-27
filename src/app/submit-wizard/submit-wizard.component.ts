@@ -93,6 +93,24 @@ export class SubmitWizardComponent implements OnInit {
       this.versionMode.set('existing');
       this.reportEnabled.set(true);
     } else {
+      const queryParams = route.snapshot.queryParamMap;
+      if (!this.softwareName && queryParams) {
+        const presetName = queryParams.get('name');
+        const presetLink = queryParams.get('productLink');
+        const presetCats = queryParams.get('categories');
+        if (presetName) {
+          this.form.get('software.name')?.setValue(presetName);
+        }
+        if (presetLink) {
+          this.form.get('software.productLink')?.setValue(presetLink);
+        }
+        if (presetCats) {
+          const cats = presetCats.split(',').map(c => c.trim()).filter(Boolean);
+          if (cats.length) {
+            this.form.get('software.categories')?.setValue(cats);
+          }
+        }
+      }
       this.versionMode.set((route.snapshot.data?.['versionMode'] as VersionMode | undefined) ?? 'new');
     }
     this.syncGroups();

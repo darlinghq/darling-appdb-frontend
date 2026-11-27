@@ -13,6 +13,7 @@ import { SearchResultsComponent } from './search-results/search-results.componen
 import { WishlistListComponent } from './wishlist-list/wishlist-list.component';
 import { WishlistNewComponent } from './wishlist-new/wishlist-new.component';
 import { WishlistDetailComponent } from './wishlist-detail/wishlist-detail.component';
+import { RecentSubmissionsComponent } from './recent-submissions/recent-submissions.component';
 
 
 const routes: Routes = [
@@ -22,6 +23,7 @@ const routes: Routes = [
   // that would fail anyway).
   { path: 'status-levels', component: StatusLevelsComponent },
   { path: 'cpu-architectures', component: CpuArchitecturesComponent },
+  { path: 'recent', component: RecentSubmissionsComponent },
   { path: 'search', component: SearchResultsComponent },
   { path: 'category/:id', component: CategoryDetailComponent },
   { path: 'software/:name', component: SoftwareDetailComponent },
