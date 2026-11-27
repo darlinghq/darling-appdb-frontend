@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 import { HttpErrorResponse } from '@angular/common/http';
 import { of, throwError } from 'rxjs';
 import { vi } from 'vitest';
@@ -7,6 +8,7 @@ import { signal } from '@angular/core';
 
 import { WishlistDetailComponent } from './wishlist-detail.component';
 import { StarButtonComponent } from '../star-button/star-button.component';
+import { StatusBadgeComponent } from '../status-badge/status-badge.component';
 import { MaterialModule } from '../material.module';
 import { AuthService } from '../auth.service';
 import { WishlistService } from '../wishlist.service';
@@ -25,11 +27,10 @@ describe('WishlistDetailComponent', () => {
 
   function setup(detail: ReturnType<typeof vi.fn>, slug = 'pearcalc') {
     TestBed.configureTestingModule({
-      imports: [MaterialModule],
-      declarations: [WishlistDetailComponent, StarButtonComponent],
+      imports: [MaterialModule, RouterTestingModule],
+      declarations: [WishlistDetailComponent, StarButtonComponent, StatusBadgeComponent],
       providers: [
         { provide: ActivatedRoute, useValue: { snapshot: { paramMap: { get: () => slug } } } },
-        { provide: Router, useValue: { navigate: vi.fn(), url: '/wishlist/' + slug } },
         { provide: WishlistService, useValue: { detail } },
         { provide: AuthService, useValue: { user: signal(null), waitUntilChecked: () => of(false) } }
       ]
@@ -73,5 +74,17 @@ describe('WishlistDetailComponent', () => {
   it('other errors show a generic message', () => {
     const el = setup(vi.fn().mockReturnValue(throwError(() => new HttpErrorResponse({ status: 500 }))));
     expect(el.textContent).toContain('Could not load');
+  });
+
+  it('shows category chips and View in AppDB when softwareShortName is set', () => {
+    const el = setup(vi.fn().mockReturnValue(of({
+      ...entry,
+      categories: ['productivity'],
+      softwareShortName: 'pearcalc',
+      softwareStatus: 'gold'
+    })));
+    expect(el.querySelectorAll('mat-chip').length).toBe(1);
+    expect(el.textContent).toContain('View in AppDB');
+    expect(el.querySelector('app-status-badge')).not.toBeNull();
   });
 });

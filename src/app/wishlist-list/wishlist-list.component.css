@@ -49,6 +49,15 @@
   opacity: 0.75;
 }
 
+.row-chips {
+  margin-top: 6px;
+}
+
+.chip-link {
+  color: inherit;
+  text-decoration: none;
+}
+
 .row-actions {
   display: flex;
   align-items: center;
@@ -100,7 +109,8 @@ mat-paginator {
   user-select: none;
 }
 
-.row-link {
+.row-link,
+.row-appdb-link {
   font-size: 0.8rem;
   line-height: 28px;
   height: 28px;

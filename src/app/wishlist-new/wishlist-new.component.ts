@@ -1,4 +1,5 @@
-import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, signal } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ProposeResult, WishlistService } from '../wishlist.service';
@@ -54,7 +55,14 @@ export class WishlistNewComponent {
   readonly duplicate = signal(false);
   readonly error = signal('');
 
-  constructor(private wishlist: WishlistService) { }
+  private readonly route = inject(ActivatedRoute, { optional: true });
+
+  constructor(private wishlist: WishlistService) {
+    const presetName = this.route?.snapshot?.queryParamMap?.get('name');
+    if (presetName) {
+      this.form.controls.name.setValue(presetName);
+    }
+  }
 
   submit() {
     this.form.markAllAsTouched();

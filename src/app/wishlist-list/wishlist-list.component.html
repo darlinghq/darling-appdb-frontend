@@ -18,9 +18,21 @@
     <mat-label>Sort by</mat-label>
     <mat-select [value]="sort()" (selectionChange)="onSortChange($event.value)">
       <mat-option value="votes">Most votes</mat-option>
+      <mat-option value="newest">Newest</mat-option>
       <mat-option value="name">Name</mat-option>
     </mat-select>
   </mat-form-field>
+  @if (categories().length) {
+    <mat-form-field appearance="outline">
+      <mat-label>Category</mat-label>
+      <mat-select [value]="categoryFilter()" (selectionChange)="onCategoryChange($event.value)">
+        <mat-option value="">All categories</mat-option>
+        @for (cat of categories(); track cat.id) {
+          <mat-option [value]="cat.id">{{ cat.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  }
   <div class="mine-filter">
     <mat-slide-toggle [checked]="mine()" [disabled]="!loggedIn()" (change)="onMineChange($event.checked)">Show only my votes</mat-slide-toggle>
     @if (!loggedIn()) {
@@ -48,10 +60,27 @@
           <div class="row-text">
             <span class="row-name"><a [routerLink]="['/wishlist', item.slug]">{{ item.name }}</a></span>
             <span class="row-description">{{ item.description }}</span>
+            @if (item.categories?.length) {
+              <mat-chip-set aria-label="Categories" class="row-chips">
+                @for (cat of item.categories; track cat) {
+                  <mat-chip>
+                    <a class="chip-link" [routerLink]="['/category', cat]">{{ categoryNames()[cat] ?? cat }}</a>
+                  </mat-chip>
+                }
+              </mat-chip-set>
+            }
           </div>
           <div class="row-actions">
             @if (item.productLink) {
               <a mat-stroked-button class="row-link" [href]="item.productLink" target="_blank" rel="noopener noreferrer">Product link<mat-icon class="row-link-icon">open_in_new</mat-icon></a>
+            }
+            @if (item.softwareShortName) {
+              @if (item.softwareStatus) {
+                <app-status-badge [status]="item.softwareStatus"></app-status-badge>
+              }
+              <a mat-stroked-button class="row-appdb-link" [routerLink]="['/software', item.softwareShortName]">View in AppDB</a>
+            } @else {
+              <a mat-stroked-button class="row-appdb-link" [routerLink]="['/submit/software']" [queryParams]="{ name: item.name, productLink: item.productLink || null, categories: item.categories?.length ? item.categories!.join(',') : null }">Submit to AppDB</a>
             }
             <app-star-button [slug]="item.slug" [votes]="item.votes" [myVote]="item.myVote ?? false"></app-star-button>
           </div>

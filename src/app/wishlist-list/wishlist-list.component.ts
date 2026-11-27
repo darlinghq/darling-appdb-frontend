@@ -6,6 +6,7 @@ import { Observable, Subject, combineLatest, of } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, map, switchMap } from 'rxjs/operators';
 import { WishlistItem, WishlistPage, WishlistService } from '../wishlist.service';
 import { AuthService } from '../auth.service';
+import { Category, CategoryService } from '../category.service';
 import { pageFromParam } from '../pagination';
 
 const SEARCH_DEBOUNCE_MS = 300;
@@ -24,7 +25,10 @@ const SEARCH_DEBOUNCE_MS = 300;
 export class WishlistListComponent implements OnInit {
   readonly pageSize = 20;
   readonly query = signal('');
-  readonly sort = signal<'votes' | 'name'>('votes');
+  readonly sort = signal<'votes' | 'name' | 'newest'>('votes');
+  readonly categoryFilter = signal('');
+  readonly categories = signal<Category[]>([]);
+  readonly categoryNames = signal<Record<string, string>>({});
   /** 1-based. */
   readonly page = signal(1);
   /** ?mine=1 is in the URL; only honoured (sent to the API) while logged in. */
@@ -38,10 +42,19 @@ export class WishlistListComponent implements OnInit {
   private readonly search$ = new Subject<string>();
   private readonly destroyRef = inject(DestroyRef);
   private readonly injector = inject(Injector);
+  private readonly categoryService = inject(CategoryService, { optional: true });
 
   constructor(private route: ActivatedRoute, private router: Router, private wishlist: WishlistService, private auth: AuthService) { }
 
   ngOnInit() {
+    this.categoryService?.getCategories().subscribe({
+      next: cats => {
+        this.categories.set(cats);
+        this.categoryNames.set(Object.fromEntries(cats.map(c => [c.id, c.name])));
+      },
+      error: () => { /* keep showing category IDs */ }
+    });
+
     // switchMap drops the response for a search or page the user has already left.
     // Wait for the initial session check so a ?mine=1 URL is not first
     // requested unfiltered while we still do not know who the user is.
@@ -52,14 +65,19 @@ export class WishlistListComponent implements OnInit {
       ])),
       switchMap(([params, loggedIn]) => {
         this.query.set(params.get('q') ?? '');
-        this.sort.set(params.get('sort') === 'name' ? 'name' : 'votes');
+        const rawSort = params.get('sort');
+        this.sort.set(rawSort === 'name' || rawSort === 'newest' ? rawSort : 'votes');
+        this.categoryFilter.set(params.get('category') ?? '');
         this.page.set(pageFromParam(params.get('page')));
         this.mineParam.set(params.get('mine') === '1');
         this.loggedIn.set(loggedIn);
         this.items.set(null);
         this.failed.set(false);
         const args = [this.query(), this.sort(), this.page(), this.pageSize] as const;
-        const request = this.mine() ? this.wishlist.list(...args, true) : this.wishlist.list(...args);
+        const cat = this.categoryFilter();
+        const request = cat
+          ? this.wishlist.list(...args, this.mine(), cat)
+          : (this.mine() ? this.wishlist.list(...args, true) : this.wishlist.list(...args));
         return request.pipe(catchError((): Observable<WishlistPage | null> => of(null)));
       }),
       takeUntilDestroyed(this.destroyRef)
@@ -85,7 +103,11 @@ export class WishlistListComponent implements OnInit {
   }
 
   onSortChange(sort: string) {
-    this.navigate({ sort: sort === 'name' ? 'name' : null, page: null });
+    this.navigate({ sort: sort === 'name' || sort === 'newest' ? sort : null, page: null });
+  }
+
+  onCategoryChange(category: string) {
+    this.navigate({ category: category || null, page: null });
   }
 
   /** The filter is active: asked for in the URL and the user is logged in. */

@@ -19,14 +19,14 @@ const REPORT = { status: 'gold', description: 'works' };
 describe('SubmitWizardComponent', () => {
   let http: HttpTestingController;
 
-  function setup(params: Record<string, string> = {}, data: Record<string, unknown> = {}) {
+  function setup(params: Record<string, string> = {}, data: Record<string, unknown> = {}, queryParams: Record<string, string> = {}) {
     TestBed.configureTestingModule({
       imports: [RouterTestingModule, ReactiveFormsModule, MaterialModule],
       declarations: [SubmitWizardComponent, StatusBadgeComponent],
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
-        { provide: ActivatedRoute, useValue: { snapshot: { paramMap: convertToParamMap(params), data } } },
+        { provide: ActivatedRoute, useValue: { snapshot: { paramMap: convertToParamMap(params), queryParamMap: convertToParamMap(queryParams), data } } },
         { provide: ScreenshotResizeService, useValue: { resize: vi.fn((f: File) => Promise.resolve(`data:image/jpeg;base64,FAKE-${f.name}`)) } },
       ]
     });
@@ -157,5 +157,14 @@ describe('SubmitWizardComponent', () => {
 
     expect(component.screenshots().length).toBe(MAX_SCREENSHOTS);
     expect(component.screenshotError()).toContain(`${MAX_SCREENSHOTS}`);
+  });
+
+  it('pre-fills software fields from query params when launched from wishlist', () => {
+    const { component } = setup({}, {}, { name: 'Figma', productLink: 'https://figma.com', categories: 'graphics,productivity' });
+    flushCategories();
+
+    expect(component.form.get('software.name')?.value).toBe('Figma');
+    expect(component.form.get('software.productLink')?.value).toBe('https://figma.com');
+    expect(component.form.get('software.categories')?.value).toEqual(['graphics', 'productivity']);
   });
 });
