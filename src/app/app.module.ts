@@ -21,6 +21,7 @@ import { StarButtonComponent } from './star-button/star-button.component';
 import { WishlistListComponent } from './wishlist-list/wishlist-list.component';
 import { WishlistDetailComponent } from './wishlist-detail/wishlist-detail.component';
 import { WishlistNewComponent } from './wishlist-new/wishlist-new.component';
+import { RecentSubmissionsComponent } from './recent-submissions/recent-submissions.component';
 import { NeedAuthGuard } from './needauth';
 import { provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -47,7 +48,8 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
         StarButtonComponent,
         WishlistListComponent,
         WishlistDetailComponent,
-        WishlistNewComponent
+        WishlistNewComponent,
+        RecentSubmissionsComponent
     ],
     bootstrap: [AppComponent], imports: [BrowserModule,
         AppRoutingModule,
