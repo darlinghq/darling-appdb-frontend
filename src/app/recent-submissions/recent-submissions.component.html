@@ -1,0 +1,90 @@
+<header class="recent-header">
+  <div>
+    <h1>Recent Submissions</h1>
+    <p class="subtitle">The newest software entries and compatibility reports added to Darling AppDB.</p>
+  </div>
+  <a mat-stroked-button routerLink="/wishlist">Wishlist</a>
+</header>
+
+<div class="filters">
+  <mat-form-field appearance="outline">
+    <mat-label>Search</mat-label>
+    <input matInput #searchInput [value]="searchQuery()" (keyup.enter)="onSearch(searchInput.value)" placeholder="Software name" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Compatibility</mat-label>
+    <mat-select [value]="statusFilter()" (selectionChange)="onStatusFilterChange($event.value)">
+      <mat-select-trigger>
+        @if (statusFilter()) {
+          <app-status-badge [status]="statusFilter()"></app-status-badge>
+        } @else {
+          Any
+        }
+      </mat-select-trigger>
+      <mat-option value="">Any</mat-option>
+      @for (s of statuses; track s) {
+        <mat-option [value]="s"><app-status-badge [status]="s"></app-status-badge></mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+</div>
+
+@if (loadError()) {
+  <p class="empty">Could not load recent submissions right now.</p>
+} @else if (items() !== null) {
+  @if (total() === 0) {
+    <p class="empty">No submissions match the current filters.</p>
+  } @else if (items()!.length === 0) {
+    <p class="past-end">
+      There is no page {{ page() }}.
+      <a [routerLink]="[]" [queryParams]="{ page: null }" queryParamsHandling="merge">Go to the first page</a>
+    </p>
+  } @else {
+    <div class="software-grid">
+      @for (sw of items(); track sw.shortName) {
+        <a [routerLink]="['/software', sw.shortName]" class="software-link">
+          <mat-card class="software-card">
+            @if (sw.screenshots?.length) {
+              <img mat-card-image [src]="sw.preview ?? sw.screenshots![0]" alt="" class="card-screenshot" loading="lazy" />
+            } @else {
+              <app-screenshot-placeholder mat-card-image></app-screenshot-placeholder>
+            }
+            <mat-card-header>
+              <mat-card-title class="card-title" [title]="sw.name">{{ sw.name }}</mat-card-title>
+              @if (sw.lastVersion) {
+                <mat-card-subtitle class="card-subtitle" [title]="sw.lastVersion">{{ sw.lastVersion }}</mat-card-subtitle>
+              }
+            </mat-card-header>
+            <mat-card-content class="card-status">
+              @if (sw.status) {
+                <app-status-badge [status]="sw.status"></app-status-badge>
+              }
+              @if (sw.submittedAt; as at) {
+                <time class="submitted-date" [attr.datetime]="at">{{ at | date: 'mediumDate' }}</time>
+              }
+            </mat-card-content>
+          </mat-card>
+        </a>
+      }
+    </div>
+  }
+
+  @if (total() > pageSize && items()!.length > 0) {
+    <mat-paginator
+      [length]="total()"
+      [pageSize]="pageSize"
+      [pageIndex]="page() - 1"
+      [hidePageSize]="true"
+      [showFirstLastButtons]="true"
+      (page)="onPage($event)"
+      aria-label="Choose page">
+    </mat-paginator>
+  }
+} @else {
+  <div class="software-grid" aria-busy="true" aria-label="Loading recent submissions">
+    @for (i of [1,2,3,4,5,6]; track i) {
+      <div class="skeleton card-skeleton"></div>
+    }
+  </div>
+}
